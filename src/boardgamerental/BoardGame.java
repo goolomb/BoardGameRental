@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 //chichichi, jde to!!! :D:D:D
+//tak jsem neco zmenil
 package boardgamerental;
 
 import java.math.BigDecimal;
