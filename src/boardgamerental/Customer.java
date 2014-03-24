@@ -48,8 +48,7 @@ public class Customer {
         this.phoneNumber = phoneNumber;
     }
 
-    public Customer(Integer id, String name, String address, String phoneNumber) {
-        this.id = id;
+    public Customer(String name, String address, String phoneNumber) {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
