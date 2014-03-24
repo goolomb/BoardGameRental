@@ -6,6 +6,8 @@
 
 package boardgamerental;
 
+import java.util.Objects;
+
 /**
  *
  * @author Goolomb
@@ -55,5 +57,24 @@ public class Customer {
         this.address = address;
         this.phoneNumber = phoneNumber;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 13 * hash + Objects.hashCode(this.id);
+        hash = 13 * hash + Objects.hashCode(this.name);
+        hash = 13 * hash + Objects.hashCode(this.address);
+        hash = 13 * hash + Objects.hashCode(this.phoneNumber);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        final Customer other = (Customer) obj;
+        return other.getId() == this.getId();
+    }
+    
 
 }
