@@ -25,8 +25,7 @@ public class BoardGame {
     public BoardGame() {
     
     }
-    public BoardGame(Integer id, String name, int maxPlayers, int minPlayers, Set<String> category, BigDecimal pricePerDay) {
-        this.id = id;
+    public BoardGame(String name, int maxPlayers, int minPlayers, Set<String> category, BigDecimal pricePerDay) {
         this.name = name;
         this.maxPlayers = maxPlayers;
         this.minPlayers = minPlayers;
