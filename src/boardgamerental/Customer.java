@@ -47,6 +47,8 @@ public class Customer {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+    
+    public Customer(){}
 
     public Customer(String name, String address, String phoneNumber) {
         this.name = name;
