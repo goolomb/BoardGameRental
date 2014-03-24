@@ -148,15 +148,15 @@ public class CustomerManagerImpl implements CustomerManager {
                     "SELECT id,name,adress,number FROM customer");
             ResultSet rs = st.executeQuery();
             
-            List<Grave> result = new ArrayList<Grave>();
+            List<Customer> result = new ArrayList<Customer>();
             while (rs.next()) {
-                result.add(resultSetToGrave(rs));
+                result.add(resultSetToCustomer(rs));
             }
             return result;
             
         } catch (SQLException ex) {
             throw new ServiceFailureException(
-                    "Error when retrieving all graves", ex);
+                    "Error when retrieving all customers", ex);
         } finally {
             if (st != null) {
                 try {
@@ -168,8 +168,32 @@ public class CustomerManagerImpl implements CustomerManager {
         }
     }
 
-    public List<Customer> findCustomerByName() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    public List<Customer> findCustomerByName(String name) {
+        PreparedStatement st = null;
+        try {
+            st = conn.prepareStatement(
+                    "SELECT id,name,adress,number FROM customer Where name='name'");
+            ResultSet rs = st.executeQuery();
+            
+            List<Customer> result = new ArrayList<Customer>();
+            while (rs.next()) {
+                result.add(resultSetToCustomer(rs));
+            }
+            return result;
+            
+        } catch (SQLException ex) {
+            throw new ServiceFailureException(
+                    "Error when retrieving all customers", ex);
+        } finally {
+            if (st != null) {
+                try {
+                    st.close();
+                } catch (SQLException ex) {
+                    logger.log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
 
     public void updateCustomer(Customer customer) {
