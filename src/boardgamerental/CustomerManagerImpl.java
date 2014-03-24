@@ -173,7 +173,7 @@ public class CustomerManagerImpl implements CustomerManager {
         PreparedStatement st = null;
         try {
             st = conn.prepareStatement(
-                    "SELECT id,name,adress,number FROM customer Where name='name'");
+                    "SELECT id,name,adress,number FROM customer Where name='name%'");
             ResultSet rs = st.executeQuery();
             
             List<Customer> result = new ArrayList<Customer>();
@@ -197,8 +197,50 @@ public class CustomerManagerImpl implements CustomerManager {
     }
 
     public void updateCustomer(Customer customer) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        if (customer == null) {
+            throw new IllegalArgumentException("customer is null");            
+        }
+        if (customer.getId() == null) {
+            throw new IllegalArgumentException("customer id null");            
+        }
+        if (customer.getAddress() == null) {
+            throw new IllegalArgumentException("customer address is null");            
+        }
+        if (customer.getName() == null) {
+            throw new IllegalArgumentException("customer name is null");            
+        }
+        if (customer.getPhoneNumber() == null) {
+            throw new IllegalArgumentException("customer phone number is null");          
+        }
+        
+        PreparedStatement st = null;
+        try {
+            st = conn.prepareStatement(
+                   "UPDATE Customer SET name = ?, address = ?, number = ?, WHERE id = ?");
+            st.setString(1, customer.getName());
+            st.setString(2, customer.getAddress());
+            st.setString(3, customer.getPhoneNumber());
+            int updateCount = st.executeUpdate();
+            if (updateCount == 0) {
+                throw new IllegalArgumentException("Customer " + customer + " does not exist in the db");
+            }
+            if (updateCount != 1) {
+                throw new ServiceFailureException("Internal Error: Internal integrity error:"
+                        + "Unexpected rows count in database affected: " + updateCount);
+            }
+
+        } catch (SQLException ex) {
+            throw new ServiceFailureException("Error when inserting customer " + customer, ex);
+        } finally {
+            if (st != null) {
+                try {
+                    st.close();
+                } catch (SQLException ex) {
+                    logger.log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+     }
 
     public void deleteCustomer(Customer customer) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
