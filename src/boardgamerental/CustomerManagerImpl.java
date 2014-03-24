@@ -243,7 +243,47 @@ public class CustomerManagerImpl implements CustomerManager {
      }
 
     public void deleteCustomer(Customer customer) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (customer == null) {
+            throw new IllegalArgumentException("customer is null");            
+        }
+        if (customer.getId() == null) {
+            throw new IllegalArgumentException("customer id null");            
+        }
+        if (customer.getAddress() == null) {
+            throw new IllegalArgumentException("customer address is null");            
+        }
+        if (customer.getName() == null) {
+            throw new IllegalArgumentException("customer name is null");            
+        }
+        if (customer.getPhoneNumber() == null) {
+            throw new IllegalArgumentException("customer phone number is null");          
+        }
+        
+        PreparedStatement st = null;
+        try {
+            st = conn.prepareStatement(
+                    "DELETE FROM Grave WHERE id = ?");
+            st.setInt(1, customer.getId());
+            int updateCount = st.executeUpdate();
+            if (updateCount == 0) {
+                throw new IllegalArgumentException("Customer " + customer + " does not exist in the db");
+            }
+            if (updateCount != 1) {
+                throw new ServiceFailureException("Internal Error: Internal integrity error:"
+                        + "Unexpected rows count in database affected: " + updateCount);
+            }
+
+        } catch (SQLException ex) {
+            throw new ServiceFailureException("Error when inserting customer " + customer, ex);
+        } finally {
+            if (st != null) {
+                try {
+                    st.close();
+                } catch (SQLException ex) {
+                    logger.log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
-    
+        
 }
