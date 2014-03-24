@@ -145,7 +145,7 @@ public class CustomerManagerImpl implements CustomerManager {
         PreparedStatement st = null;
         try {
             st = conn.prepareStatement(
-                    "SELECT id,name,adress,phonenumber FROM customer");
+                    "SELECT id,name,address,phonenumber FROM Customer");
             ResultSet rs = st.executeQuery();
             
             List<Customer> result = new ArrayList<Customer>();
@@ -173,7 +173,8 @@ public class CustomerManagerImpl implements CustomerManager {
         PreparedStatement st = null;
         try {
             st = conn.prepareStatement(
-                    "SELECT id,name,adress,phonenumber FROM customer Where name='name%'");
+                    "SELECT id,name,address,phonenumber FROM customer WHERE name = ? ");
+            st.setString(1, name);
             ResultSet rs = st.executeQuery();
             
             List<Customer> result = new ArrayList<Customer>();
@@ -201,7 +202,7 @@ public class CustomerManagerImpl implements CustomerManager {
             throw new IllegalArgumentException("customer is null");            
         }
         if (customer.getId() == null) {
-            throw new IllegalArgumentException("customer id null");            
+            throw new IllegalArgumentException("customer id is null");            
         }
         if (customer.getAddress() == null) {
             throw new IllegalArgumentException("customer address is null");            
@@ -220,6 +221,7 @@ public class CustomerManagerImpl implements CustomerManager {
             st.setString(1, customer.getName());
             st.setString(2, customer.getAddress());
             st.setString(3, customer.getPhoneNumber());
+            st.setInt(4, customer.getId());
             int updateCount = st.executeUpdate();
             if (updateCount == 0) {
                 throw new IllegalArgumentException("Customer " + customer + " does not exist in the db");
