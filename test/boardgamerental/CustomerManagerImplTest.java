@@ -78,6 +78,7 @@ public class CustomerManagerImplTest {
         assertDeepEquals(customer, result);
     }
 
+    
     /**
      * Test of findAllCustomers method, of class CustomerManagerImpl.
      */
