@@ -6,6 +6,9 @@
 
 package boardgamerental;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -20,23 +23,24 @@ import static org.junit.Assert.*;
  */
 public class CustomerManagerImplTest {
     
-    public CustomerManagerImplTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
+    private CustomerManagerImpl manager;
+    private Connection conn;
     
     @Before
-    public void setUp() {
+    public void setUp() throws SQLException{
+        conn = DriverManager.getConnection("jdbc:derby:memory:GraveManagerTest;create=true");
+        conn.prepareStatement("CREATE TABLE CUSTOMER ("
+                + "id int primary key generated always as identity,"
+                + "name varchar(30),"
+                + "address varchar(255),"
+                + "phoneNumber varchar(20))").executeUpdate();
+        manager = new CustomerManagerImpl(conn);
     }
     
     @After
-    public void tearDown() {
+    public void tearDown() throws SQLException {
+        conn.prepareStatement("DROP TABLE CUSTOMER").executeUpdate();        
+        conn.close();
     }
 
     /**
@@ -44,12 +48,15 @@ public class CustomerManagerImplTest {
      */
     @Test
     public void testCreateCustomer() {
-        System.out.println("createCustomer");
-        Customer customer = null;
-        CustomerManagerImpl instance = null;
-        instance.createCustomer(customer);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Customer customer = new Customer("I.C. Wiener", "New York City", "+420 666 666 666");
+        manager.createCustomer(customer);
+
+        Integer customerId = customer.getId();
+        assertNotNull(customerId);
+        Customer result = manager.getCustomerById(customerId);
+        assertEquals(customer, result);
+        assertNotSame(customer, result);
+        assertDeepEquals(customer, result);
     }
 
     /**
@@ -57,14 +64,15 @@ public class CustomerManagerImplTest {
      */
     @Test
     public void testGetCustomerById() {
-        System.out.println("getCustomerById");
-        Integer id = null;
-        CustomerManagerImpl instance = null;
-        Customer expResult = null;
-        Customer result = instance.getCustomerById(id);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertNull(manager.getCustomerById(1));
+        
+        Customer customer = new Customer("I.C. Wiener", "New York City", "+420 666 666 666");
+        manager.createCustomer(customer);
+        Integer customerId = customer.getId();
+
+        Customer result = manager.getCustomerById(customerId);
+        assertEquals(customer, result);
+        assertDeepEquals(customer, result);
     }
 
     /**
@@ -86,13 +94,7 @@ public class CustomerManagerImplTest {
      */
     @Test
     public void testFindCustomerByName() {
-        System.out.println("findCustomerByName");
-        CustomerManagerImpl instance = null;
-        List<Customer> expResult = null;
-        List<Customer> result = instance.findCustomerByName();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
 
     /**
@@ -120,5 +122,11 @@ public class CustomerManagerImplTest {
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
-    
+
+    private void assertDeepEquals(Customer expected, Customer actual) {
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.getAddress(), actual.getAddress());
+        assertEquals(expected.getPhoneNumber(), actual.getPhoneNumber());
+    }
 }
