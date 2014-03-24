@@ -48,7 +48,7 @@ public class CustomerManagerImpl implements CustomerManager {
         PreparedStatement st = null;
         try {
             st = conn.prepareStatement(
-                    "INSERT INTO CUSTOMER (name,address,number) VALUES (?,?,?)",
+                    "INSERT INTO CUSTOMER (name,address,phonenumber) VALUES (?,?,?)",
                     Statement.RETURN_GENERATED_KEYS);
             st.setString(1, customer.getName());
             st.setString(2, customer.getAddress());
@@ -100,7 +100,7 @@ public class CustomerManagerImpl implements CustomerManager {
         PreparedStatement st = null;
         try {
             st = conn.prepareStatement(
-                    "SELECT id,col,row,capacity,note FROM grave WHERE id = ?");
+                    "SELECT id,name,address,phonenumber FROM customer WHERE id = ?");
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             
@@ -137,7 +137,7 @@ public class CustomerManagerImpl implements CustomerManager {
         customer.setId(rs.getInt("id"));
         customer.setName(rs.getString("name"));
         customer.setAddress(rs.getString("address"));
-        customer.setPhoneNumber(rs.getString("number"));
+        customer.setPhoneNumber(rs.getString("phonenumber"));
         return customer;
     }
 
@@ -145,7 +145,7 @@ public class CustomerManagerImpl implements CustomerManager {
         PreparedStatement st = null;
         try {
             st = conn.prepareStatement(
-                    "SELECT id,name,adress,number FROM customer");
+                    "SELECT id,name,adress,phonenumber FROM customer");
             ResultSet rs = st.executeQuery();
             
             List<Customer> result = new ArrayList<Customer>();
@@ -173,7 +173,7 @@ public class CustomerManagerImpl implements CustomerManager {
         PreparedStatement st = null;
         try {
             st = conn.prepareStatement(
-                    "SELECT id,name,adress,number FROM customer Where name='name%'");
+                    "SELECT id,name,adress,phonenumber FROM customer Where name='name%'");
             ResultSet rs = st.executeQuery();
             
             List<Customer> result = new ArrayList<Customer>();
@@ -216,7 +216,7 @@ public class CustomerManagerImpl implements CustomerManager {
         PreparedStatement st = null;
         try {
             st = conn.prepareStatement(
-                   "UPDATE Customer SET name = ?, address = ?, number = ?, WHERE id = ?");
+                   "UPDATE Customer SET name = ?, address = ?, phonenumber = ?, WHERE id = ?");
             st.setString(1, customer.getName());
             st.setString(2, customer.getAddress());
             st.setString(3, customer.getPhoneNumber());
@@ -262,7 +262,7 @@ public class CustomerManagerImpl implements CustomerManager {
         PreparedStatement st = null;
         try {
             st = conn.prepareStatement(
-                    "DELETE FROM Grave WHERE id = ?");
+                    "DELETE FROM Customer WHERE id = ?");
             st.setInt(1, customer.getId());
             int updateCount = st.executeUpdate();
             if (updateCount == 0) {
