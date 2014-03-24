@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+//chichichi, jde to!!! :D:D:D
 package boardgamerental;
 
 import java.math.BigDecimal;
