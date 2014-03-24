@@ -42,7 +42,7 @@ public class LendingManagerImplTest {
     @Test
     public void createLending() {
         
-        Lending lending = newLending(5, new Customer(15, "Pepa", "Brno", "800000000"), new BoardGame(25, "Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
+        Lending lending = newLending(5, new Customer("Pepa", "Brno", "800000000"), new BoardGame("Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
         manager.createLending(lending);
 
         Integer lendingId = lending.getId();
@@ -58,8 +58,8 @@ public class LendingManagerImplTest {
 
         assertTrue(manager.findAllLendings().isEmpty());
 
-        Lending l1 = newLending(5, new Customer(15, "Pepa", "Brno", "800000000"), new BoardGame(25, "Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
-        Lending l2 = newLending(8, new Customer(15, "Pepa", "Brno", "800000000"), new BoardGame(25, "Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
+        Lending l1 = newLending(5, new Customer("Pepa", "Brno", "800000000"), new BoardGame("Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
+        Lending l2 = newLending(8, new Customer("Pepa", "Brno", "800000000"), new BoardGame("Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
 
         manager.createLending(l1);
         manager.createLending(l2);
@@ -77,8 +77,8 @@ public class LendingManagerImplTest {
     @Test
     public void deleteLending() {
 
-        Lending l1 = newLending(5, new Customer(15, "Pepa", "Brno", "800000000"), new BoardGame(25, "Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
-        Lending l2 = newLending(8, new Customer(15, "Pepa", "Brno", "800000000"), new BoardGame(25, "Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
+        Lending l1 = newLending(5, new Customer("Pepa", "Brno", "800000000"), new BoardGame("Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
+        Lending l2 = newLending(8, new Customer("Pepa", "Brno", "800000000"), new BoardGame("Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
         manager.createLending(l1);
         manager.createLending(l2);
         
@@ -95,7 +95,7 @@ public class LendingManagerImplTest {
     @Test
     public void deleteLendingWithWrongAttributes() {
 
-        Lending lending = newLending(5, new Customer(15, "Pepa", "Brno", "800000000"), new BoardGame(25, "Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
+        Lending lending = newLending(5, new Customer("Pepa", "Brno", "800000000"), new BoardGame("Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
         
         try {
             manager.deleteLending(null);
