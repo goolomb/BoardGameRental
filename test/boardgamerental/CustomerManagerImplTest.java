@@ -31,7 +31,7 @@ public class CustomerManagerImplTest {
     
     @Before
     public void setUp() throws SQLException{
-        conn = DriverManager.getConnection("jdbc:derby:memory:GraveManagerTest;create=true");
+        conn = DriverManager.getConnection("jdbc:derby:memory:CustomerManagerTest;create=true");
         conn.prepareStatement("CREATE TABLE CUSTOMER ("
                 + "id int primary key generated always as identity,"
                 + "name varchar(30),"
@@ -153,13 +153,13 @@ public class CustomerManagerImplTest {
         assertTrue(manager.findCustomerByName("wie").isEmpty());
 
         Customer c1 = new Customer("I.C. Wiener", "New York City", "+420 666 666 666");
-        Customer c2 = new Customer("Hugh Wierection", "California", "+420 123 456 789");
+        Customer c2 = new Customer("I.C. Wiener", "California", "+420 123 456 789");
 
         manager.createCustomer(c1);
         manager.createCustomer(c2);
 
         List<Customer> expected = Arrays.asList(c1,c2);
-        List<Customer> actual = manager.findCustomerByName("wie");
+        List<Customer> actual = manager.findCustomerByName("I.C. Wiener");
 
         Collections.sort(actual,idComparator);
         Collections.sort(expected,idComparator);
