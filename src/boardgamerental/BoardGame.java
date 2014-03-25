@@ -8,6 +8,7 @@
 package boardgamerental;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -80,5 +81,23 @@ public class BoardGame {
     public void setPricePerDay(BigDecimal pricePerDay) {
         this.pricePerDay = pricePerDay;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 53 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) 
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final BoardGame other = (BoardGame) obj;
+        return other.getId() == this.getId();
+    }
+    
     
 }

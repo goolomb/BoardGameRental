@@ -70,8 +70,10 @@ public class Customer {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
+        if (obj == null) 
+            return false;
+        if (getClass() != obj.getClass()) 
+            return false;
         final Customer other = (Customer) obj;
         return other.getId() == this.getId();
     }
