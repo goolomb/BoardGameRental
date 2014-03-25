@@ -22,7 +22,6 @@ public class Lending {
     private Calendar realEndTime;
 
     public Lending(Integer id, Customer customer, BoardGame boardGame, Calendar startTime, Calendar expectedEndTime, Calendar realEndTime) {
-        this.id = id;
         this.customer = customer;
         this.boardGame = boardGame;
         this.startTime = startTime;
