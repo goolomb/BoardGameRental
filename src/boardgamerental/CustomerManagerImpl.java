@@ -29,20 +29,9 @@ public class CustomerManagerImpl implements CustomerManager {
     private Connection conn;
 
     public void createCustomer(Customer customer)  throws ServiceFailureException {
-        if (customer == null) {
-            throw new IllegalArgumentException("customer is null");            
-        }
+        validate(customer);
         if (customer.getId() != null) {
             throw new IllegalArgumentException("customer id is already set");            
-        }
-        if (customer.getAddress() == null) {
-            throw new IllegalArgumentException("customer address is null");            
-        }
-        if (customer.getName() == null) {
-            throw new IllegalArgumentException("customer name is null");            
-        }
-        if (customer.getPhoneNumber() == null) {
-            throw new IllegalArgumentException("customer phone number is null");          
         }
 
         PreparedStatement st = null;
@@ -198,20 +187,9 @@ public class CustomerManagerImpl implements CustomerManager {
     }
 
     public void updateCustomer(Customer customer) {
-        if (customer == null) {
-            throw new IllegalArgumentException("customer is null");            
-        }
+        validate(customer);
         if (customer.getId() == null) {
             throw new IllegalArgumentException("customer id is null");            
-        }
-        if (customer.getAddress() == null) {
-            throw new IllegalArgumentException("customer address is null");            
-        }
-        if (customer.getName() == null) {
-            throw new IllegalArgumentException("customer name is null");            
-        }
-        if (customer.getPhoneNumber() == null) {
-            throw new IllegalArgumentException("customer phone number is null");          
         }
         
         PreparedStatement st = null;
@@ -245,20 +223,9 @@ public class CustomerManagerImpl implements CustomerManager {
      }
 
     public void deleteCustomer(Customer customer) {
-        if (customer == null) {
-            throw new IllegalArgumentException("customer is null");            
-        }
+        validate(customer);
         if (customer.getId() == null) {
             throw new IllegalArgumentException("customer id null");            
-        }
-        if (customer.getAddress() == null) {
-            throw new IllegalArgumentException("customer address is null");            
-        }
-        if (customer.getName() == null) {
-            throw new IllegalArgumentException("customer name is null");            
-        }
-        if (customer.getPhoneNumber() == null) {
-            throw new IllegalArgumentException("customer phone number is null");          
         }
         
         PreparedStatement st = null;
@@ -285,6 +252,21 @@ public class CustomerManagerImpl implements CustomerManager {
                     logger.log(Level.SEVERE, null, ex);
                 }
             }
+        }
+    }
+    
+    private void validate(Customer customer) {
+        if (customer == null) {
+            throw new IllegalArgumentException("customer is null");            
+        }
+        if (customer.getAddress() == null) {
+            throw new IllegalArgumentException("customer address is null");            
+        }
+        if (customer.getName() == null) {
+            throw new IllegalArgumentException("customer name is null");            
+        }
+        if (customer.getPhoneNumber() == null) {
+            throw new IllegalArgumentException("customer phone number is null");          
         }
     }
         
