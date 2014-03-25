@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Tue Mar 25 09:53:47 CET 2014:
+ Zavádìní serveru Derby verze The Apache Software Foundation - Apache Derby - 10.8.3.0 - (1405108): instance a816c00e-0144-f872-0708-0000016c7ab8
+v adresáøi databáze memory:C:\Users\Patrik\Documents\GitHub\BoardGameRental\CustomerManagerTest  sun.misc.Launcher$AppClassLoader@1497b7b1 
+
+java.vendor=Oracle Corporation
+java.runtime.version=1.7.0_51-b13
+user.dir=C:\Users\Patrik\Documents\GitHub\BoardGameRental
+os.name=Windows 7
+os.arch=amd64
+os.version=6.1
+derby.system.home=null
+Byl spuštìn zavadìè tøídy databáze - derby.database.classpath=''
