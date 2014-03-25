@@ -8,12 +8,29 @@ package boardgamerental;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.logging.Logger;
+import javax.sql.DataSource;
 
 /**
  *
  * @author Goolomb
  */
 public class BoardGameManagerImpl implements BoardGameManager {
+    
+    private static final Logger logger = Logger.getLogger(
+            BoardGameManagerImpl.class.getName());    
+    
+    private DataSource dataSource;
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    private void checkDataSource() {
+        if (dataSource == null) {
+            throw new IllegalStateException("DataSource is not set");
+        }
+    }
 
     public void createBoardGame(BoardGame boardGame) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
