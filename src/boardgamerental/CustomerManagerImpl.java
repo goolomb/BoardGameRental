@@ -217,7 +217,7 @@ public class CustomerManagerImpl implements CustomerManager {
         PreparedStatement st = null;
         try {
             st = conn.prepareStatement(
-                   "UPDATE Customer SET name = ?, address = ?, phonenumber = ?, WHERE id = ?");
+                   "UPDATE Customer SET name = ?, address = ?, phonenumber = ? WHERE id = ?");
             st.setString(1, customer.getName());
             st.setString(2, customer.getAddress());
             st.setString(3, customer.getPhoneNumber());
