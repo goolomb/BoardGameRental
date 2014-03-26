@@ -9,6 +9,8 @@
 package boardgamerental;
 
 import cz.muni.fi.pv168.common.DBUtils;
+import cz.muni.fi.pv168.common.IllegalEntityException;
+import cz.muni.fi.pv168.common.ValidationException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -123,14 +125,23 @@ public class BoardGameManagerImplTest {
      */
     @Test
     public void testFindBoardGameByPlayers() {
-        System.out.println("findBoardGameByPlayers");
-        int players = 0;
-        BoardGameManagerImpl instance = new BoardGameManagerImpl();
-        List<BoardGame> expResult = null;
-        List<BoardGame> result = instance.findBoardGameByPlayers(players);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(manager.findBoardGameByPlayers(6).isEmpty());
+
+        Set<String> category = new HashSet<>();
+        category.add("cool");
+        category.add("nice");
+        BoardGame bg1 = new BoardGame("Nice BoardGame", 6, 2, category, new BigDecimal(150));
+        Set<String> cat = new HashSet<>();
+        cat.add("cool");
+        cat.add("alternative");
+        BoardGame bg2 = new BoardGame("Another BoardGame", 8, 1, cat, new BigDecimal(300));
+        manager.createBoardGame(bg1);
+        manager.createBoardGame(bg2);
+
+        List<BoardGame> expected = Arrays.asList(bg1,bg2);
+        List<BoardGame> actual = manager.findBoardGameByPlayers(6);
+        
+        assertBGCollectionDeepEquals(expected, actual);
     }
 
     /**
@@ -162,21 +173,21 @@ public class BoardGameManagerImplTest {
      */
     @Test
     public void testFindBoardGameByPricePerDay() {
-        assertTrue(manager.findBoardGameByPricePerDay(new BigDecimal(400)).isEmpty());
+        assertTrue(manager.findBoardGameByPricePerDay(new BigDecimal(500)).isEmpty());
 
         Set<String> category = new HashSet<>();
         category.add("cool");
         category.add("nice");
         BoardGame bg1 = new BoardGame("Nice BoardGame", 6, 2, category, new BigDecimal(150));
         Set<String> cat = new HashSet<>();
-        cat.add("another");
+        cat.add("cool");
         cat.add("alternative");
         BoardGame bg2 = new BoardGame("Another BoardGame", 8, 1, cat, new BigDecimal(300));
         manager.createBoardGame(bg1);
         manager.createBoardGame(bg2);
 
         List<BoardGame> expected = Arrays.asList(bg1,bg2);
-        List<BoardGame> actual = manager.findBoardGameByPricePerDay(new BigDecimal(400));
+        List<BoardGame> actual = manager.findBoardGameByPricePerDay(new BigDecimal(500));
         
         assertBGCollectionDeepEquals(expected, actual);
     }
@@ -321,20 +332,131 @@ public class BoardGameManagerImplTest {
         result = manager.getBoardGameById(boardGameId);
         assertBGDeepEquals(boardGame, result);
 
-        grave = manager.getGrave(graveId);
-        grave.setNote("Another grave");
-        manager.updateGrave(grave);        
-        result = manager.getGrave(graveId);
-        assertGraveDeepEquals(grave, result);
+        category = new HashSet<>();
+        category.add("awesome");
+        category.add("pretty");
+        boardGame = manager.getBoardGameById(boardGameId);
+        boardGame.setCategory(category);
+        manager.updateBoardGame(boardGame);        
+        result = manager.getBoardGameById(boardGameId);
+        assertBGDeepEquals(boardGame, result);
 
-        grave = manager.getGrave(graveId);
-        grave.setNote(null);
-        manager.updateGrave(grave);        
-        result = manager.getGrave(graveId);
-        assertGraveDeepEquals(grave, result);
+        boardGame = manager.getBoardGameById(boardGameId);
+        boardGame.setPricePerDay(new BigDecimal(500));
+        manager.updateBoardGame(boardGame);        
+        result = manager.getBoardGameById(boardGameId);
+        assertBGDeepEquals(boardGame, result);
 
         // Check if updates didn't affected other records
-        assertGraveDeepEquals(g2, manager.getGrave(g2.getId()));
+        assertBGDeepEquals(bg2, manager.getBoardGameById(bg2.getId()));
+    }
+    
+    public void updateBoardGameWithWrongAttributes(){
+        
+        Set<String> category = new HashSet<>();
+        category.add("cool");
+        category.add("nice");
+        BoardGame boardGame = new BoardGame("Nice BoardGame", 6, 2, category, new BigDecimal(150));
+        manager.createBoardGame(boardGame);
+        Integer boardGameId = boardGame.getId();
+        
+        try {
+            manager.updateBoardGame(null);
+            fail();
+        } catch (IllegalArgumentException ex) {
+            //OK
+        }
+        
+        try {
+            boardGame = manager.getBoardGameById(boardGameId);
+            boardGame.setId(null);
+            manager.updateBoardGame(boardGame);        
+            fail();
+        } catch (IllegalEntityException ex) {
+            //OK
+        }
+
+        try {
+            boardGame = manager.getBoardGameById(boardGameId);
+            boardGame.setId(boardGameId - 1);
+            manager.updateBoardGame(boardGame);        
+            fail();
+        } catch (IllegalEntityException ex) {
+            //OK
+        }
+
+        try {
+            boardGame = manager.getBoardGameById(boardGameId);
+            boardGame.setName(null);
+            manager.updateBoardGame(boardGame);        
+            fail();
+        } catch (IllegalEntityException ex) {
+            //OK
+        }
+
+        try {
+            boardGame = manager.getBoardGameById(boardGameId);
+            boardGame.setName("");
+            manager.updateBoardGame(boardGame);        
+            fail();
+        } catch (IllegalEntityException ex) {
+            //OK
+        }
+
+        try {
+            boardGame = manager.getBoardGameById(boardGameId);
+            boardGame.setMaxPlayers(0);
+            manager.updateBoardGame(boardGame);        
+            fail();
+        } catch (IllegalEntityException ex) {
+            //OK
+        }
+
+        try {
+            boardGame = manager.getBoardGameById(boardGameId);
+            boardGame.setMinPlayers(0);
+            manager.updateBoardGame(boardGame);        
+            fail();
+        } catch (IllegalEntityException ex) {
+            //OK
+        }
+        
+        try {
+            boardGame = manager.getBoardGameById(boardGameId);
+            boardGame.setCategory(null);
+            manager.updateBoardGame(boardGame);        
+            fail();
+        } catch (IllegalEntityException ex) {
+            //OK
+        }
+        
+        category.clear();
+        try {
+            boardGame = manager.getBoardGameById(boardGameId);
+            boardGame.setCategory(category);
+            manager.updateBoardGame(boardGame);        
+            fail();
+        } catch (IllegalEntityException ex) {
+            //OK
+        }
+        
+        try {
+            boardGame = manager.getBoardGameById(boardGameId);
+            boardGame.setPricePerDay(null);
+            manager.updateBoardGame(boardGame);        
+            fail();
+        } catch (IllegalEntityException ex) {
+            //OK
+        }
+        
+        try {
+            boardGame = manager.getBoardGameById(boardGameId);
+            boardGame.setPricePerDay(new BigDecimal(0));
+            manager.updateBoardGame(boardGame);        
+            fail();
+        } catch (IllegalEntityException ex) {
+            //OK
+        }
     }
 
     /**
@@ -342,12 +464,25 @@ public class BoardGameManagerImplTest {
      */
     @Test
     public void testDeleteBoardGame() {
-        System.out.println("deleteBoardGame");
-        BoardGame boardGame = null;
-        BoardGameManagerImpl instance = new BoardGameManagerImpl();
-        instance.deleteBoardGame(boardGame);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        Set<String> category = new HashSet<>();
+        category.add("cool");
+        category.add("nice");
+        BoardGame bg1 = new BoardGame("Nice BoardGame", 6, 2, category, new BigDecimal(150));
+        Set<String> cat = new HashSet<>();
+        cat.add("another");
+        cat.add("alternative");
+        BoardGame bg2 = new BoardGame("Another BoardGame", 8, 1, cat, new BigDecimal(300));
+        manager.createBoardGame(bg1);
+        manager.createBoardGame(bg2);
+        
+        assertNotNull(manager.getBoardGameById(bg1.getId()));
+        assertNotNull(manager.getBoardGameById(bg2.getId()));
+
+        manager.deleteGrave(g1);
+        
+        assertNull(manager.getGrave(g1.getId()));
+        assertNotNull(manager.getGrave(g2.getId()));
     }
 
     private static void assertBGDeepEquals(BoardGame expected, BoardGame actual) {
@@ -359,7 +494,7 @@ public class BoardGameManagerImplTest {
         assertEquals(expected.getPricePerDay(), actual.getPricePerDay());
     }
     
-    private static Comparator<BoardGame> idComparator = new Comparator<BoardGame>() {
+    private static final Comparator<BoardGame> idComparator = new Comparator<BoardGame>() {
 
         @Override
         public int compare(BoardGame o1, BoardGame o2) {
@@ -387,5 +522,6 @@ public class BoardGameManagerImplTest {
         for (int i = 0; i < expectedSortedList.size(); i++) {
             assertBGDeepEquals(expectedSortedList.get(i), actualSortedList.get(i));
         }
+    }
 }
 
