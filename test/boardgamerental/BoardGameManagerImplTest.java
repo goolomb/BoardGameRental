@@ -479,10 +479,41 @@ public class BoardGameManagerImplTest {
         assertNotNull(manager.getBoardGameById(bg1.getId()));
         assertNotNull(manager.getBoardGameById(bg2.getId()));
 
-        manager.deleteGrave(g1);
+        manager.deleteBoardGame(bg1);
         
-        assertNull(manager.getGrave(g1.getId()));
-        assertNotNull(manager.getGrave(g2.getId()));
+        assertNull(manager.getBoardGameById(bg1.getId()));
+        assertNotNull(manager.getBoardGameById(bg2.getId()));
+    }
+    
+    public void deleteBoardGameWithWrongAttributes(){
+        
+        Set<String> category = new HashSet<>();
+        category.add("cool");
+        category.add("nice");
+        BoardGame boardGame = new BoardGame("Nice BoardGame", 6, 2, category, new BigDecimal(150));
+        
+        try {
+            manager.deleteBoardGame(null);
+            fail();
+        } catch (IllegalArgumentException ex) {
+            //OK
+        }
+
+        try {
+            boardGame.setId(null);
+            manager.deleteBoardGame(boardGame);
+            fail();
+        } catch (IllegalEntityException ex) {
+            //OK
+        }
+
+        try {
+            boardGame.setId(1);
+            manager.deleteBoardGame(boardGame);
+            fail();
+        } catch (IllegalEntityException ex) {
+            //OK
+        }   
     }
 
     private static void assertBGDeepEquals(BoardGame expected, BoardGame actual) {
