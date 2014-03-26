@@ -6,15 +6,16 @@
 
 package boardgamerental;
 
-import cz.muni.fi.pv168.common.DBUtils;
-import cz.muni.fi.pv168.common.IllegalEntityException;
-import cz.muni.fi.pv168.common.ValidationException;
+import cz.muni.fi.pv168.common.*;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
@@ -74,7 +75,7 @@ public class BoardGameManagerImpl implements BoardGameManager {
         } catch (SQLException ex) {
             String msg = "Error when inserting board game into db";
             logger.log(Level.SEVERE, msg, ex);
-            throw new cz.muni.fi.pv168.common.ServiceFailureException(msg, ex);
+            throw new ServiceFailureException(msg, ex);
         }
     }
 
@@ -85,25 +86,32 @@ public class BoardGameManagerImpl implements BoardGameManager {
             throw new IllegalArgumentException("id is null");
         }
         
-        Connection conn = null;
-        PreparedStatement st = null;
-        try {
-            conn = dataSource.getConnection();
-            st = conn.prepareStatement(
-                    "SELECT id, col, row, capacity, note FROM Grave WHERE id = ?");
-            st.setLong(1, id);
-            return executeQueryForSingleGrave(st);
+        try (Connection conn = dataSource.getConnection()){
+            try(PreparedStatement st = conn.prepareStatement(
+                    "SELECT id, name, maxPlayers, minPlayers, pricePerDay FROM BoardGame WHERE id = ?")){
+                st.setInt(1, id);
+                
+                return executeQueryForSingleBoardGame(st);
+            }
         } catch (SQLException ex) {
             String msg = "Error when getting grave with id = " + id + " from DB";
             logger.log(Level.SEVERE, msg, ex);
-            throw new cz.muni.fi.pv168.common.ServiceFailureException(msg, ex);
-        } finally {
-            DBUtils.closeQuietly(conn, st);
+            throw new ServiceFailureException(msg, ex);
         }
     }
 
     public List<BoardGame> findAllBoardGames() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        checkDataSource();
+        try (Connection conn = dataSource.getConnection()){
+            try (PreparedStatement st = conn.prepareStatement(
+                    "SELECT id, name, maxPlayers, minPlayers, pricePerDay FROM BoardGame")){
+            return executeQueryForMultipleBoardGames(st);
+            }
+        } catch (SQLException ex) {
+            String msg = "Error when getting all graves from DB";
+            logger.log(Level.SEVERE, msg, ex);
+            throw new cz.muni.fi.pv168.common.ServiceFailureException(msg, ex);
+        }
     }
 
     public List<BoardGame> findBoardGameByName(String name) {
@@ -128,6 +136,54 @@ public class BoardGameManagerImpl implements BoardGameManager {
 
     public void deleteBoardGame(BoardGame boardGame) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    BoardGame executeQueryForSingleBoardGame(PreparedStatement st) throws SQLException, ServiceFailureException {
+        try (ResultSet rs = st.executeQuery()){
+            if (rs.next()) {
+                BoardGame result = rowToBoardGame(rs);                
+                if (rs.next()) {
+                    throw new ServiceFailureException(
+                            "Internal integrity error: more board games with the same id found!");
+                }
+                return result;
+            } else {
+                return null;
+            }
+        }
+    }
+
+    List<BoardGame> executeQueryForMultipleBoardGames(PreparedStatement st) throws SQLException {
+        List<BoardGame> result = new ArrayList<>();
+        try (ResultSet rs = st.executeQuery()) {
+            while (rs.next()) {
+                result.add(rowToBoardGame(rs));
+            }
+        }
+        return result;
+    }
+    
+    private BoardGame rowToBoardGame(ResultSet rs) throws SQLException {
+        BoardGame result = new BoardGame(rs.getString("name"), rs.getInt("maxPlayers"), 
+                rs.getInt("minPlayers"), new HashSet<>(rowToCategory(rs)), rs.getBigDecimal("pricePerDay"));
+        result.setId(rs.getInt("id"));
+        return result;
+    }
+    
+    private List<String> rowToCategory(ResultSet rs) throws SQLException {
+        List<String> categories = new ArrayList<>();
+        try (Connection conn = dataSource.getConnection()){
+            try(PreparedStatement st = conn.prepareStatement(
+                    "SELECT boardGameId, category FROM Category WHERE id = ?")){
+                st.setInt(1, rs.getInt("id"));
+                try(ResultSet rs1 = st.executeQuery()){
+                    while (rs1.next()) {
+                        categories.add(rs1.getString("category"));
+                    }
+                }
+            }
+        }
+        return categories;
     }
     
     private static void validate(BoardGame boardGame) {
@@ -160,6 +216,7 @@ public class BoardGameManagerImpl implements BoardGameManager {
         }
         if (boardGame.getPricePerDay().compareTo(new BigDecimal(0)) <= 0) {
             throw new ValidationException("pricePerDay is not positive number");
+        }
         }
     
 }
