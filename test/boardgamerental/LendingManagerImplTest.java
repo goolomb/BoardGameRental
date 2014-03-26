@@ -6,22 +6,27 @@
 
 package boardgamerental;
 
+import cz.muni.fi.pv168.common.DBUtils;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.SQLException;
+import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+
+import org.apache.commons.dbcp.BasicDataSource;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+
 
 /**
  *
@@ -30,10 +35,37 @@ import static org.junit.Assert.*;
 public class LendingManagerImplTest {
     
     private LendingManagerImpl manager;
+    private DataSource ds;
+    private BoardGameManagerImpl boardGameManager;
+    private CustomerManagerImpl customerManager;
     
+
+    private static DataSource prepareDataSource() throws SQLException {
+        BasicDataSource ds = new BasicDataSource();
+        //we will use in memory database
+        ds.setUrl("jdbc:derby:memory:LendingManager-test;create=true");
+        return ds;
+    }
+
     @Before
-    public  void setUp() throws SQLException {
+    public void setUp() throws SQLException {
+        ds = prepareDataSource();
+        DBUtils.executeSqlScript(ds, LendingManager.class.getResource("createTables.sql"));
         manager = new LendingManagerImpl();
+        manager.setDataSource(ds);
+        boardGameManager = new BoardGameManagerImpl();
+        boardGameManager.setDataSource(ds);
+        customerManager = new CustomerManagerImpl();
+        customerManager.setDataSource(ds);
+    }
+
+    @After
+    public void tearDown() throws SQLException {
+        DBUtils.executeSqlScript(ds,LendingManager.class.getResource("dropTables.sql"));
+    }
+
+    private Date date(String date) {
+        return Date.valueOf(date);
     }
     
     /**
@@ -41,8 +73,13 @@ public class LendingManagerImplTest {
      */
     @Test
     public void createLending() {
-        
-        Lending lending = newLending(5, new Customer("Pepa", "Brno", "800000000"), new BoardGame("Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
+        Customer cust = new Customer("Pepa", "Brno", "800000000");
+        manager.createCustomer(cust);
+        Set<String> category = new HashSet<>();
+        category.add("cool");
+        category.add("nice");
+        BoardGame game = new BoardGame("Nice BoardGame", 6, 2, category, new BigDecimal(150));
+        Lending lending = new Lending(cust, game, null, null, null);
         manager.createLending(lending);
 
         Integer lendingId = lending.getId();
@@ -58,8 +95,8 @@ public class LendingManagerImplTest {
 
         assertTrue(manager.findAllLendings().isEmpty());
 
-        Lending l1 = newLending(5, new Customer("Pepa", "Brno", "800000000"), new BoardGame("Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
-        Lending l2 = newLending(8, new Customer("Pepa", "Brno", "800000000"), new BoardGame("Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
+        Lending l1 = newLending(new Customer("Pepa", "Brno", "800000000"), new BoardGame("Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
+        Lending l2 = newLending(new Customer("Pepa", "Brno", "800000000"), new BoardGame("Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
 
         manager.createLending(l1);
         manager.createLending(l2);
@@ -77,8 +114,8 @@ public class LendingManagerImplTest {
     @Test
     public void deleteLending() {
 
-        Lending l1 = newLending(5, new Customer("Pepa", "Brno", "800000000"), new BoardGame("Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
-        Lending l2 = newLending(8, new Customer("Pepa", "Brno", "800000000"), new BoardGame("Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
+        Lending l1 = newLending(new Customer("Pepa", "Brno", "800000000"), new BoardGame("Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
+        Lending l2 = newLending(new Customer("Pepa", "Brno", "800000000"), new BoardGame("Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
         manager.createLending(l1);
         manager.createLending(l2);
         
@@ -95,7 +132,7 @@ public class LendingManagerImplTest {
     @Test
     public void deleteLendingWithWrongAttributes() {
 
-        Lending lending = newLending(5, new Customer("Pepa", "Brno", "800000000"), new BoardGame("Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
+        Lending lending = newLending(new Customer("Pepa", "Brno", "800000000"), new BoardGame("Nice game", 1, 5, new TreeSet<String>(), new BigDecimal(7.185)), new GregorianCalendar(), new GregorianCalendar(), new GregorianCalendar());
         
         try {
             manager.deleteLending(null);
@@ -122,9 +159,8 @@ public class LendingManagerImplTest {
 
     }
     
-    private static Lending newLending(Integer id, Customer customer, BoardGame boardGame, Calendar startTime, Calendar expectedEndTime, Calendar realEndTime) {
+    private static Lending newLending(Customer customer, BoardGame boardGame, Calendar startTime, Calendar expectedEndTime, Calendar realEndTime) {
         Lending lending = new Lending();
-        lending.setId(id);
         lending.setCustomer(customer);
         lending.setBoardGame(boardGame);
         lending.setStartTime(startTime);

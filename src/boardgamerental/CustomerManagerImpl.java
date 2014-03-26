@@ -6,6 +6,7 @@
 
 package boardgamerental;
 
+import cz.muni.fi.pv168.common.ServiceFailureException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
