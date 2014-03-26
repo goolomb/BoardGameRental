@@ -38,7 +38,6 @@ public class BoardGameManagerImplTest {
     
     private static DataSource prepareDataSource() throws SQLException {
         BasicDataSource ds = new BasicDataSource();
-        //we will use in memory database
         ds.setUrl("jdbc:derby:memory:BoardGameManager-test;create=true");
         return ds;
     }

@@ -45,7 +45,7 @@ public class BoardGameManagerImpl implements BoardGameManager {
         checkDataSource();
         validate(boardGame);
         if (boardGame.getId() != null) {
-            throw new IllegalEntityException("grave id is already set");
+            throw new IllegalEntityException("board game id is already set");
         }        
         try (Connection conn = dataSource.getConnection()) {
             //conn.setAutoCommit(false);
@@ -94,7 +94,7 @@ public class BoardGameManagerImpl implements BoardGameManager {
                 return executeQueryForSingleBoardGame(st);
             }
         } catch (SQLException ex) {
-            String msg = "Error when getting grave with id = " + id + " from DB";
+            String msg = "Error when getting board game with id = " + id + " from DB";
             logger.log(Level.SEVERE, msg, ex);
             throw new ServiceFailureException(msg, ex);
         }
