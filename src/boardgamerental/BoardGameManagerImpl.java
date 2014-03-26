@@ -6,8 +6,16 @@
 
 package boardgamerental;
 
+import cz.muni.fi.pv168.common.DBUtils;
+import cz.muni.fi.pv168.common.IllegalEntityException;
+import cz.muni.fi.pv168.common.ValidationException;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
 
@@ -33,11 +41,65 @@ public class BoardGameManagerImpl implements BoardGameManager {
     }
 
     public void createBoardGame(BoardGame boardGame) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        checkDataSource();
+        validate(boardGame);
+        if (boardGame.getId() != null) {
+            throw new IllegalEntityException("grave id is already set");
+        }        
+        try (Connection conn = dataSource.getConnection()) {
+            //conn.setAutoCommit(false);
+            try (PreparedStatement st = conn.prepareStatement(
+                    "INSERT INTO BoardGame (name, maxPlayers, minPlayers, pricePerDay) VALUES (?,?,?,?)",
+                    Statement.RETURN_GENERATED_KEYS)){
+            st.setString(1, boardGame.getName());
+            st.setInt(2, boardGame.getMaxPlayers());
+            st.setInt(3, boardGame.getMinPlayers());
+            st.setBigDecimal(4, boardGame.getPricePerDay());
+
+            int count = st.executeUpdate();
+            DBUtils.checkUpdatesCount(count, boardGame, true);
+
+            Integer id = DBUtils.getId(st.getGeneratedKeys());
+            boardGame.setId(id);
+            }
+            for(String cat : boardGame.getCategory())
+                try (PreparedStatement st = conn.prepareStatement(
+                    "INSERT INTO Category (boardGameId, category) VALUES (?,?)")){
+                    st.setInt(1, boardGame.getId());
+                    st.setString(2, cat);
+                    int count = st.executeUpdate();
+                    DBUtils.checkUpdatesCount(count, boardGame, true);
+                }
+            conn.commit();
+        } catch (SQLException ex) {
+            String msg = "Error when inserting board game into db";
+            logger.log(Level.SEVERE, msg, ex);
+            throw new cz.muni.fi.pv168.common.ServiceFailureException(msg, ex);
+        }
     }
 
     public BoardGame getBoardGameById(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        checkDataSource();
+        
+        if (id == null) {
+            throw new IllegalArgumentException("id is null");
+        }
+        
+        Connection conn = null;
+        PreparedStatement st = null;
+        try {
+            conn = dataSource.getConnection();
+            st = conn.prepareStatement(
+                    "SELECT id, col, row, capacity, note FROM Grave WHERE id = ?");
+            st.setLong(1, id);
+            return executeQueryForSingleGrave(st);
+        } catch (SQLException ex) {
+            String msg = "Error when getting grave with id = " + id + " from DB";
+            logger.log(Level.SEVERE, msg, ex);
+            throw new cz.muni.fi.pv168.common.ServiceFailureException(msg, ex);
+        } finally {
+            DBUtils.closeQuietly(conn, st);
+        }
     }
 
     public List<BoardGame> findAllBoardGames() {
@@ -67,5 +129,37 @@ public class BoardGameManagerImpl implements BoardGameManager {
     public void deleteBoardGame(BoardGame boardGame) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    private static void validate(BoardGame boardGame) {
+        if (boardGame == null) {
+            throw new IllegalArgumentException("grave is null");
+        }
+        if (boardGame.getName() == null) {
+            throw new ValidationException("name is null");
+        }
+        if (boardGame.getName().equals("")) {
+            throw new ValidationException("name is null");
+        }
+        if (boardGame.getMaxPlayers() < 0) {
+            throw new ValidationException("maxPlayers is negative number");
+        }
+        if (boardGame.getMinPlayers() < 0) {
+            throw new ValidationException("minPlayers is negative number");
+        }
+        if (boardGame.getMinPlayers() > boardGame.getMaxPlayers()) {
+            throw new ValidationException("minPlayers is greater than maxPlayers");
+        }
+        if (boardGame.getCategory() == null) {
+            throw new ValidationException("category is null");
+        }
+        if (boardGame.getCategory().isEmpty()) {
+            throw new ValidationException("category is empty");
+        }
+        if (boardGame.getPricePerDay() == null) {
+            throw new ValidationException("pricePerDay is null");
+        }
+        if (boardGame.getPricePerDay().compareTo(new BigDecimal(0)) <= 0) {
+            throw new ValidationException("pricePerDay is not positive number");
+        }
     
 }
