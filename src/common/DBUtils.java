@@ -76,12 +76,12 @@ public class DBUtils {
      * @return key from given result set
      * @throws SQLException when operation fails
      */
-    public static Long getId(ResultSet key) throws SQLException {
+    public static Integer getId(ResultSet key) throws SQLException {
         if (key.getMetaData().getColumnCount() != 1) {
             throw new IllegalArgumentException("Given ResultSet contains more columns");
         }
         if (key.next()) {
-            Long result = key.getLong(1);
+            Integer result = key.getInt(1);
             if (key.next()) {
                 throw new IllegalArgumentException("Given ResultSet contains more rows");
             }
