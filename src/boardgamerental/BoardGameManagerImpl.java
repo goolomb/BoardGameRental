@@ -16,6 +16,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
@@ -41,6 +42,7 @@ public class BoardGameManagerImpl implements BoardGameManager {
         }
     }
 
+    @Override
     public void createBoardGame(BoardGame boardGame) {
         checkDataSource();
         validate(boardGame);
@@ -79,6 +81,7 @@ public class BoardGameManagerImpl implements BoardGameManager {
         }
     }
 
+    @Override
     public BoardGame getBoardGameById(Integer id) {
         checkDataSource();
         
@@ -91,7 +94,16 @@ public class BoardGameManagerImpl implements BoardGameManager {
                     "SELECT id, name, maxPlayers, minPlayers, pricePerDay FROM BoardGame WHERE id = ?")){
                 st.setInt(1, id);
                 
-                return executeQueryForSingleBoardGame(st);
+                BoardGame boardGame = executeQueryForSingleBoardGame(st);
+                
+                if (boardGame != null) {
+                    try (PreparedStatement st1 = conn.prepareStatement(
+                            "SELECT boardGameId, category FROM category WHERE boardGameId = ?")){
+                        st1.setInt(1, boardGame.getId());
+                        boardGame.setCategory(executeQueryForCategory(st1));
+                    }
+                }
+                return boardGame;
             }
         } catch (SQLException ex) {
             String msg = "Error when getting board game with id = " + id + " from DB";
@@ -100,6 +112,7 @@ public class BoardGameManagerImpl implements BoardGameManager {
         }
     }
 
+    @Override
     public List<BoardGame> findAllBoardGames() {
         checkDataSource();
         try (Connection conn = dataSource.getConnection()){
@@ -114,31 +127,37 @@ public class BoardGameManagerImpl implements BoardGameManager {
         }
     }
 
+    @Override
     public List<BoardGame> findBoardGameByName(String name) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
     public List<BoardGame> findBoardGameByPlayers(int players) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
     public List<BoardGame> findBoardGameByCategory(String category) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
     public List<BoardGame> findBoardGameByPricePerDay(BigDecimal pricePerDay) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
     public void updateBoardGame(BoardGame boardGame) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
     public void deleteBoardGame(BoardGame boardGame) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    BoardGame executeQueryForSingleBoardGame(PreparedStatement st) throws SQLException, ServiceFailureException {
+    private static BoardGame executeQueryForSingleBoardGame(PreparedStatement st) throws SQLException, ServiceFailureException {
         try (ResultSet rs = st.executeQuery()){
             if (rs.next()) {
                 BoardGame result = rowToBoardGame(rs);                
@@ -153,7 +172,7 @@ public class BoardGameManagerImpl implements BoardGameManager {
         }
     }
 
-    List<BoardGame> executeQueryForMultipleBoardGames(PreparedStatement st) throws SQLException {
+    private static List<BoardGame> executeQueryForMultipleBoardGames(PreparedStatement st) throws SQLException {
         List<BoardGame> result = new ArrayList<>();
         try (ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
@@ -163,24 +182,18 @@ public class BoardGameManagerImpl implements BoardGameManager {
         return result;
     }
     
-    private BoardGame rowToBoardGame(ResultSet rs) throws SQLException {
+    private static BoardGame rowToBoardGame(ResultSet rs) throws SQLException {
         BoardGame result = new BoardGame(rs.getString("name"), rs.getInt("maxPlayers"), 
-                rs.getInt("minPlayers"), new HashSet<>(rowToCategory(rs)), rs.getBigDecimal("pricePerDay"));
+                rs.getInt("minPlayers"), null, rs.getBigDecimal("pricePerDay"));
         result.setId(rs.getInt("id"));
         return result;
     }
     
-    private List<String> rowToCategory(ResultSet rs) throws SQLException {
-        List<String> categories = new ArrayList<>();
-        try (Connection conn = dataSource.getConnection()){
-            try(PreparedStatement st = conn.prepareStatement(
-                    "SELECT boardGameId, category FROM Category WHERE id = ?")){
-                st.setInt(1, rs.getInt("id"));
-                try(ResultSet rs1 = st.executeQuery()){
-                    while (rs1.next()) {
-                        categories.add(rs1.getString("category"));
-                    }
-                }
+    private static Set<String> executeQueryForCategory(PreparedStatement st) throws SQLException, ServiceFailureException {
+        Set<String> categories = new HashSet<>();
+        try (ResultSet rs = st.executeQuery()){
+            while (rs.next()) {
+                categories.add(rs.getString("category"));
             }
         }
         return categories;

@@ -8,9 +8,7 @@
 
 package boardgamerental;
 
-import cz.muni.fi.pv168.common.DBUtils;
-import cz.muni.fi.pv168.common.IllegalEntityException;
-import cz.muni.fi.pv168.common.ValidationException;
+import cz.muni.fi.pv168.common.*;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -35,6 +33,8 @@ public class BoardGameManagerImplTest {
 
     private BoardGameManagerImpl manager;
     private DataSource ds;
+    private BoardGame boardGame;
+    private BoardGame bg2;
     
     private static DataSource prepareDataSource() throws SQLException {
         BasicDataSource ds = new BasicDataSource();
@@ -48,6 +48,14 @@ public class BoardGameManagerImplTest {
         DBUtils.executeSqlScript(ds,BoardGameManager.class.getResource("createTables.sql"));
         manager = new BoardGameManagerImpl();
         manager.setDataSource(ds);
+        Set<String> category = new HashSet<>();
+        category.add("cool");
+        category.add("nice");
+        Set<String> cat2 = new HashSet<>();
+        cat2.add("another");
+        cat2.add("alternative");
+        boardGame = new BoardGame("Nice BoardGame", 6, 2, category, new BigDecimal(150));
+        bg2 = new BoardGame("Another BoardGame", 8, 1, cat2, new BigDecimal(300));
     }
     
     @After
@@ -60,10 +68,6 @@ public class BoardGameManagerImplTest {
      */
     @Test
     public void testCreateBoardGame() {
-        Set<String> category = new HashSet<>();
-        category.add("cool");
-        category.add("nice");
-        BoardGame boardGame = new BoardGame("Nice BoardGame", 6, 2, category, new BigDecimal(150));
         manager.createBoardGame(boardGame);
 
         Integer boardGameId = boardGame.getId();
@@ -83,10 +87,6 @@ public class BoardGameManagerImplTest {
     public void testGetBoardGameById() {
         assertNull(manager.getBoardGameById(1));
         
-        Set<String> category = new HashSet<>();
-        category.add("cool");
-        category.add("nice");
-        BoardGame boardGame = new BoardGame("Nice BoardGame", 6, 2, category, new BigDecimal(150));
         manager.createBoardGame(boardGame);
         Integer boardGameId = boardGame.getId();
 
