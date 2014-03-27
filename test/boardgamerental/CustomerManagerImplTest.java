@@ -35,7 +35,7 @@ public class CustomerManagerImplTest {
                 + "name varchar(30),"
                 + "address varchar(255),"
                 + "phoneNumber varchar(20))").executeUpdate();
-        manager = new CustomerManagerImpl(conn);
+        manager = new CustomerManagerImpl();
     }
     
     @After
