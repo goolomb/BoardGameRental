@@ -7,6 +7,7 @@
 package boardgamerental;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -17,16 +18,15 @@ public class Lending {
     private Integer id;
     private Customer customer;
     private BoardGame boardGame;
-    private Calendar startTime;
-    private Calendar expectedEndTime;
-    private Calendar realEndTime;
+    private Date startTime;
+    private Date expectedEndTime;
+    private Date realEndTime;
 
-    public Lending(Customer customer, BoardGame boardGame, Calendar startTime, Calendar expectedEndTime, Calendar realEndTime) {
+    public Lending(Customer customer, BoardGame boardGame, Date startTime, Date expectedEndTime) {
         this.customer = customer;
         this.boardGame = boardGame;
         this.startTime = startTime;
         this.expectedEndTime = expectedEndTime;
-        this.realEndTime = realEndTime;
     }
 
     @Override
@@ -82,27 +82,27 @@ public class Lending {
         this.boardGame = boardGame;
     }
 
-    public Calendar getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Calendar startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public Calendar getExpectedEndTime() {
+    public Date getExpectedEndTime() {
         return expectedEndTime;
     }
 
-    public void setExpectedEndTime(Calendar expectedEndTime) {
+    public void setExpectedEndTime(Date expectedEndTime) {
         this.expectedEndTime = expectedEndTime;
     }
 
-    public Calendar getRealEndTime() {
+    public Date getRealEndTime() {
         return realEndTime;
     }
 
-    public void setRealEndTime(Calendar realEndTime) {
+    public void setRealEndTime(Date realEndTime) {
         this.realEndTime = realEndTime;
     }
     
