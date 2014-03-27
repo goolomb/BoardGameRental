@@ -29,6 +29,7 @@ public class CustomerManagerImpl implements CustomerManager {
     }    
     private Connection conn;
 
+    @Override
     public void createCustomer(Customer customer)  throws ServiceFailureException {
         validate(customer);
         if (customer.getId() != null) {
@@ -86,6 +87,7 @@ public class CustomerManagerImpl implements CustomerManager {
         }
     }
 
+    @Override
     public Customer getCustomerById(Integer id) throws ServiceFailureException {
         PreparedStatement st = null;
         try {
@@ -131,6 +133,7 @@ public class CustomerManagerImpl implements CustomerManager {
         return customer;
     }
 
+    @Override
     public List<Customer> findAllCustomers() throws ServiceFailureException {
         PreparedStatement st = null;
         try {
@@ -138,7 +141,7 @@ public class CustomerManagerImpl implements CustomerManager {
                     "SELECT id,name,address,phonenumber FROM Customer");
             ResultSet rs = st.executeQuery();
             
-            List<Customer> result = new ArrayList<Customer>();
+            List<Customer> result = new ArrayList<>();
             while (rs.next()) {
                 result.add(resultSetToCustomer(rs));
             }
@@ -159,6 +162,7 @@ public class CustomerManagerImpl implements CustomerManager {
     }
 
     
+    @Override
     public List<Customer> findCustomerByName(String name) {
         PreparedStatement st = null;
         try {
@@ -167,7 +171,7 @@ public class CustomerManagerImpl implements CustomerManager {
             st.setString(1, name);
             ResultSet rs = st.executeQuery();
             
-            List<Customer> result = new ArrayList<Customer>();
+            List<Customer> result = new ArrayList<>();
             while (rs.next()) {
                 result.add(resultSetToCustomer(rs));
             }
@@ -187,6 +191,7 @@ public class CustomerManagerImpl implements CustomerManager {
         }
     }
 
+    @Override
     public void updateCustomer(Customer customer) {
         validate(customer);
         if (customer.getId() == null) {
@@ -223,6 +228,7 @@ public class CustomerManagerImpl implements CustomerManager {
         }
      }
 
+    @Override
     public void deleteCustomer(Customer customer) {
         validate(customer);
         if (customer.getId() == null) {
