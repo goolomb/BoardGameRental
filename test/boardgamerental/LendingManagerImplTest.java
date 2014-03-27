@@ -52,14 +52,15 @@ public class LendingManagerImplTest {
         c2 = new Customer("Pepa", "Brno", "800000000");
         customerManager.createCustomer(c1);
         customerManager.createCustomer(c2);
+ 
         Set<String> category = new HashSet<>();
         category.add("cool");
         category.add("nice");
         Set<String> category2 = new HashSet<>();
-        category.add("pretty");
-        category.add("badd ass");
+        category2.add("pretty");
+        category2.add("badd ass");
         b1 = new BoardGame("Nice BoardGame", 6, 2, category, new BigDecimal(150));
-        b2 = new BoardGame("Even Better BoardGame", 3, 4, category2, new BigDecimal(35));
+        b2 = new BoardGame("Even Better BoardGame", 4, 3, category2, new BigDecimal(35));
         boardGameManager.createBoardGame(b1);
         boardGameManager.createBoardGame(b2);
         
