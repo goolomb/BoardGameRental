@@ -166,9 +166,7 @@ public class BoardGameManagerImpl implements BoardGameManager {
                             "Internal integrity error: more board games with the same id found!");
                 }
                 return result;
-            } else {
-                return null;
-            }
+            } else return null;
         }
     }
 
