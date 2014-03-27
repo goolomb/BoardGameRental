@@ -6,13 +6,14 @@
 
 package boardgamerental;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import cz.muni.fi.pv168.common.*;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import javax.sql.DataSource;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,23 +26,25 @@ import static org.junit.Assert.*;
 public class CustomerManagerImplTest {
     
     private CustomerManagerImpl manager;
-    private Connection conn;
+    private DataSource ds;
+    
+    private static DataSource prepareDataSource() throws SQLException {
+        BasicDataSource ds = new BasicDataSource();
+        ds.setUrl("jdbc:derby:memory:CustomerManager-test;create=true");
+        return ds;
+    }
     
     @Before
     public void setUp() throws SQLException{
-        conn = DriverManager.getConnection("jdbc:derby:memory:CustomerManagerTest;create=true");
-        conn.prepareStatement("CREATE TABLE CUSTOMER ("
-                + "id int primary key generated always as identity,"
-                + "name varchar(30),"
-                + "address varchar(255),"
-                + "phoneNumber varchar(20))").executeUpdate();
+        ds = prepareDataSource();
+        DBUtils.executeSqlScript(ds,CustomerManager.class.getResource("createTables.sql"));
         manager = new CustomerManagerImpl();
+        manager.setDataSource(ds);
     }
     
     @After
     public void tearDown() throws SQLException {
-        conn.prepareStatement("DROP TABLE CUSTOMER").executeUpdate();        
-        conn.close();
+        DBUtils.executeSqlScript(ds,CustomerManager.class.getResource("dropTables.sql"));
     }
 
     /**
