@@ -21,55 +21,7 @@ public class DBUtils {
     private static final Logger logger = Logger.getLogger(
             DBUtils.class.getName());
 
-    /**
-     * Closes connection and logs possible error.
-     * 
-     * @param conn connection to close
-     * @param statements  statements to close
-     */
-    public static void closeQuietly(Connection conn, Statement ... statements) {
-        for (Statement st : statements) {
-            if (st != null) {
-                try {
-                    st.close();
-                } catch (SQLException ex) {
-                    logger.log(Level.SEVERE, "Error when closing statement", ex);
-                }                
-            }
-        }        
-        if (conn != null) {
-            try {
-                conn.setAutoCommit(true);
-            } catch (SQLException ex) {
-                logger.log(Level.SEVERE, "Error when switching autocommit mode back to true", ex);
-            }
-            try {
-                conn.close();
-            } catch (SQLException ex) {
-                logger.log(Level.SEVERE, "Error when closing connection", ex);
-            }
-        }
-    }
-
-    /**
-     * Rolls back transaction and logs possible error.
-     * 
-     * @param conn connection
-     */
-    public static void doRollbackQuietly(Connection conn) {
-        if (conn != null) {
-            try {
-                if (conn.getAutoCommit()) {
-                    throw new IllegalStateException("Connection is in the autocommit mode!");
-                }
-                conn.rollback();
-            } catch (SQLException ex) {
-                logger.log(Level.SEVERE, "Error when doing rollback", ex);
-            }
-        }
-    }
-
-    /**
+        /**
      * Extract key from given ResultSet.
      * 
      * @param key resultSet with key
@@ -116,30 +68,7 @@ public class DBUtils {
         }
     }
     
-    /**
-     * Try to execute script for creating tables. If tables already exist, 
-     * appropriate exception is catched and ignored.
-     * 
-     * @param ds dataSource 
-     * @param scriptUrl url of script for creating tables
-     * @throws SQLException when operation fails
-     */
-    public static void tryCreateTables(DataSource ds, URL scriptUrl) throws SQLException {
-        try {
-            executeSqlScript(ds, scriptUrl);
-            logger.warning("Tables created");
-        } catch (SQLException ex) {
-            if ("X0Y32".equals(ex.getSQLState())) {
-                // This code represents "Table/View/... already exists"
-                // This code is Derby specific!
-                return;
-            } else {
-                throw ex;
-            }
-        }
-    }
-    
-    /**
+        /**
      * Executes SQL script.
      * 
      * @param ds datasource
@@ -147,16 +76,14 @@ public class DBUtils {
      * @throws SQLException when operation fails
      */
     public static void executeSqlScript(DataSource ds, URL scriptUrl) throws SQLException {
-        Connection conn = null;
-        try {
-            conn = ds.getConnection();
+        
+        try (Connection conn = ds.getConnection()){
+            
             for (String sqlStatement : readSqlStatements(scriptUrl)) {
                 if (!sqlStatement.trim().isEmpty()) {
                     conn.prepareStatement(sqlStatement).executeUpdate();
                 }
             }
-        } finally {
-            closeQuietly(conn);
         }
     }
 

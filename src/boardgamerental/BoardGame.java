@@ -111,6 +111,13 @@ public class BoardGame {
         final BoardGame other = (BoardGame) obj;
         return other.getId() == this.getId();
     }
+
+    @Override
+    public String toString() {
+        return "BoardGame{" + "id=" + id + ", name=" + name + '}';
+    }
+    
+    
     
     
 }
