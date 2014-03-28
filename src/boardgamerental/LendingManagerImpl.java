@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
 import cz.muni.fi.pv168.common.ServiceFailureException;
+import static java.math.BigDecimal.valueOf;
 import java.sql.Date;
 
 /**
@@ -194,12 +195,29 @@ public class LendingManagerImpl implements LendingManager {
         
         try (Connection conn = dataSource.getConnection()){
             try (PreparedStatement st = conn.prepareStatement(
-                    "SELECT id, boardgameid starttime, expectedendtime realendtime FROM lending WHERE id = ?")){
+                    "SELECT id, boardgameid, customerid starttime, expectedendtime realendtime FROM lending WHERE id = ?")){
                 st.setInt(1, lending.getId());
-        //not complete
-        //not complete
-        //not complete
-                executeQueryForSingleLending(st);
+        
+/*                BigDecimal price;
+                
+                Lending l = executeQueryForSingleLending(st);
+                
+                BigDecimal  pPerDay = l.getBoardGame().getPricePerDay();
+                BigDecimal eeTime = valueOf(l.getExpectedEndTime().getTime());
+                BigDecimal reTime = valueOf(l.getRealEndTime().getTime());
+                BigDecimal sTime = valueOf(l.getStartTime().getTime());
+                BigDecimal day = valueOf(1000*60*60*24);
+
+                if(reTime == null) {
+                    price = eeTime.subtract(sTime);
+                }
+                else if(l.getExpectedEndTime().after(l.getRealEndTime())) {
+                    price = reTime.subtract(sTime);
+                }
+                else {
+                    price = eeTime.subtract(sTime)...;
+                }
+                */
                 return BigDecimal.ZERO;
             }
         }
@@ -217,12 +235,8 @@ public class LendingManagerImpl implements LendingManager {
             try (PreparedStatement st = conn.prepareStatement(
                     "SELECT id, boardgameid FROM lending WHERE boardgameid = ?")){
                 st.setInt(1, boardGame.getId());
-            
-                if(executeQueryForMultipleLendings(st) != null) {
-                    return false;
-                }
-                else return true;
                 
+                return executeQueryForMultipleLendings(st) == null;
             }
         }
         catch (SQLException ex) {
@@ -293,6 +307,7 @@ public class LendingManagerImpl implements LendingManager {
         result.setCustomer(c.getCustomerById(rs.getInt("customerid")));
         result.setStartTime(rs.getDate("starttime"));
         result.setExpectedEndTime(rs.getDate("expectedendtime"));
+        result.setRealEndTime(rs.getDate("realendtime"));
         result.setId(rs.getInt("id"));
         return result;
     }
