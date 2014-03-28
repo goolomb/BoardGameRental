@@ -6,8 +6,7 @@
 
 package boardgamerental;
 
-import cz.muni.fi.pv168.common.DBUtils;
-import cz.muni.fi.pv168.common.IllegalEntityException;
+import cz.muni.fi.pv168.common.*;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -113,8 +112,7 @@ public class LendingManagerImplTest {
     @Test
     public void createLendingWithWrongAttributes() {
         Lending l1 = new Lending(c1, b1, date("2014-01-01"), date("2014-02-01"));
-
-        Integer lendingId = l1.getId();
+        
         try {
             manager.createLending(null);
             fail();
@@ -123,92 +121,82 @@ public class LendingManagerImplTest {
         }
 
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setId(1);
             manager.createLending(l1);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalEntityException ex) {
             //OK
         }
 
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setRealEndTime(date("2014-03-01"));
             manager.createLending(l1);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setStartTime(null);
             manager.createLending(l1);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setExpectedEndTime(null);
             manager.createLending(l1);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setBoardGame(null);
             manager.createLending(l1);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setBoardGame(boardGameWithNullId);
             manager.createLending(l1);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setBoardGame(boardGameNotInDB);
             manager.createLending(l1);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setCustomer(null);
             manager.createLending(l1);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setCustomer(customerWithNullId);
             manager.createLending(l1);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setCustomer(customerNotInDB);
             manager.createLending(l1);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (ValidationException ex) {
             //OK
         }        
     }
@@ -237,7 +225,7 @@ public class LendingManagerImplTest {
         manager.createLending(l2);
         manager.createLending(l3);
         
-        List<Lending> expected = Arrays.asList(l1,l2,l3);
+        List<Lending> expected = Arrays.asList(l1,l3);
         List<Lending> actual = manager.findLendingsForCustomer(c1);
         
         assertCollectionDeepEquals(expected, actual);
@@ -315,7 +303,7 @@ public class LendingManagerImplTest {
     public void updateLendingWithWrongAttributes() {
         Lending l1 = new Lending(c1, b1, date("2014-01-01"), date("2014-01-02"));
 
-        manager.createLending(l1);
+        //manager.createLending(l1);
         
         Integer lendingId = l1.getId();
         
@@ -326,8 +314,10 @@ public class LendingManagerImplTest {
             //OK
         }
         
+        l1 = manager.getLendingById(lendingId);
+        manager.createLending(l1);
+
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setId(null);
             manager.updateLending(l1);
             fail();
@@ -336,7 +326,6 @@ public class LendingManagerImplTest {
         }
 
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setId(lendingId - 1);
             manager.updateLending(l1);        
             fail();
@@ -345,101 +334,90 @@ public class LendingManagerImplTest {
         }
 
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setBoardGame(null);
             manager.updateLending(l1);        
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setCustomer(null);
             manager.updateLending(l1);
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setStartTime(null);
             manager.updateLending(l1);        
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setExpectedEndTime(null);
             manager.updateLending(l1);        
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
         
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setRealEndTime(null);
             manager.updateLending(l1);        
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
         
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setRealEndTime(date("2013-12-31"));
             manager.updateLending(l1);
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
         
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setExpectedEndTime(date("2013-12-31"));
             manager.updateLending(l1);
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setBoardGame(boardGameWithNullId);
             manager.updateLending(l1);
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setBoardGame(boardGameNotInDB);
             manager.updateLending(l1);
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
         
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setCustomer(customerWithNullId);
             manager.updateLending(l1);
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
         
         try {
-            l1 = manager.getLendingById(lendingId);
             l1.setCustomer(customerNotInDB);
             manager.updateLending(l1);
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
     }
@@ -470,8 +448,6 @@ public class LendingManagerImplTest {
 
         Lending l1 = new Lending(c1, b1, date("2014-01-01"), date("2014-02-01"));
         
-        manager.createLending(l1);
-        
         try {
             manager.deleteLending(null);
             fail();
@@ -483,17 +459,26 @@ public class LendingManagerImplTest {
             l1.setId(null);
             manager.deleteLending(l1);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalEntityException ex) {
+            //OK
+        }
+        
+        try {
+            l1.setId(null);
+            manager.deleteLending(l1);
+            fail();
+        } catch (IllegalEntityException ex) {
             //OK
         }
 
         try {
-            l1.setId(1);
+            manager.createLending(l1);
+            l1.setId(l1.getId() + 1);
             manager.deleteLending(l1);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalEntityException ex) {
             //OK
-        }        
+        }
     }
     
     @Test
@@ -534,7 +519,7 @@ public class LendingManagerImplTest {
             l1.setBoardGame(null);
             manager.calculateTotalPrice(l1);
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
@@ -543,7 +528,7 @@ public class LendingManagerImplTest {
             l1.setBoardGame(boardGameWithNullId);
             manager.calculateTotalPrice(l1);
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
@@ -552,7 +537,7 @@ public class LendingManagerImplTest {
             l1.setBoardGame(boardGameNotInDB);
             manager.calculateTotalPrice(l1);
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
@@ -561,7 +546,7 @@ public class LendingManagerImplTest {
             l1.setStartTime(null);
             manager.calculateTotalPrice(l1);
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
@@ -570,7 +555,7 @@ public class LendingManagerImplTest {
             l1.setExpectedEndTime(null);
             manager.calculateTotalPrice(l1);
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
@@ -579,7 +564,7 @@ public class LendingManagerImplTest {
             l1.setExpectedEndTime(date("2013-12-31"));
             manager.calculateTotalPrice(l1);
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
@@ -588,7 +573,7 @@ public class LendingManagerImplTest {
             l1.setRealEndTime(date("2013-12-31"));
             manager.calculateTotalPrice(l1);
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
@@ -598,7 +583,7 @@ public class LendingManagerImplTest {
             l1.setBoardGame(b1);
             manager.calculateTotalPrice(l1);
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
         
@@ -608,7 +593,7 @@ public class LendingManagerImplTest {
             l1.setBoardGame(b1);
             manager.calculateTotalPrice(l1);
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
         
@@ -618,7 +603,7 @@ public class LendingManagerImplTest {
             l1.setBoardGame(b1);
             manager.calculateTotalPrice(l1);
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
