@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
-import cz.muni.fi.pv168.common.ServiceFailureException;
 import static java.math.BigDecimal.valueOf;
 import java.sql.Date;
 
@@ -76,7 +75,7 @@ public class LendingManagerImpl implements LendingManager {
         checkDataSource();
         
         if (id == null) {
-            throw new IllegalArgumentException("id is null");
+            throw new IllegalEntityException("id is null");
         }
         
         try (Connection conn = dataSource.getConnection()){
@@ -126,7 +125,7 @@ public class LendingManagerImpl implements LendingManager {
         checkDataSource();
         validate(lending);
         if (lending.getId() == null) {
-            throw new IllegalEntityException("lending id is null");
+            throw new IllegalEntityException("id is null");
         }        
         
         try (Connection conn = dataSource.getConnection()){
@@ -137,15 +136,10 @@ public class LendingManagerImpl implements LendingManager {
                 st.setDate(3, lending.getStartTime());
                 st.setDate(4, lending.getExpectedEndTime());
                 st.setDate(5, lending.getRealEndTime());
+                st.setInt(6, lending.getId());
                 
                 int updateCount = st.executeUpdate();
-                if (updateCount == 0) {
-                    throw new IllegalArgumentException("Lending " + lending + " does not exist in the db");
-                }
-                if (updateCount != 1) {
-                    throw new ServiceFailureException("Internal Error: Internal integrity error:"
-                            + "Unexpected rows count in database affected: " + updateCount);
-                }
+                DBUtils.checkUpdatesCount(updateCount, lending, false);
             }
         }
         catch (SQLException ex) {
@@ -159,22 +153,18 @@ public class LendingManagerImpl implements LendingManager {
         checkDataSource();
         validate(lending);
         if (lending.getId() == null) {
-            throw new IllegalEntityException("lending id is null");
+            throw new IllegalEntityException("id is null");
         }
         
         try (Connection conn = dataSource.getConnection()){
+            conn.setAutoCommit(false);
             try (PreparedStatement st = conn.prepareStatement(
-                    "DELETE FROM lending WHERE id = ?")){
-                st.setInt(1, lending.getId());
-                
-                int updateCount = st.executeUpdate();
-                if (updateCount == 0) {
-                    throw new IllegalArgumentException("Lenging " + lending + " does not exist in the db");
-                }
-                if (updateCount != 1) {
-                    throw new ServiceFailureException("Internal Error: Internal integrity error:"
-                            + "Unexpected rows count in database affected: " + updateCount);
-                }
+                   "DELETE FROM lending WHERE id = ?")){
+               st.setInt(1, lending.getId());
+  
+               int updateCount = st.executeUpdate();
+               DBUtils.checkUpdatesCount(updateCount, lending, false);
+               conn.commit();
             }
         }
         catch (SQLException ex) {
@@ -188,7 +178,7 @@ public class LendingManagerImpl implements LendingManager {
         checkDataSource();
         validate(lending);
         if (lending.getId() == null) {
-            throw new IllegalEntityException("lending id is null");
+            throw new IllegalEntityException("id is null");
         }
         
         try (Connection conn = dataSource.getConnection()){
@@ -231,7 +221,7 @@ public class LendingManagerImpl implements LendingManager {
         
         try (Connection conn = dataSource.getConnection()){
             try (PreparedStatement st = conn.prepareStatement(
-                    "SELECT id, boardgameid FROM lending WHERE boardgameid = ?")){
+                    "SELECT id, boardgameid, customerid FROM lending WHERE boardgameid = ?")){
                 st.setInt(1, boardGame.getId());
                 
                 return executeQueryForMultipleLendings(st) == null;
@@ -246,7 +236,7 @@ public class LendingManagerImpl implements LendingManager {
 
     private void validate(Lending lending) {
         if(lending == null) {
-            throw new ValidationException("lending is null");
+            throw new IllegalArgumentException("lending is null");
         }
         if (lending.getCustomer() == null) {
             throw new ValidationException("customer is null");
@@ -265,9 +255,6 @@ public class LendingManagerImpl implements LendingManager {
         }
         if (lending.getExpectedEndTime() == null) {
             throw new ValidationException("expectedendtime is null");
-        }
-        if (lending.getRealEndTime() != null) {
-            throw new ValidationException("realendtime already set");
         }
         if (!lending.getStartTime().before(lending.getExpectedEndTime())) {
             throw new ValidationException("expected time is set to earlier date than start time");
@@ -301,6 +288,8 @@ public class LendingManagerImpl implements LendingManager {
         Lending result = new Lending();
         BoardGameManagerImpl b = new BoardGameManagerImpl();
         CustomerManagerImpl c = new CustomerManagerImpl();
+        b.setDataSource(dataSource);
+        c.setDataSource(dataSource);
         result.setBoardGame(b.getBoardGameById(rs.getInt("boardgameid")));
         result.setCustomer(c.getCustomerById(rs.getInt("customerid")));
         result.setStartTime(rs.getDate("starttime"));
