@@ -47,6 +47,7 @@ public class LendingManagerImpl implements LendingManager {
         if (lending.getId() != null) {
             throw new IllegalEntityException("lending id is already set");
         }
+        
         try (Connection conn = dataSource.getConnection()) {
             //conn.setAutoCommit(false);
             try (PreparedStatement st = conn.prepareStatement(
@@ -219,12 +220,21 @@ public class LendingManagerImpl implements LendingManager {
     public boolean isAvailable(BoardGame boardGame) {
         checkDataSource();
         
+        if (boardGame == null) {
+            throw new IllegalArgumentException("boardgame is null");
+        }
+        if (boardGame.getId() == null) {
+            throw new IllegalEntityException("boardgame not in DB");
+        }
+
         try (Connection conn = dataSource.getConnection()){
             try (PreparedStatement st = conn.prepareStatement(
-                    "SELECT id, boardgameid, customerid FROM lending WHERE boardgameid = ?")){
+                    "SELECT  boardgameid FROM lending WHERE boardgameid = ?")){
                 st.setInt(1, boardGame.getId());
                 
-                return executeQueryForMultipleLendings(st) == null;
+                try (ResultSet rs = st.executeQuery()) {
+                    return !rs.next();
+                }
             }
         }
         catch (SQLException ex) {

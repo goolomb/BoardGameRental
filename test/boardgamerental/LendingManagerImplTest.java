@@ -111,15 +111,14 @@ public class LendingManagerImplTest {
     
     @Test
     public void createLendingWithWrongAttributes() {
-        Lending l1 = new Lending(c1, b1, date("2014-01-01"), date("2014-02-01"));
-        
         try {
             manager.createLending(null);
             fail();
         } catch (IllegalArgumentException ex) {
             //OK
         }
-
+        
+        Lending l1 = new Lending(c1, b1, date("2014-01-01"), date("2014-02-01"));
         try {
             l1.setId(1);
             manager.createLending(l1);
@@ -128,6 +127,31 @@ public class LendingManagerImplTest {
             //OK
         }
 
+        l1 = new Lending(c1, b1, date("2014-03-01"), date("2014-02-01"));
+        try {
+            manager.createLending(l1);
+            fail();
+        } catch (ValidationException ex) {
+            //OK
+        }
+
+        l1 = new Lending(c1, b1, null, date("2014-02-01"));
+        try {
+            manager.createLending(l1);
+            fail();
+        } catch (ValidationException ex) {
+            //OK
+        }
+
+        l1 = new Lending(c1, b1, date("2014-03-01"), null);
+        try {
+            manager.createLending(l1);
+            fail();
+        } catch (ValidationException ex) {
+            //OK
+        }
+
+        l1 = new Lending(c1, b1, date("2014-03-01"), date("2014-02-01"));
         try {
             l1.setRealEndTime(date("2014-03-01"));
             manager.createLending(l1);
@@ -135,65 +159,49 @@ public class LendingManagerImplTest {
         } catch (ValidationException ex) {
             //OK
         }
-
+        
+        l1 = new Lending(c1, null, date("2014-03-01"), date("2014-02-01"));
         try {
-            l1.setStartTime(null);
             manager.createLending(l1);
             fail();
         } catch (ValidationException ex) {
             //OK
         }
 
+        l1 = new Lending(c1, boardGameWithNullId, date("2014-03-01"), date("2014-02-01"));
         try {
-            l1.setExpectedEndTime(null);
             manager.createLending(l1);
             fail();
         } catch (ValidationException ex) {
             //OK
         }
 
+        l1 = new Lending(c1, boardGameNotInDB, date("2014-03-01"), date("2014-02-01"));
         try {
-            l1.setBoardGame(null);
             manager.createLending(l1);
             fail();
         } catch (ValidationException ex) {
             //OK
         }
 
+        l1 = new Lending(null, b1, date("2014-03-01"), date("2014-02-01"));
         try {
-            l1.setBoardGame(boardGameWithNullId);
             manager.createLending(l1);
             fail();
         } catch (ValidationException ex) {
             //OK
         }
 
+        l1 = new Lending(customerWithNullId, b1, date("2014-03-01"), date("2014-02-01"));
         try {
-            l1.setBoardGame(boardGameNotInDB);
             manager.createLending(l1);
             fail();
         } catch (ValidationException ex) {
             //OK
         }
 
+        l1 = new Lending(customerNotInDB, b1, date("2014-03-01"), date("2014-02-01"));
         try {
-            l1.setCustomer(null);
-            manager.createLending(l1);
-            fail();
-        } catch (ValidationException ex) {
-            //OK
-        }
-
-        try {
-            l1.setCustomer(customerWithNullId);
-            manager.createLending(l1);
-            fail();
-        } catch (ValidationException ex) {
-            //OK
-        }
-
-        try {
-            l1.setCustomer(customerNotInDB);
             manager.createLending(l1);
             fail();
         } catch (ValidationException ex) {
@@ -303,7 +311,7 @@ public class LendingManagerImplTest {
     public void updateLendingWithWrongAttributes() {
         Lending l1 = new Lending(c1, b1, date("2014-01-01"), date("2014-01-02"));
 
-        //manager.createLending(l1);
+        manager.createLending(l1);
         
         Integer lendingId = l1.getId();
         
@@ -314,9 +322,6 @@ public class LendingManagerImplTest {
             //OK
         }
         
-        l1 = manager.getLendingById(lendingId);
-        manager.createLending(l1);
-
         try {
             l1.setId(null);
             manager.updateLending(l1);
@@ -618,14 +623,7 @@ public class LendingManagerImplTest {
         
         manager.createLending(l1);
         
-        Integer boardGameId = b1.getId();
-        BoardGame game = boardGameManager.getBoardGameById(boardGameId);
-        
-        assertTrue(manager.isAvailable(game));
-        
-        Integer boardGameId2 = b2.getId();
-        BoardGame game2 = boardGameManager.getBoardGameById(boardGameId2);
-        
+        assertTrue(manager.isAvailable(b2));
         assertFalse(manager.isAvailable(b1));
     }
 
