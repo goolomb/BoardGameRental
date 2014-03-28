@@ -236,17 +236,109 @@ public class BoardGameManagerImpl implements BoardGameManager {
 
     @Override
     public List<BoardGame> findBoardGameByPricePerDay(BigDecimal pricePerDay) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        checkDataSource();
+        
+        if (pricePerDay.compareTo(new BigDecimal(0)) <= 0) {
+            throw new IllegalArgumentException("price per day is not positive number");
+        }
+        
+        try (Connection conn = dataSource.getConnection()){
+            try(PreparedStatement st = conn.prepareStatement(
+                    "SELECT id, name, maxPlayers, minPlayers, pricePerDay FROM BoardGame WHERE pricePerDay <= ?")){
+                st.setBigDecimal(1, pricePerDay);
+                
+                List<BoardGame> boardGames = executeQueryForMultipleBoardGames(st);
+                
+                for(BoardGame boardGame : boardGames) {
+                    try (PreparedStatement st1 = conn.prepareStatement(
+                            "SELECT boardGameId, category FROM category WHERE boardGameId = ?")){
+                        st1.setInt(1, boardGame.getId());
+                        boardGame.setCategory(executeQueryForCategory(st1));
+                    }
+                }
+                return boardGames;
+            }
+        } catch (SQLException ex) {
+            String msg = "Error when getting board game with pricePerDay = " + pricePerDay + " from DB";
+            logger.log(Level.SEVERE, msg, ex);
+            throw new ServiceFailureException(msg, ex);
+        }
     }
 
     @Override
     public void updateBoardGame(BoardGame boardGame) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        checkDataSource();
+        validate(boardGame);
+        if (boardGame.getId() == null) {
+            throw new IllegalEntityException("board game id is null");            
+        }
+        
+        try (Connection conn = dataSource.getConnection()) {
+            try(PreparedStatement st = conn.prepareStatement(
+                   "UPDATE BoardGame SET name = ?, maxPlayers = ?, minPlayers = ?, pricePerDay = ? WHERE id = ?")){
+                st.setString(1, boardGame.getName());
+                st.setInt(2, boardGame.getMaxPlayers());
+                st.setInt(3, boardGame.getMinPlayers());
+                st.setBigDecimal(4, boardGame.getPricePerDay());
+                st.setInt(5, boardGame.getId());
+                int updateCount = st.executeUpdate();
+                if (updateCount == 0) {
+                    throw new IllegalArgumentException("BoardGame " + boardGame + " does not exist in the db");
+                }
+                if (updateCount != 1) {
+                    throw new ServiceFailureException("Internal Error: Internal integrity error:"
+                            + "Unexpected rows count in database affected: " + updateCount);
+                }
+                try (PreparedStatement st1 = conn.prepareStatement("DELETE FROM Category WHERE boardGameId = ?")) {
+                    st1.setInt(1, boardGame.getId());
+                    st1.executeUpdate();
+                }
+                for(String cat : boardGame.getCategory())
+                    try (PreparedStatement st2 = conn.prepareStatement(
+                        "INSERT INTO Category (boardGameId, category) VALUES (?,?)")){
+                        st2.setInt(1, boardGame.getId());
+                        st2.setString(2, cat);
+                        int count = st2.executeUpdate();
+                        DBUtils.checkUpdatesCount(count, boardGame, true);
+                }
+            }
+        } catch (SQLException ex) {
+            String msg = "Error when updating board game in the db";
+            logger.log(Level.SEVERE, msg, ex);
+            throw new ServiceFailureException(msg, ex);
+        }
     }
 
     @Override
     public void deleteBoardGame(BoardGame boardGame) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        checkDataSource();
+        validate(boardGame);
+        if (boardGame.getId() == null) {
+            throw new IllegalEntityException("board game id null");            
+        }
+        
+        try (Connection conn = dataSource.getConnection()){
+            try (PreparedStatement st1 = conn.prepareStatement("DELETE FROM Category WHERE boardGameId = ?")){
+                st1.setInt(1, boardGame.getId());
+                st1.executeUpdate();
+                }
+            try (PreparedStatement st2 = conn.prepareStatement(
+                    "DELETE FROM BoardGame WHERE id = ?")){
+                st2.setInt(1, boardGame.getId());
+                int updateCount = st2.executeUpdate();
+                if (updateCount == 0) {
+                    throw new IllegalArgumentException("BoardGame " + boardGame + " does not exist in the db");
+                }
+                if (updateCount != 1) {
+                    throw new ServiceFailureException("Internal Error: Internal integrity error:"
+                            + "Unexpected rows count in database affected: " + updateCount);
+                }
+            }
+        } catch (SQLException ex) {
+            String msg = "Error when deleting board game from the db";
+            logger.log(Level.SEVERE, msg, ex);
+            throw new ServiceFailureException(msg, ex);
+        }
     }
     
     private static BoardGame executeQueryForSingleBoardGame(PreparedStatement st) throws SQLException, ServiceFailureException {

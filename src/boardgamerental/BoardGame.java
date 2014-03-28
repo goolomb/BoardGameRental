@@ -21,7 +21,7 @@ public class BoardGame {
     private String name;
     private int maxPlayers;
     private int minPlayers;
-    private Set<String> category = new HashSet<>();
+    private Set<String> category;
     private BigDecimal pricePerDay;
 
     public BoardGame() {
@@ -31,9 +31,13 @@ public class BoardGame {
         this.name = name;
         this.maxPlayers = maxPlayers;
         this.minPlayers = minPlayers;
-        if(category != null)
+        
+        if(category != null) {
+            this.category = new HashSet<>();
             for(String elem : category)
                 this.category.add(elem);
+        }else this.category = category;
+        
         this.pricePerDay = pricePerDay;
     }
 
@@ -70,13 +74,17 @@ public class BoardGame {
     }
 
     public Set<String> getCategory() {
-        return Collections.unmodifiableSet(category);
+        if (category != null)
+            return Collections.unmodifiableSet(category);
+        else return null;
     }
 
     public void setCategory(Set<String> category) {
-        if(category != null)
+        if(category != null) {
+            this.category = new HashSet<>();
             for(String elem : category)
                 this.category.add(elem);
+        }else this.category = category;
     }
 
     public BigDecimal getPricePerDay() {

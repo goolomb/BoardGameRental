@@ -111,6 +111,9 @@ public class BoardGameManagerImplTest {
         assertBGCollectionDeepEquals(expected, actual);
     }
     
+    /**
+     * Test of findBoardGameByName method, of class BoardGameManagerImpl.
+     */
     @Test
     public void findBoardGameByName(){
         assertTrue(manager.findBoardGameByName("BoardGame").isEmpty());
@@ -168,18 +171,10 @@ public class BoardGameManagerImplTest {
     public void testFindBoardGameByPricePerDay() {
         assertTrue(manager.findBoardGameByPricePerDay(new BigDecimal(500)).isEmpty());
 
-        Set<String> category = new HashSet<>();
-        category.add("cool");
-        category.add("nice");
-        BoardGame bg1 = new BoardGame("Nice BoardGame", 6, 2, category, new BigDecimal(150));
-        Set<String> cat = new HashSet<>();
-        cat.add("cool");
-        cat.add("alternative");
-        BoardGame bg2 = new BoardGame("Another BoardGame", 8, 1, cat, new BigDecimal(300));
-        manager.createBoardGame(bg1);
+        manager.createBoardGame(boardGame);
         manager.createBoardGame(bg2);
 
-        List<BoardGame> expected = Arrays.asList(bg1,bg2);
+        List<BoardGame> expected = Arrays.asList(boardGame,bg2);
         List<BoardGame> actual = manager.findBoardGameByPricePerDay(new BigDecimal(500));
         
         assertBGCollectionDeepEquals(expected, actual);
@@ -294,14 +289,7 @@ public class BoardGameManagerImplTest {
      */
     @Test
     public void testUpdateBoardGame() {
-        Set<String> category = new HashSet<>();
-        category.add("cool");
-        category.add("nice");
-        BoardGame boardGame = new BoardGame("Nice BoardGame", 6, 2, category, new BigDecimal(150));
-        Set<String> cat = new HashSet<>();
-        cat.add("another");
-        cat.add("alternative");
-        BoardGame bg2 = new BoardGame("Another BoardGame", 8, 1, cat, new BigDecimal(300));
+
         manager.createBoardGame(boardGame);
         manager.createBoardGame(bg2);
         Integer boardGameId = boardGame.getId();
@@ -325,7 +313,7 @@ public class BoardGameManagerImplTest {
         result = manager.getBoardGameById(boardGameId);
         assertBGDeepEquals(boardGame, result);
 
-        category = new HashSet<>();
+        Set<String> category = new HashSet<>();
         category.add("awesome");
         category.add("pretty");
         boardGame = manager.getBoardGameById(boardGameId);
@@ -347,17 +335,13 @@ public class BoardGameManagerImplTest {
     @Test
     public void updateBoardGameWithWrongAttributes(){
         
-        Set<String> category = new HashSet<>();
-        category.add("cool");
-        category.add("nice");
-        BoardGame boardGame = new BoardGame("Nice BoardGame", 6, 2, category, new BigDecimal(150));
         manager.createBoardGame(boardGame);
         Integer boardGameId = boardGame.getId();
         
         try {
             manager.updateBoardGame(null);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalEntityException ex) {
             //OK
         }
         
@@ -375,7 +359,7 @@ public class BoardGameManagerImplTest {
             boardGame.setId(boardGameId - 1);
             manager.updateBoardGame(boardGame);        
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (IllegalArgumentException ex) {
             //OK
         }
 
@@ -384,7 +368,7 @@ public class BoardGameManagerImplTest {
             boardGame.setName(null);
             manager.updateBoardGame(boardGame);        
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
@@ -393,7 +377,7 @@ public class BoardGameManagerImplTest {
             boardGame.setName("");
             manager.updateBoardGame(boardGame);        
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
@@ -402,7 +386,7 @@ public class BoardGameManagerImplTest {
             boardGame.setMaxPlayers(0);
             manager.updateBoardGame(boardGame);        
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
@@ -411,7 +395,7 @@ public class BoardGameManagerImplTest {
             boardGame.setMinPlayers(0);
             manager.updateBoardGame(boardGame);        
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
         
@@ -420,17 +404,17 @@ public class BoardGameManagerImplTest {
             boardGame.setCategory(null);
             manager.updateBoardGame(boardGame);        
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
         
-        category.clear();
+        Set<String> category = new HashSet<>();
         try {
             boardGame = manager.getBoardGameById(boardGameId);
             boardGame.setCategory(category);
             manager.updateBoardGame(boardGame);        
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
         
@@ -439,7 +423,7 @@ public class BoardGameManagerImplTest {
             boardGame.setPricePerDay(null);
             manager.updateBoardGame(boardGame);        
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
         
@@ -448,7 +432,7 @@ public class BoardGameManagerImplTest {
             boardGame.setPricePerDay(new BigDecimal(0));
             manager.updateBoardGame(boardGame);        
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
     }
@@ -459,38 +443,25 @@ public class BoardGameManagerImplTest {
     @Test
     public void testDeleteBoardGame() {
         
-        Set<String> category = new HashSet<>();
-        category.add("cool");
-        category.add("nice");
-        BoardGame bg1 = new BoardGame("Nice BoardGame", 6, 2, category, new BigDecimal(150));
-        Set<String> cat = new HashSet<>();
-        cat.add("another");
-        cat.add("alternative");
-        BoardGame bg2 = new BoardGame("Another BoardGame", 8, 1, cat, new BigDecimal(300));
-        manager.createBoardGame(bg1);
+        manager.createBoardGame(boardGame);
         manager.createBoardGame(bg2);
         
-        assertNotNull(manager.getBoardGameById(bg1.getId()));
+        assertNotNull(manager.getBoardGameById(boardGame.getId()));
         assertNotNull(manager.getBoardGameById(bg2.getId()));
 
-        manager.deleteBoardGame(bg1);
+        manager.deleteBoardGame(boardGame);
         
-        assertNull(manager.getBoardGameById(bg1.getId()));
+        assertNull(manager.getBoardGameById(boardGame.getId()));
         assertNotNull(manager.getBoardGameById(bg2.getId()));
     }
     
     @Test
     public void deleteBoardGameWithWrongAttributes(){
         
-        Set<String> category = new HashSet<>();
-        category.add("cool");
-        category.add("nice");
-        BoardGame boardGame = new BoardGame("Nice BoardGame", 6, 2, category, new BigDecimal(150));
-        
         try {
             manager.deleteBoardGame(null);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalEntityException ex) {
             //OK
         }
 
@@ -506,7 +477,7 @@ public class BoardGameManagerImplTest {
             boardGame.setId(1);
             manager.deleteBoardGame(boardGame);
             fail();
-        } catch (IllegalEntityException ex) {
+        } catch (IllegalArgumentException ex) {
             //OK
         }   
     }

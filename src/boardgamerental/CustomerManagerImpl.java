@@ -55,10 +55,7 @@ public class CustomerManagerImpl implements CustomerManager {
                 st.setString(2, customer.getAddress());
                 st.setString(3, customer.getPhoneNumber());
                 int addedRows = st.executeUpdate();
-                if (addedRows != 1) {
-                    throw new ServiceFailureException("Internal Error: More rows "
-                            + "inserted when trying to insert customer " + customer);
-                }            
+                DBUtils.checkUpdatesCount(addedRows, customer, true);            
             
                 Integer id = DBUtils.getId(st.getGeneratedKeys());
                 customer.setId(id);
@@ -81,12 +78,12 @@ public class CustomerManagerImpl implements CustomerManager {
                 try (ResultSet rs = st.executeQuery()){
             
                     if (rs.next()) {
-                        Customer customer = resultSetToCustomer(rs);
+                        Customer customer = rsToCustomer(rs);
                         
                         if (rs.next()) {
                             throw new ServiceFailureException(
                                     "Internal error: More entities with the same id found "
-                                 + "(source id: " + id + ", found " + customer + " and " + resultSetToCustomer(rs));
+                                 + "(source id: " + id + ", found " + customer + " and " + rsToCustomer(rs));
                         }
                         return customer;
                     } else return null;
@@ -109,7 +106,7 @@ public class CustomerManagerImpl implements CustomerManager {
             
                     List<Customer> result = new ArrayList<>();
                     while (rs.next()) {
-                        result.add(resultSetToCustomer(rs));
+                        result.add(rsToCustomer(rs));
                     }
                     return result;
                 }
@@ -134,7 +131,7 @@ public class CustomerManagerImpl implements CustomerManager {
             
                     List<Customer> result = new ArrayList<>();
                     while (rs.next()) {
-                        result.add(resultSetToCustomer(rs));
+                        result.add(rsToCustomer(rs));
                     }
                     return result;
                 }
@@ -206,7 +203,7 @@ public class CustomerManagerImpl implements CustomerManager {
         }
     }
     
-    private Customer resultSetToCustomer(ResultSet rs) throws SQLException {
+    private Customer rsToCustomer(ResultSet rs) throws SQLException {
         Customer customer = new Customer(rs.getString("name"), rs.getString("address"), rs.getString("phonenumber"));
         customer.setId(rs.getInt("id"));
         return customer;
@@ -214,16 +211,16 @@ public class CustomerManagerImpl implements CustomerManager {
     
     private void validate(Customer customer) {
         if (customer == null) {
-            throw new IllegalArgumentException("customer is null");            
+            throw new IllegalEntityException("customer is null");            
         }
         if (customer.getAddress() == null) {
-            throw new IllegalArgumentException("customer address is null");            
+            throw new ValidationException("customer address is null");            
         }
         if (customer.getName() == null) {
-            throw new IllegalArgumentException("customer name is null");            
+            throw new ValidationException("customer name is null");            
         }
         if (customer.getPhoneNumber() == null) {
-            throw new IllegalArgumentException("customer phone number is null");          
+            throw new ValidationException("customer phone number is null");          
         }
     }
         
