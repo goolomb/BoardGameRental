@@ -118,7 +118,15 @@ public class BoardGameManagerImpl implements BoardGameManager {
         try (Connection conn = dataSource.getConnection()){
             try (PreparedStatement st = conn.prepareStatement(
                     "SELECT id, name, maxPlayers, minPlayers, pricePerDay FROM BoardGame")){
-            return executeQueryForMultipleBoardGames(st);
+                List<BoardGame> boardGames = executeQueryForMultipleBoardGames(st);
+                for(BoardGame boardGame : boardGames) {
+                    try (PreparedStatement st1 = conn.prepareStatement(
+                               "SELECT boardGameId, category FROM category WHERE boardGameId = ?")){
+                           st1.setInt(1, boardGame.getId());
+                           boardGame.setCategory(executeQueryForCategory(st1));
+                    }
+                }
+                return boardGames;
             }
         } catch (SQLException ex) {
             String msg = "Error when getting all graves from DB";
@@ -129,17 +137,101 @@ public class BoardGameManagerImpl implements BoardGameManager {
 
     @Override
     public List<BoardGame> findBoardGameByName(String name) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        checkDataSource();
+        
+        if (name == null) {
+            throw new IllegalArgumentException("name is null");
+        }
+        
+        if (name == "") {
+            throw new IllegalArgumentException("name is empty");
+        }
+        
+        try (Connection conn = dataSource.getConnection()){
+            try(PreparedStatement st = conn.prepareStatement(
+                    "SELECT id, name, maxPlayers, minPlayers, pricePerDay FROM BoardGame WHERE name = ?")){
+                st.setString(1, name);
+                
+                List<BoardGame> boardGames = executeQueryForMultipleBoardGames(st);
+                
+                for(BoardGame boardGame : boardGames) {
+                    try (PreparedStatement st1 = conn.prepareStatement(
+                            "SELECT boardGameId, category FROM category WHERE boardGameId = ?")){
+                        st1.setInt(1, boardGame.getId());
+                        boardGame.setCategory(executeQueryForCategory(st1));
+                    }
+                }
+                return boardGames;
+            }
+        } catch (SQLException ex) {
+            String msg = "Error when getting board game with name = " + name + " from DB";
+            logger.log(Level.SEVERE, msg, ex);
+            throw new ServiceFailureException(msg, ex);
+        }
     }
 
     @Override
     public List<BoardGame> findBoardGameByPlayers(int players) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        checkDataSource();
+        
+        if (players <= 0) {
+            throw new IllegalArgumentException("players is not positive number");
+        }
+        
+        try (Connection conn = dataSource.getConnection()){
+            try(PreparedStatement st = conn.prepareStatement(
+                    "SELECT id, name, maxPlayers, minPlayers, pricePerDay FROM BoardGame WHERE maxPlayers >= ? AND minPlayers <= ?")){
+                st.setInt(1, players);
+                st.setInt(2, players);
+                
+                List<BoardGame> boardGames = executeQueryForMultipleBoardGames(st);
+                
+                for(BoardGame boardGame : boardGames) {
+                    try (PreparedStatement st1 = conn.prepareStatement(
+                            "SELECT boardGameId, category FROM category WHERE boardGameId = ?")){
+                        st1.setInt(1, boardGame.getId());
+                        boardGame.setCategory(executeQueryForCategory(st1));
+                    }
+                }
+                return boardGames;
+            }
+        } catch (SQLException ex) {
+            String msg = "Error when getting board game with players = " + players + " from DB";
+            logger.log(Level.SEVERE, msg, ex);
+            throw new ServiceFailureException(msg, ex);
+        }
     }
 
     @Override
     public List<BoardGame> findBoardGameByCategory(String category) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        checkDataSource();
+        List<BoardGame> bgs = new ArrayList<>();
+        if (category == null) {
+            throw new IllegalArgumentException("category is null");
+        }
+        
+        if (category == "") {
+            throw new IllegalArgumentException("category is empty");
+        }
+        
+        try (Connection conn = dataSource.getConnection()){
+            try(PreparedStatement st1 = conn.prepareStatement(
+                    "SELECT boardGameId, category FROM Category WHERE category = ?")) {
+                st1.setString(1, category);
+                List<Integer> ids = new ArrayList<>();
+                try(ResultSet rs = st1.executeQuery()){
+                    while(rs.next())
+                        ids.add(rs.getInt("boardGameId"));
+                }
+                for(Integer id : ids)
+                    bgs.add(getBoardGameById(id));
+            }
+            return bgs;
+        } catch (SQLException ex) {
+            String msg = "Error when getting board game with id = " + category + " from DB";
+            logger.log(Level.SEVERE, msg, ex);
+            throw new ServiceFailureException(msg, ex);
+        }
     }
 
     @Override
@@ -182,30 +274,34 @@ public class BoardGameManagerImpl implements BoardGameManager {
     
     private static BoardGame rowToBoardGame(ResultSet rs) throws SQLException {
         BoardGame result = new BoardGame(rs.getString("name"), rs.getInt("maxPlayers"), 
-                rs.getInt("minPlayers"), null, rs.getBigDecimal("pricePerDay"));
+                rs.getInt("minPlayers"), new HashSet<String>(), rs.getBigDecimal("pricePerDay"));
         result.setId(rs.getInt("id"));
         return result;
     }
     
     private static Set<String> executeQueryForCategory(PreparedStatement st) throws SQLException, ServiceFailureException {
-        Set<String> categories = new HashSet<>();
         try (ResultSet rs = st.executeQuery()){
-            while (rs.next()) {
-                categories.add(rs.getString("category"));
-            }
+            return rowToCategory(rs);
         }
+        
+    }
+    
+    private static Set<String> rowToCategory(ResultSet rs) throws SQLException, ServiceFailureException {
+        Set<String> categories = new HashSet<>();
+        while (rs.next())
+            categories.add(rs.getString("category"));
         return categories;
     }
     
     private static void validate(BoardGame boardGame) {
         if (boardGame == null) {
-            throw new IllegalArgumentException("grave is null");
+            throw new IllegalEntityException("board game is null");
         }
         if (boardGame.getName() == null) {
             throw new ValidationException("name is null");
         }
         if (boardGame.getName().equals("")) {
-            throw new ValidationException("name is null");
+            throw new ValidationException("name is empty");
         }
         if (boardGame.getMaxPlayers() <= 0) {
             throw new ValidationException("maxPlayers is negative number");
