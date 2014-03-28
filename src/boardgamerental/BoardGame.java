@@ -8,6 +8,7 @@
 package boardgamerental;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -20,7 +21,7 @@ public class BoardGame {
     private String name;
     private int maxPlayers;
     private int minPlayers;
-    private Set<String> category;
+    private Set<String> category = new HashSet<>();
     private BigDecimal pricePerDay;
 
     public BoardGame() {
@@ -30,7 +31,9 @@ public class BoardGame {
         this.name = name;
         this.maxPlayers = maxPlayers;
         this.minPlayers = minPlayers;
-        this.category = category;
+        if(category != null)
+            for(String elem : category)
+                this.category.add(elem);
         this.pricePerDay = pricePerDay;
     }
 
@@ -71,7 +74,8 @@ public class BoardGame {
     }
 
     public void setCategory(Set<String> category) {
-        this.category = category;
+        for(String elem : category)
+            this.category.add(elem);
     }
 
     public BigDecimal getPricePerDay() {

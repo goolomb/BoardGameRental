@@ -207,10 +207,10 @@ public class BoardGameManagerImpl implements BoardGameManager {
         if (boardGame.getName().equals("")) {
             throw new ValidationException("name is null");
         }
-        if (boardGame.getMaxPlayers() < 0) {
+        if (boardGame.getMaxPlayers() <= 0) {
             throw new ValidationException("maxPlayers is negative number");
         }
-        if (boardGame.getMinPlayers() < 0) {
+        if (boardGame.getMinPlayers() <= 0) {
             throw new ValidationException("minPlayers is negative number");
         }
         if (boardGame.getMinPlayers() > boardGame.getMaxPlayers()) {
@@ -221,6 +221,9 @@ public class BoardGameManagerImpl implements BoardGameManager {
         }
         if (boardGame.getCategory().isEmpty()) {
             throw new ValidationException("category is empty");
+        }
+        if (boardGame.getCategory().contains(null)) {
+            throw new ValidationException("category contains null");
         }
         if (boardGame.getPricePerDay() == null) {
             throw new ValidationException("pricePerDay is null");

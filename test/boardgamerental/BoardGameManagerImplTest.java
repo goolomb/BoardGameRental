@@ -102,18 +102,10 @@ public class BoardGameManagerImplTest {
     public void testFindAllBoardGames() {
         assertTrue(manager.findAllBoardGames().isEmpty());
 
-        Set<String> category = new HashSet<>();
-        category.add("cool");
-        category.add("nice");
-        BoardGame bg1 = new BoardGame("Nice BoardGame", 6, 2, category, new BigDecimal(150));
-        Set<String> cat = new HashSet<>();
-        cat.add("another");
-        cat.add("alternative");
-        BoardGame bg2 = new BoardGame("Another BoardGame", 8, 1, cat, new BigDecimal(300));
-        manager.createBoardGame(bg1);
+        manager.createBoardGame(boardGame);
         manager.createBoardGame(bg2);
 
-        List<BoardGame> expected = Arrays.asList(bg1,bg2);
+        List<BoardGame> expected = Arrays.asList(boardGame,bg2);
         List<BoardGame> actual = manager.findAllBoardGames();
         
         assertBGCollectionDeepEquals(expected, actual);
@@ -209,7 +201,7 @@ public class BoardGameManagerImplTest {
         try {
             manager.createBoardGame(boardGame);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalEntityException ex) {
             //OK
         }
 
@@ -217,7 +209,7 @@ public class BoardGameManagerImplTest {
         try {
             manager.createBoardGame(boardGame);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
@@ -225,7 +217,7 @@ public class BoardGameManagerImplTest {
         try {
             manager.createBoardGame(boardGame);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
@@ -233,7 +225,7 @@ public class BoardGameManagerImplTest {
         try {
             manager.createBoardGame(boardGame);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
@@ -241,7 +233,7 @@ public class BoardGameManagerImplTest {
         try {
             manager.createBoardGame(boardGame);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
@@ -249,7 +241,7 @@ public class BoardGameManagerImplTest {
         try {
             manager.createBoardGame(boardGame);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
@@ -257,7 +249,7 @@ public class BoardGameManagerImplTest {
         try {
             manager.createBoardGame(boardGame);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
@@ -266,7 +258,7 @@ public class BoardGameManagerImplTest {
         try {
             manager.createBoardGame(boardGame);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
@@ -276,7 +268,7 @@ public class BoardGameManagerImplTest {
         try {
             manager.createBoardGame(boardGame);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
         
@@ -284,7 +276,7 @@ public class BoardGameManagerImplTest {
         try {
             manager.createBoardGame(boardGame);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (ValidationException ex) {
             //OK
         }
 
@@ -520,7 +512,7 @@ public class BoardGameManagerImplTest {
         assertEquals(expected.getName(), actual.getName());
         assertEquals(expected.getMinPlayers(), actual.getMinPlayers());
         assertEquals(expected.getMaxPlayers(), actual.getMaxPlayers());
-        assertEquals(expected.getCategory(), actual.getCategory());
+        assertSetCategories(expected.getCategory(), actual.getCategory());
         assertEquals(expected.getPricePerDay(), actual.getPricePerDay());
     }
     
@@ -552,6 +544,13 @@ public class BoardGameManagerImplTest {
         for (int i = 0; i < expectedSortedList.size(); i++) {
             assertBGDeepEquals(expectedSortedList.get(i), actualSortedList.get(i));
         }
+    }
+    
+    private static void assertSetCategories(Set<String> cat1, Set<String> cat2) {
+        Object[] array1 = cat1.toArray();
+        Object[] array2 = cat2.toArray();
+        for(int i = 0; i < array1.length; i++)
+            assertEquals(array1[i], array2[i]);
     }
 }
 
