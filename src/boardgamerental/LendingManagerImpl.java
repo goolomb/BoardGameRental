@@ -183,31 +183,38 @@ public class LendingManagerImpl implements LendingManager {
         }
         
         try (Connection conn = dataSource.getConnection()){
+            //conn.setAutoCommit(false);
             try (PreparedStatement st = conn.prepareStatement(
-                    "SELECT id, boardgameid, customerid starttime, expectedendtime realendtime FROM lending WHERE id = ?")){
+                    "SELECT id, boardgameid FROM lending WHERE id = ?")){
                 st.setInt(1, lending.getId());
-        
-/*                BigDecimal price;
                 
-                Lending l = executeQueryForSingleLending(st);
-                
-                BigDecimal  pPerDay = l.getBoardGame().getPricePerDay();
-                BigDecimal eeTime = valueOf(l.getExpectedEndTime().getTime());
-                BigDecimal reTime = valueOf(l.getRealEndTime().getTime());
-                BigDecimal sTime = valueOf(l.getStartTime().getTime());
-                BigDecimal day = valueOf(1000*60*60*24);
+                try (ResultSet rs = st.executeQuery()){
+                    if(!rs.next()) {
+                        throw new ValidationException("boardgame not found");
+                    }
+                   
+                    BoardGameManagerImpl b = new BoardGameManagerImpl();
+                    b.setDataSource(dataSource);
+                    
+                    BoardGame game = b.getBoardGameById(rs.getInt("boardgameid"));
+                    //conn.commit();
+                    BigDecimal  perDay = game.getPricePerDay();
+                    long day = 1000*60*60*24;
+                    long sTimeDay = lending.getStartTime().getTime()/day - 1;
+                    long eeTime = lending.getExpectedEndTime().getTime()/day - sTimeDay;
+                    
+                    if(lending.getRealEndTime() == null) {
+                        return perDay.multiply(new BigDecimal(eeTime));
+                    }
 
-                if(reTime == null) {
-                    price = eeTime.subtract(sTime);
+                    long reTime = lending.getRealEndTime().getTime()/day - sTimeDay;
+                    if(!lending.getExpectedEndTime().before(lending.getRealEndTime())) {
+                        return perDay.multiply(new BigDecimal(reTime));
+                    }
+                    else {
+                        return perDay.multiply(new BigDecimal(reTime)).add(new BigDecimal(50*(reTime - eeTime)));
+                    }
                 }
-                else if(l.getExpectedEndTime().after(l.getRealEndTime())) {
-                    price = reTime.subtract(sTime);
-                }
-                else {
-                    price = eeTime.subtract(sTime)...;
-                }
-                */
-                return BigDecimal.ZERO;
             }
         }
         catch (SQLException ex) {

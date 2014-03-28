@@ -488,18 +488,23 @@ public class LendingManagerImplTest {
     
     @Test
     public void calculateTotalPrice() {
-        Lending l1 = new Lending(c1, b1, date("2014-01-01"), date("2014-03-23"));
+        Lending l1 = new Lending(c1, b1, date("2014-01-01"), date("2014-02-13"));
         
         manager.createLending(l1);
-//boardGameManager.getBoardGameById(b1,getId()); ???
-        long days = (l1.getRealEndTime().getTime() - l1.getStartTime().getTime())/(1000*60*60*24);
-        BigDecimal expPrice = b1.getPricePerDay().multiply(new BigDecimal(days));
         
         BigDecimal result;
         
-        Integer lendingId = l1.getId();
+        BigDecimal expPrice = b1.getPricePerDay().multiply(new BigDecimal(44)); //31 for january, 13 for february
+        result = manager.calculateTotalPrice(l1);
+        assertEquals(expPrice, result);
         
-        l1 = manager.getLendingById(lendingId);
+        l1.setRealEndTime(date("2014-01-13"));
+        expPrice = b1.getPricePerDay().multiply(new BigDecimal(13));
+        result = manager.calculateTotalPrice(l1);
+        assertEquals(expPrice, result);
+        
+        l1.setRealEndTime(date("2014-02-19"));
+        expPrice = b1.getPricePerDay().multiply(new BigDecimal(50)).add(new BigDecimal(300)); //6 days extra
         result = manager.calculateTotalPrice(l1);
         assertEquals(expPrice, result);
     }
