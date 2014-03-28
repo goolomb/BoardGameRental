@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-//chichichi, jde to!!! :D:D:D
-//tak jsem neco zmenil
+
 package boardgamerental;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -70,12 +70,13 @@ public class BoardGame {
     }
 
     public Set<String> getCategory() {
-        return category;
+        return Collections.unmodifiableSet(category);
     }
 
     public void setCategory(Set<String> category) {
-        for(String elem : category)
-            this.category.add(elem);
+        if(category != null)
+            for(String elem : category)
+                this.category.add(elem);
     }
 
     public BigDecimal getPricePerDay() {

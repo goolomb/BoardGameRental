@@ -110,6 +110,21 @@ public class BoardGameManagerImplTest {
         
         assertBGCollectionDeepEquals(expected, actual);
     }
+    
+    @Test
+    public void findBoardGameByName(){
+        assertTrue(manager.findBoardGameByName("BoardGame").isEmpty());
+        
+        boardGame.setName("BoardGame");
+        bg2.setName("BoardGame");
+        manager.createBoardGame(boardGame);
+        manager.createBoardGame(bg2);
+
+        List<BoardGame> expected = Arrays.asList(boardGame,bg2);
+        List<BoardGame> actual = manager.findBoardGameByName("BoardGame");
+        
+        assertBGCollectionDeepEquals(expected, actual);
+    }
 
     /**
      * Test of findBoardGameByPlayers method, of class BoardGameManagerImpl.
@@ -118,18 +133,10 @@ public class BoardGameManagerImplTest {
     public void testFindBoardGameByPlayers() {
         assertTrue(manager.findBoardGameByPlayers(6).isEmpty());
 
-        Set<String> category = new HashSet<>();
-        category.add("cool");
-        category.add("nice");
-        BoardGame bg1 = new BoardGame("Nice BoardGame", 6, 2, category, new BigDecimal(150));
-        Set<String> cat = new HashSet<>();
-        cat.add("cool");
-        cat.add("alternative");
-        BoardGame bg2 = new BoardGame("Another BoardGame", 8, 1, cat, new BigDecimal(300));
-        manager.createBoardGame(bg1);
+        manager.createBoardGame(boardGame);
         manager.createBoardGame(bg2);
 
-        List<BoardGame> expected = Arrays.asList(bg1,bg2);
+        List<BoardGame> expected = Arrays.asList(boardGame,bg2);
         List<BoardGame> actual = manager.findBoardGameByPlayers(6);
         
         assertBGCollectionDeepEquals(expected, actual);
@@ -142,18 +149,13 @@ public class BoardGameManagerImplTest {
     public void testFindBoardGameByCategory() {
         assertTrue(manager.findBoardGameByCategory("cool").isEmpty());
 
-        Set<String> category = new HashSet<>();
-        category.add("cool");
-        category.add("nice");
-        BoardGame bg1 = new BoardGame("Nice BoardGame", 6, 2, category, new BigDecimal(150));
         Set<String> cat = new HashSet<>();
         cat.add("cool");
-        cat.add("alternative");
-        BoardGame bg2 = new BoardGame("Another BoardGame", 8, 1, cat, new BigDecimal(300));
-        manager.createBoardGame(bg1);
+        bg2.setCategory(cat);
+        manager.createBoardGame(boardGame);
         manager.createBoardGame(bg2);
 
-        List<BoardGame> expected = Arrays.asList(bg1,bg2);
+        List<BoardGame> expected = Arrays.asList(boardGame,bg2);
         List<BoardGame> actual = manager.findBoardGameByCategory("cool");
         
         assertBGCollectionDeepEquals(expected, actual);
@@ -189,7 +191,7 @@ public class BoardGameManagerImplTest {
         try {
             manager.createBoardGame(null);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalEntityException ex) {
             //OK
         }
 
@@ -342,6 +344,7 @@ public class BoardGameManagerImplTest {
         assertBGDeepEquals(bg2, manager.getBoardGameById(bg2.getId()));
     }
     
+    @Test
     public void updateBoardGameWithWrongAttributes(){
         
         Set<String> category = new HashSet<>();
@@ -476,6 +479,7 @@ public class BoardGameManagerImplTest {
         assertNotNull(manager.getBoardGameById(bg2.getId()));
     }
     
+    @Test
     public void deleteBoardGameWithWrongAttributes(){
         
         Set<String> category = new HashSet<>();
