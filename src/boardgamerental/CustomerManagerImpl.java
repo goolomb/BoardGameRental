@@ -55,10 +55,7 @@ public class CustomerManagerImpl implements CustomerManager {
                 st.setString(2, customer.getAddress());
                 st.setString(3, customer.getPhoneNumber());
                 int addedRows = st.executeUpdate();
-                if (addedRows != 1) {
-                    throw new ServiceFailureException("Internal Error: More rows "
-                            + "inserted when trying to insert customer " + customer);
-                }            
+                DBUtils.checkUpdatesCount(addedRows, customer, true);            
             
                 Integer id = DBUtils.getId(st.getGeneratedKeys());
                 customer.setId(id);
@@ -74,23 +71,15 @@ public class CustomerManagerImpl implements CustomerManager {
     @Override
     public Customer getCustomerById(Integer id) throws ServiceFailureException {
         checkDataSource();
+        
+        if(id == null)
+            throw new IllegalArgumentException("id is null");
+        
         try (Connection conn = dataSource.getConnection()){
             try(PreparedStatement st = conn.prepareStatement(
                     "SELECT id,name,address,phonenumber FROM customer WHERE id = ?")){
                 st.setInt(1, id);
-                try (ResultSet rs = st.executeQuery()){
-            
-                    if (rs.next()) {
-                        Customer customer = resultSetToCustomer(rs);
-                        
-                        if (rs.next()) {
-                            throw new ServiceFailureException(
-                                    "Internal error: More entities with the same id found "
-                                 + "(source id: " + id + ", found " + customer + " and " + resultSetToCustomer(rs));
-                        }
-                        return customer;
-                    } else return null;
-                }
+                return executeQueryForSingleCustomer(st);
             }
         } catch (SQLException ex) {
             String msg = "Error when getting customer with id = " + id + " from DB";
@@ -105,27 +94,22 @@ public class CustomerManagerImpl implements CustomerManager {
         try (Connection conn = dataSource.getConnection()) {
             try(PreparedStatement st = conn.prepareStatement(
                     "SELECT id,name,address,phonenumber FROM Customer")){
-                try(ResultSet rs = st.executeQuery()){
-            
-                    List<Customer> result = new ArrayList<>();
-                    while (rs.next()) {
-                        result.add(resultSetToCustomer(rs));
-                    }
-                    return result;
-                }
-            }
-            
+                return executeQueryForMultipleCustomers(st);
+            }          
         } catch (SQLException ex) {
             String msg = "Error when getting all customers from DB";
             logger.log(Level.SEVERE, msg, ex);
             throw new ServiceFailureException(msg, ex);
         }
     }
-
     
     @Override
-    public List<Customer> findCustomerByName(String name) {
+    public List<Customer> findCustomerByName(String name) throws ServiceFailureException {
         checkDataSource();
+        
+        if (name == null)
+            throw new IllegalArgumentException("name is null");
+        
         try (Connection conn = dataSource.getConnection()){
             try(PreparedStatement st = conn.prepareStatement(
                     "SELECT id,name,address,phonenumber FROM customer WHERE name = ? ")){
@@ -134,7 +118,7 @@ public class CustomerManagerImpl implements CustomerManager {
             
                     List<Customer> result = new ArrayList<>();
                     while (rs.next()) {
-                        result.add(resultSetToCustomer(rs));
+                        result.add(rowToCustomer(rs));
                     }
                     return result;
                 }
@@ -206,7 +190,32 @@ public class CustomerManagerImpl implements CustomerManager {
         }
     }
     
-    private Customer resultSetToCustomer(ResultSet rs) throws SQLException {
+    private List<Customer> executeQueryForMultipleCustomers(PreparedStatement st)throws SQLException {
+        try (ResultSet rs = st.executeQuery()){
+            List<Customer> result = new ArrayList<>();
+            while (rs.next()) {
+                result.add(rowToCustomer(rs));
+            }
+            return result;
+        }
+    }
+    
+    private Customer executeQueryForSingleCustomer(PreparedStatement st) throws SQLException, ServiceFailureException {
+        try (ResultSet rs = st.executeQuery()){
+            if (rs.next()) {
+                Customer result = rowToCustomer(rs);                
+                if (rs.next()) {
+                    throw new ServiceFailureException(
+                            "Internal integrity error: more customers with the same id found!");
+                }
+                return result;
+            } else {
+                return null;
+            }
+        }
+    }
+    
+    private Customer rowToCustomer(ResultSet rs) throws SQLException {
         Customer customer = new Customer(rs.getString("name"), rs.getString("address"), rs.getString("phonenumber"));
         customer.setId(rs.getInt("id"));
         return customer;
@@ -214,17 +223,16 @@ public class CustomerManagerImpl implements CustomerManager {
     
     private void validate(Customer customer) {
         if (customer == null) {
-            throw new IllegalArgumentException("customer is null");            
+            throw new IllegalEntityException("customer is null");            
         }
         if (customer.getAddress() == null) {
-            throw new IllegalArgumentException("customer address is null");            
+            throw new ValidationException("customer address is null");            
         }
         if (customer.getName() == null) {
-            throw new IllegalArgumentException("customer name is null");            
+            throw new ValidationException("customer name is null");            
         }
         if (customer.getPhoneNumber() == null) {
-            throw new IllegalArgumentException("customer phone number is null");          
+            throw new ValidationException("customer phone number is null");          
         }
-    }
-        
+    }   
 }

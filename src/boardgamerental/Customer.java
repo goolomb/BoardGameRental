@@ -62,9 +62,6 @@ public class Customer {
     public int hashCode() {
         int hash = 7;
         hash = 13 * hash + Objects.hashCode(this.id);
-        hash = 13 * hash + Objects.hashCode(this.name);
-        hash = 13 * hash + Objects.hashCode(this.address);
-        hash = 13 * hash + Objects.hashCode(this.phoneNumber);
         return hash;
     }
 
@@ -77,6 +74,13 @@ public class Customer {
         final Customer other = (Customer) obj;
         return other.getId() == this.getId();
     }
+
+    @Override
+    public String toString() {
+        return "Customer{" + "id=" + id + ", name=" + name + '}';
+    }
+    
+    
     
 
 }
