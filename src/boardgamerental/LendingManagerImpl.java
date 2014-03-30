@@ -64,7 +64,7 @@ public class LendingManagerImpl implements LendingManager {
             Integer id = DBUtils.getId(st.getGeneratedKeys());
             lending.setId(id);
             }
-            conn.commit();
+            //conn.commit();
         } catch (SQLException ex) {
             String msg = "Error when inserting lending into db";
             logger.log(Level.SEVERE, msg, ex);
@@ -181,6 +181,11 @@ public class LendingManagerImpl implements LendingManager {
         if (lending.getId() == null) {
             throw new IllegalEntityException("id is null");
         }
+
+        BoardGameManagerImpl b = new BoardGameManagerImpl();
+        b.setDataSource(dataSource);
+        if(b.getBoardGameById(lending.getBoardGame().getId()) == null)
+            throw new ValidationException("boardgame not in DB");
         
         try (Connection conn = dataSource.getConnection()){
             //conn.setAutoCommit(false);
@@ -188,14 +193,10 @@ public class LendingManagerImpl implements LendingManager {
                     "SELECT id, boardgameid FROM lending WHERE id = ?")){
                 st.setInt(1, lending.getId());
                 
-                try (ResultSet rs = st.executeQuery()){
+                try (ResultSet rs = st.executeQuery()) {
                     if(!rs.next()) {
-                        throw new ValidationException("boardgame not found");
+                        throw new ValidationException();
                     }
-                   
-                    BoardGameManagerImpl b = new BoardGameManagerImpl();
-                    b.setDataSource(dataSource);
-                    
                     BoardGame game = b.getBoardGameById(rs.getInt("boardgameid"));
                     //conn.commit();
                     BigDecimal  perDay = game.getPricePerDay();
@@ -282,8 +283,11 @@ public class LendingManagerImpl implements LendingManager {
         if (lending.getBoardGame().getPricePerDay().compareTo(new BigDecimal(0)) <= 0) {
             throw new ValidationException("pricePerDay is not positive number");
         }
-//(boardGameNotInDB)
-//(customerNotInDB)
+        if (lending.getRealEndTime() != null) {
+            if(lending.getStartTime().after(lending.getRealEndTime())) {
+                throw new ValidationException("realtime before starttime");
+            }
+        }
     }
 
     private Lending executeQueryForSingleLending(PreparedStatement st) throws SQLException, ServiceFailureException {
