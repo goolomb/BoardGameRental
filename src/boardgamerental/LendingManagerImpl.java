@@ -14,12 +14,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
-import static java.math.BigDecimal.valueOf;
-import java.sql.Date;
 
 /**
  *
@@ -46,6 +46,12 @@ public class LendingManagerImpl implements LendingManager {
         validate(lending);
         if (lending.getId() != null) {
             throw new IllegalEntityException("lending id is already set");
+        }
+        
+        BoardGameManagerImpl b = new BoardGameManagerImpl();
+        b.setDataSource(dataSource);
+        if(!this.isAvailable(b.getBoardGameById(lending.getBoardGame().getId()))) {
+            throw new ValidationException("Cannot create lending, boardgame is already borrowed");
         }
         
         try (Connection conn = dataSource.getConnection()) {
@@ -181,7 +187,6 @@ public class LendingManagerImpl implements LendingManager {
         if (lending.getId() == null) {
             throw new IllegalEntityException("id is null");
         }
-
         BoardGameManagerImpl b = new BoardGameManagerImpl();
         b.setDataSource(dataSource);
         if(b.getBoardGameById(lending.getBoardGame().getId()) == null)
@@ -197,9 +202,11 @@ public class LendingManagerImpl implements LendingManager {
                     if(!rs.next()) {
                         throw new ValidationException();
                     }
+
                     BoardGame game = b.getBoardGameById(rs.getInt("boardgameid"));
                     //conn.commit();
                     BigDecimal  perDay = game.getPricePerDay();
+                    
                     long day = 1000*60*60*24;
                     long sTimeDay = lending.getStartTime().getTime()/day - 1;
                     long eeTime = lending.getExpectedEndTime().getTime()/day - sTimeDay;
@@ -207,7 +214,6 @@ public class LendingManagerImpl implements LendingManager {
                     if(lending.getRealEndTime() == null) {
                         return perDay.multiply(new BigDecimal(eeTime));
                     }
-
                     long reTime = lending.getRealEndTime().getTime()/day - sTimeDay;
                     if(!lending.getExpectedEndTime().before(lending.getRealEndTime())) {
                         return perDay.multiply(new BigDecimal(reTime));

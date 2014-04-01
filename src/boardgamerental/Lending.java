@@ -50,9 +50,11 @@ public class Lending {
         }
         return true;
     }
-    
-    
 
+    @Override
+    public String toString() {
+        return "Lending{" + "id=" + id + ", customer=" + customer.getName() + ", boardGame=" + boardGame.getName() + '}';
+    }
     
     public Lending() {
         

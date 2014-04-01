@@ -44,7 +44,7 @@ public class LendingManagerImplTest {
     }
     
     private Customer c1, c2, customerWithNullId, customerNotInDB;
-    private BoardGame b1, b2, boardGameWithNullId, boardGameNotInDB;
+    private BoardGame b1, b2, b3, boardGameWithNullId, boardGameNotInDB;
     
     private void prepareTestData() {
         c1 = new Customer("Franta", "Praha", "900000000");
@@ -60,8 +60,10 @@ public class LendingManagerImplTest {
         category2.add("badd ass");
         b1 = new BoardGame("Nice BoardGame", 6, 2, category, new BigDecimal(150));
         b2 = new BoardGame("Even Better BoardGame", 4, 3, category2, new BigDecimal(35));
+        b3 = new BoardGame("The best BoardGame", 8, 1, category2, new BigDecimal(30));
         boardGameManager.createBoardGame(b1);
         boardGameManager.createBoardGame(b2);
+        boardGameManager.createBoardGame(b3);
         
         customerWithNullId = new Customer("Dont", "Have", "Id");
         customerNotInDB = new Customer("Not","In","Database");
@@ -127,6 +129,17 @@ public class LendingManagerImplTest {
             //OK
         }
 
+        l1 = new Lending(c1, b1, date("2014-01-01"), date("2014-02-01"));
+        try {
+            Lending l2 = new Lending(c2, b1, date("2014-01-01"), date("2014-02-01"));
+            manager.createLending(l1);
+            manager.createLending(l2);
+            fail();
+        }
+        catch(ValidationException ex) {
+            //OK
+        }
+        
         l1 = new Lending(c1, b1, date("2014-03-01"), date("2014-02-01"));
         try {
             manager.createLending(l1);
@@ -228,7 +241,7 @@ public class LendingManagerImplTest {
 
         Lending l1 = new Lending(c1, b1, date("2014-01-01"), date("2014-02-01"));
         Lending l2 = new Lending(c2, b2, date("2013-07-06"), date("2013-07-21"));
-        Lending l3 = new Lending(c1, b2, date("2013-05-01"), date("2014-04-01"));
+        Lending l3 = new Lending(c1, b3, date("2013-05-01"), date("2014-04-01"));
         manager.createLending(l1);
         manager.createLending(l2);
         manager.createLending(l3);
@@ -246,13 +259,13 @@ public class LendingManagerImplTest {
 
         Lending l1 = new Lending(c1, b1, date("2014-01-01"), date("2014-02-01"));
         Lending l2 = new Lending(c2, b2, date("2013-07-06"), date("2013-07-21"));
-        Lending l3 = new Lending(c1, b2, date("2013-05-01"), date("2014-04-01"));
+        Lending l3 = new Lending(c1, b3, date("2013-05-01"), date("2014-04-01"));
         
         manager.createLending(l1);
         manager.createLending(l2);
-        manager.createLending(l3);
+        //manager.createLending(l3);
 
-        List<Lending> expected = Arrays.asList(l1,l2,l3);
+        List<Lending> expected = Arrays.asList(l1,l2);
         List<Lending> actual = manager.findAllLendings();
 
         Collections.sort(actual,idComparator);
@@ -516,7 +529,7 @@ public class LendingManagerImplTest {
         manager.createLending(l1);
         
         Integer lendingId = l1.getId();
-        
+
         try {
             manager.calculateTotalPrice(null);
             fail();
@@ -616,7 +629,6 @@ public class LendingManagerImplTest {
         } catch (ValidationException ex) {
             //OK
         }
-
     }
 
     @Test
@@ -666,5 +678,4 @@ public class LendingManagerImplTest {
             }
         }
     };
-    
 }
