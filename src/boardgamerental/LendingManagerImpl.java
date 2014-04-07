@@ -193,7 +193,6 @@ public class LendingManagerImpl implements LendingManager {
             throw new ValidationException("boardgame not in DB");
         
         try (Connection conn = dataSource.getConnection()){
-            //conn.setAutoCommit(false);
             try (PreparedStatement st = conn.prepareStatement(
                     "SELECT id, boardgameid FROM lending WHERE id = ?")){
                 st.setInt(1, lending.getId());
@@ -204,10 +203,31 @@ public class LendingManagerImpl implements LendingManager {
                     }
 
                     BoardGame game = b.getBoardGameById(rs.getInt("boardgameid"));
-                    //conn.commit();
                     BigDecimal  perDay = game.getPricePerDay();
                     
-                    long day = 1000*60*60*24;
+                    Calendar countFromStart;
+                    countFromStart = Calendar.getInstance();
+                    countFromStart.setTime(lending.getStartTime());
+                    int pastDays = 1;
+                    int extraFee = 0;
+                    
+                    while(true) {
+                        if(lending.getRealEndTime() == null) {
+                            if(countFromStart.getTime().equals(lending.getExpectedEndTime())) {
+                                return new BigDecimal(pastDays).multiply(perDay);
+                            }
+                        }
+                        else if(countFromStart.getTime().after(lending.getExpectedEndTime())) {
+                                extraFee += 50;
+                             }
+                        if(countFromStart.getTime().equals(lending.getRealEndTime())) {
+                           return new BigDecimal(pastDays).multiply(perDay).add(new BigDecimal(extraFee));
+                        }
+                    countFromStart.add(Calendar.DATE, 1);
+                    pastDays++;
+                    }
+
+/*                    long day = 1000*60*60*24;
                     long sTimeDay = lending.getStartTime().getTime()/day - 1;
                     long eeTime = lending.getExpectedEndTime().getTime()/day - sTimeDay;
                     
@@ -220,7 +240,7 @@ public class LendingManagerImpl implements LendingManager {
                     }
                     else {
                         return perDay.multiply(new BigDecimal(reTime)).add(new BigDecimal(50*(reTime - eeTime)));
-                    }
+                    }*/
                 }
             }
         }
