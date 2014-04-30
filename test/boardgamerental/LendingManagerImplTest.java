@@ -6,7 +6,7 @@
 
 package boardgamerental;
 
-import cz.muni.fi.pv168.common.*;
+import common.*;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;

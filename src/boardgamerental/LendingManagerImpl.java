@@ -6,7 +6,7 @@
 
 package boardgamerental;
 
-import cz.muni.fi.pv168.common.*;
+import common.*;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -28,7 +28,14 @@ public class LendingManagerImpl implements LendingManager {
     private static final Logger logger = Logger.getLogger(
             LendingManagerImpl.class.getName());
     
+    private BoardGameManager boardGameManager;
+    private CustomerManager customerManager;
+
     private DataSource dataSource;
+
+    
+    LendingManagerImpl() {
+    }
 
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -353,5 +360,13 @@ public class LendingManagerImpl implements LendingManager {
             }
         }
         return result;
+    }
+
+    public void setBoardGameManager(BoardGameManager boardGameManager) {
+        this.boardGameManager = boardGameManager;
+    }
+
+    public void setCustomerManager(CustomerManager customerManager) {
+        this.customerManager = customerManager;
     }
 }

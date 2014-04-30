@@ -6,7 +6,7 @@
 
 package boardgamerental;
 
-import cz.muni.fi.pv168.common.*;
+import common.*;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;

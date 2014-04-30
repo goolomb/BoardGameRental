@@ -6,7 +6,7 @@
 
 package boardgamerental;
 
-import cz.muni.fi.pv168.common.*;
+import common.*;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -115,7 +115,7 @@ public class BoardGameManagerImpl implements BoardGameManager {
         } catch (SQLException ex) {
             String msg = "Error when getting all graves from DB";
             logger.log(Level.SEVERE, msg, ex);
-            throw new cz.muni.fi.pv168.common.ServiceFailureException(msg, ex);
+            throw new common.ServiceFailureException(msg, ex);
         }
     }
 

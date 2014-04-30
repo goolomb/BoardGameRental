@@ -1,4 +1,4 @@
-package cz.muni.fi.pv168.common;
+package common;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,7 +10,6 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
-
 /**
  * Some DB tools.
  * 

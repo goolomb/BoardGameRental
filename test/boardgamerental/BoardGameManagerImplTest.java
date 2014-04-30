@@ -8,7 +8,7 @@
 
 package boardgamerental;
 
-import cz.muni.fi.pv168.common.*;
+import common.*;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;

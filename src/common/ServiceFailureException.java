@@ -1,4 +1,4 @@
-package cz.muni.fi.pv168.common;
+package common;
 
 /**
  * This exception indicates service failure.
