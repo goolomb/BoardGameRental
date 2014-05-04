@@ -6,17 +6,22 @@
 
 package boardgamerental;
 
+import bestguiever.openingTable;
+import java.awt.EventQueue;
+import javax.swing.JFrame;
+
 /**
  *
  * @author Goolomb
  */
 public class BoardgameRental {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
-    }
-    
+ 
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new openingTable().setVisible(true);
+            }
+        });
+    }    
 }

@@ -30,7 +30,7 @@ public class openingTable extends javax.swing.JFrame {
 
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jButtonFindBoardGame = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
@@ -51,7 +51,12 @@ public class openingTable extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("Find board game");
+        jButtonFindBoardGame.setText("Find board game");
+        jButtonFindBoardGame.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFindBoardGameActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Board game Rental");
@@ -80,7 +85,7 @@ public class openingTable extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(123, 123, 123)
-                                .addComponent(jButton3))
+                                .addComponent(jButtonFindBoardGame))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(86, 86, 86)
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -94,7 +99,7 @@ public class openingTable extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton1, jButton2, jButton3});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton1, jButton2, jButtonFindBoardGame});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -108,7 +113,7 @@ public class openingTable extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jButton2)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3)
+                        .addComponent(jButtonFindBoardGame)
                         .addGap(108, 108, 108))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -131,6 +136,11 @@ public class openingTable extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButtonFindBoardGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFindBoardGameActionPerformed
+        new FindBoardGame().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButtonFindBoardGameActionPerformed
 
     /**
      * @param args the command line arguments
@@ -170,9 +180,9 @@ public class openingTable extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButtonFindBoardGame;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
