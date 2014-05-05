@@ -1,19 +1,8 @@
 ----------------------------------------------------------------
-<<<<<<< HEAD
-Tue Mar 25 14:59:01 CET 2014:
- Zavádìní serveru Derby verze The Apache Software Foundation - Apache Derby - 10.8.3.0 - (1405108): instance a816c00e-0144-f989-7c7a-000002980000
-v adresáøi databáze memory:C:\Users\Goolomb\Documents\GitHub\BoardGameRental\CustomerManagerTest  sun.misc.Launcher$AppClassLoader@231a6631 
-=======
-Tue Mar 25 09:53:47 CET 2014:
- Zavádìní serveru Derby verze The Apache Software Foundation - Apache Derby - 10.8.3.0 - (1405108): instance a816c00e-0144-f872-0708-0000016c7ab8
-v adresáøi databáze memory:C:\Users\Patrik\Documents\GitHub\BoardGameRental\CustomerManagerTest  sun.misc.Launcher$AppClassLoader@1497b7b1 
->>>>>>> parent of 17973ef... commons + derby
-
+2014-05-05 16:31:31.253 GMT:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.6.2.1 - (999685): instance a816c00e-0145-cd39-d68a-000002c8de80 
+on database directory memory:C:\Users\Goolomb\Documents\GitHub\BoardGameRental\CustomerManager-test  with class loader sun.misc.Launcher$AppClassLoader@dbe996d 
+Loaded from file:/C:/Users/Goolomb/Documents/GitHub/BoardGameRental/test/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.7.0_40-b43
-user.dir=C:\Users\Goolomb\Documents\GitHub\BoardGameRental
-os.name=Windows 7
-os.arch=amd64
-os.version=6.1
-derby.system.home=null
-Byl spuštìn zavadìè tøídy databáze - derby.database.classpath=''
+Database Class Loader started - derby.database.classpath=''

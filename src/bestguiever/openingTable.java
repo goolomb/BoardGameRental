@@ -6,6 +6,12 @@
 
 package bestguiever;
 
+import boardgamerental.CustomerManagerImpl;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.sql.DataSource;
+
 /**
  *
  * @author Goolomb
@@ -190,6 +196,8 @@ public class openingTable extends javax.swing.JFrame {
         });
     }
 
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddBoardGame;
     private javax.swing.JButton jButtonAddCustomer;

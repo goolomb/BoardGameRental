@@ -38,7 +38,6 @@ public class AddCustomer extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(AddCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //manager.createCustomer(new Customer("name", "address", "phone"));
     }
 
     /**
@@ -185,8 +184,6 @@ public class AddCustomer extends javax.swing.JFrame {
     private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
         Customer c = new Customer(jTextName.getText(), jTextCity.getText() + " " + jTextStreet.getText(), jTextPhone.getText());
         manager.createCustomer(c);
-        if(manager.findCustomerByName(jTextName.getText()) != null)
-            new Dialog(this, jTextName.getText()).setVisible(true);
     }//GEN-LAST:event_jButtonAddActionPerformed
 
     private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed

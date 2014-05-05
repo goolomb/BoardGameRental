@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 /**
@@ -25,11 +26,13 @@ import javax.sql.DataSource;
 public class CustomerManagerImpl implements CustomerManager {
     
     private static final Logger logger = Logger.getLogger(
-            BoardGameManagerImpl.class.getName());    
+            CustomerManagerImpl.class.getName());    
     
     private DataSource dataSource;
 
-    public void setDataSource(DataSource dataSource) {
+    //@Resource(name="jdbc/CustomerManager")
+    public void setDataSource(DataSource dataSource) throws SQLException {
+        DBUtils.executeSqlScript(dataSource,CustomerManager.class.getResource("createTables.sql"));
         this.dataSource = dataSource;
     }
 
