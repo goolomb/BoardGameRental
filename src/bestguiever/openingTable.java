@@ -28,26 +28,26 @@ public class openingTable extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jButtonListAllBoardGames = new javax.swing.JButton();
+        jButtonShowLendings = new javax.swing.JButton();
         jButtonFindBoardGame = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        jButtonAddCustomer = new javax.swing.JButton();
+        jButtonAddBoardGame = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("List all board games");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonListAllBoardGames.setText("List all board games");
+        jButtonListAllBoardGames.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonListAllBoardGamesActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Show lendings for Customer");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButtonShowLendings.setText("Show lendings for Customer");
+        jButtonShowLendings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButtonShowLendingsActionPerformed(evt);
             }
         });
 
@@ -61,14 +61,19 @@ public class openingTable extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Board game Rental");
 
-        jButton4.setText("Add Customer");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        jButtonAddCustomer.setText("Add Customer");
+        jButtonAddCustomer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                jButtonAddCustomerActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Add board game");
+        jButtonAddBoardGame.setText("Add board game");
+        jButtonAddBoardGame.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddBoardGameActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -78,9 +83,9 @@ public class openingTable extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton4)
+                        .addComponent(jButtonAddCustomer)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton5))
+                        .addComponent(jButtonAddBoardGame))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -91,15 +96,15 @@ public class openingTable extends javax.swing.JFrame {
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(123, 123, 123)
-                                .addComponent(jButton2))
+                                .addComponent(jButtonShowLendings))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(123, 123, 123)
-                                .addComponent(jButton1)))
+                                .addComponent(jButtonListAllBoardGames)))
                         .addGap(0, 90, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton1, jButton2, jButtonFindBoardGame});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonFindBoardGame, jButtonListAllBoardGames, jButtonShowLendings});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -109,38 +114,46 @@ public class openingTable extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(jButtonListAllBoardGames)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton2)
+                        .addComponent(jButtonShowLendings)
                         .addGap(18, 18, 18)
                         .addComponent(jButtonFindBoardGame)
                         .addGap(108, 108, 108))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton4)
-                            .addComponent(jButton5))
+                            .addComponent(jButtonAddCustomer)
+                            .addComponent(jButtonAddBoardGame))
                         .addContainerGap())))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void jButtonListAllBoardGamesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonListAllBoardGamesActionPerformed
+        new ListBoardGames().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButtonListAllBoardGamesActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void jButtonShowLendingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonShowLendingsActionPerformed
+        new ShowMyLendings().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButtonShowLendingsActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void jButtonAddCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddCustomerActionPerformed
+        new AddCustomer().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButtonAddCustomerActionPerformed
 
     private void jButtonFindBoardGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFindBoardGameActionPerformed
         new FindBoardGame().setVisible(true);
         dispose();
     }//GEN-LAST:event_jButtonFindBoardGameActionPerformed
+
+    private void jButtonAddBoardGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddBoardGameActionPerformed
+        new AddBoardGame().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButtonAddBoardGameActionPerformed
 
     /**
      * @param args the command line arguments
@@ -178,11 +191,11 @@ public class openingTable extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButtonAddBoardGame;
+    private javax.swing.JButton jButtonAddCustomer;
     private javax.swing.JButton jButtonFindBoardGame;
+    private javax.swing.JButton jButtonListAllBoardGames;
+    private javax.swing.JButton jButtonShowLendings;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
