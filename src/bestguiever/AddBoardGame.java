@@ -6,17 +6,41 @@
 
 package bestguiever;
 
+import boardgamerental.BoardGame;
+import boardgamerental.BoardGameManager;
+import boardgamerental.BoardGameManagerImpl;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.dbcp.BasicDataSource;
+
 /**
  *
  * @author Goolomb
  */
 public class AddBoardGame extends javax.swing.JFrame {
 
+    private static final Logger LOGGER = Logger.getLogger(AddBoardGame.class.getName());
+    BasicDataSource basicDataSource = new BasicDataSource();
+    BoardGameManagerImpl bgManager;
     /**
      * Creates new form AddBoardGame
      */
     public AddBoardGame() {
+        
+        try {
+            setUp();
+        } catch (IOException ex) {
+	    String msg = "Application setup failed.";
+            LOGGER.log(Level.SEVERE, msg, ex);
+        }
+        
         initComponents();
+        
+        bgManager = new BoardGameManagerImpl();
+        bgManager.setDataSource(basicDataSource);
     }
 
     /**
@@ -40,6 +64,7 @@ public class AddBoardGame extends javax.swing.JFrame {
         jSpinnerMaxPlayers = new javax.swing.JSpinner();
         jLabel6 = new javax.swing.JLabel();
         jTextPrizePerDay = new javax.swing.JTextField();
+        jButtonAdd = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -69,6 +94,13 @@ public class AddBoardGame extends javax.swing.JFrame {
 
         jTextPrizePerDay.setText("jTextField1");
 
+        jButtonAdd.setText("Add");
+        jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -83,18 +115,21 @@ public class AddBoardGame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(70, 70, 70)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSpinnerMaxPlayers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSpinnerMinPlayers, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextPrizePerDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jButtonAdd)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel6))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jSpinnerMaxPlayers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jSpinnerMinPlayers, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextPrizePerDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap(100, Short.MAX_VALUE))
         );
 
@@ -127,7 +162,9 @@ public class AddBoardGame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(jTextPrizePerDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(84, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButtonAdd)
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
         pack();
@@ -137,6 +174,10 @@ public class AddBoardGame extends javax.swing.JFrame {
         new openingTable().setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
+        bgManager.createBoardGame(new BoardGame(jTextName.getText(), jSpinnerMaxPlayers.getValue()));
+    }//GEN-LAST:event_jButtonAddActionPerformed
 
     /**
      * @param args the command line arguments
@@ -175,6 +216,7 @@ public class AddBoardGame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonAdd;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -187,4 +229,14 @@ public class AddBoardGame extends javax.swing.JFrame {
     private javax.swing.JTextField jTextName;
     private javax.swing.JTextField jTextPrizePerDay;
     // End of variables declaration//GEN-END:variables
+
+    private void setUp() throws IOException {
+        Properties configFile = new Properties();
+        configFile.load(new FileInputStream("src/DBprop.properties"));
+	BasicDataSource bds = new BasicDataSource();
+	bds.setUrl( configFile.getProperty( "url" ) );
+	bds.setPassword( configFile.getProperty( "password" ) );
+	bds.setUsername( configFile.getProperty( "username" ) );
+	basicDataSource = bds;
+    }
 }
