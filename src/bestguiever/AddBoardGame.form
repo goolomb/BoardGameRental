@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.4" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
   </Properties>
@@ -214,12 +214,13 @@
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButtonChoose">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Choose"/>
-      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonChooseActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CodeGeneration" type="java.lang.Integer" value="1"/>
+        <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="AddBoardGame_jButtonChoose"/>
+      </AuxValues>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane2">
       <AuxValues>
@@ -237,7 +238,7 @@
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JList(model)"/>
             <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="model = new DefaultListModel();"/>
-            <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="private DefaultListModel model;"/>
+            <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="protected DefaultListModel model;"/>
           </AuxValues>
         </Component>
       </SubComponents>
@@ -257,8 +258,11 @@
     </Component>
     <Component class="javax.swing.JButton" name="jButtonChange">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Change"/>
+        <Property name="text" type="java.lang.String" value="Change Categories"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonChangeActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButtonDelete">
       <Properties>
@@ -274,7 +278,7 @@
       <SubComponents>
         <Component class="javax.swing.JTable" name="jTableBoardGames">
           <Properties>
-            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor" postCode="jTableBoardGames.setDefaultRenderer(Set.class, new SetCellRenderer());&#xa;jTableBoardGames.setSelectionMode (0);&#xa;jTableBoardGames.getColumnModel().getColumn(0).setMaxWidth(20);">
+            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor" postCode="jTableBoardGames.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);&#xa;//jTableBoardGames.setDefaultRenderer(Set.class, new SetCellRenderer());&#xa;jTableBoardGames.setSelectionMode (0);&#xa;TableColumnModel columnModel = jTableBoardGames.getColumnModel();&#xa;columnModel.getColumn(0).setMaxWidth(maxWidth);&#xa;columnModel.getColumn(0).setPreferredWidth(preferredWidth);&#xa;columnModel.getColumn(2).setMaxWidth(maxWidth * 2);&#xa;columnModel.getColumn(2).setPreferredWidth(preferredWidth * 2);&#xa;columnModel.getColumn(3).setMaxWidth(maxWidth * 2);&#xa;columnModel.getColumn(3).setPreferredWidth(preferredWidth * 2);&#xa;columnModel.getColumn(5).setMaxWidth(45);&#xa;columnModel.getColumn(5).setPreferredWidth(40);">
               <Connection code="new BoardGameTableModel()" type="code"/>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -305,6 +309,9 @@
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="int maxWidth = 25;&#xa;int preferredWidth = 20;"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

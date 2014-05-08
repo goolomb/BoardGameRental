@@ -4,6 +4,7 @@ import boardgamerental.BoardGame;
 import boardgamerental.BoardGameManager;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -61,13 +62,13 @@ public class BoardGameTableModel extends AbstractTableModel {
 	    case NAME:
 		return "Name";
 	    case MINPLAYERS:
-		return "Min of Players";
+		return "Min players";
 	    case MAXPLAYERS:
-		return "Max of Players";
+		return "Max players";
 	    case CATEGORIES:
 		return "Categories";
 	    case PRIZEPERDAY:
-		return "Prize per day";
+		return "Prize";
 	    default:
 		throw new IllegalArgumentException("columnIndex");
 	}
@@ -86,7 +87,17 @@ public class BoardGameTableModel extends AbstractTableModel {
 	    case NAME:
                 return bGame.getName();
             case CATEGORIES:
-                return bGame.getCategory();
+                Set<String> cats = (Set) bGame.getCategory();
+                StringBuilder sb = new StringBuilder();
+                int count = 0;
+                for (String cat : cats) {
+                    count++;
+                    sb.append(cat);
+                    if (count < cats.size()) {
+                        sb.append(", ");
+                    }
+                }
+                return sb.toString();
 	    case PRIZEPERDAY:
                 return bGame.getPricePerDay();
             default:
@@ -127,8 +138,9 @@ public class BoardGameTableModel extends AbstractTableModel {
 		bGame.setMaxPlayers((Integer) aValue);
 		break;
             case CATEGORIES:
-                JOptionPane.showMessageDialog(null, "kuk ;)", "Error", 2);
-                break;
+                Set<String> cat = new HashSet<>(bGame.getCategory());
+                cat.add((String) aValue);
+                bGame.setCategory(cat);
             case PRIZEPERDAY:
                 bGame.setPricePerDay((BigDecimal) aValue);
                 break;
@@ -150,13 +162,14 @@ public class BoardGameTableModel extends AbstractTableModel {
     public boolean isCellEditable(int rowIndex, int columnIndex) {
 	switch (COLUMNS.values()[columnIndex]) {
 	    case ID:
+
 		return false;
 	    case NAME:
-	    case MINPLAYERS:
-	    case MAXPLAYERS:
             case CATEGORIES:
+            case MINPLAYERS:
+            case MAXPLAYERS:
             case PRIZEPERDAY:
-		return true;
+                return true;
 	    default:
 		throw new IllegalArgumentException("columnIndex");
 	}

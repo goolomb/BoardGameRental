@@ -20,12 +20,11 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListModel;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingWorker;
+import javax.swing.table.TableColumnModel;
 import org.apache.commons.dbcp.BasicDataSource;
 
 /**
@@ -84,7 +83,13 @@ public class AddBoardGame extends javax.swing.JFrame {
         jSpinnerMaxPlayers = new javax.swing.JSpinner(new SpinnerNumberModel(1,1,99,1));
         jLabel6 = new javax.swing.JLabel();
         jButtonAdd = new javax.swing.JButton();
-        jButtonChoose = new javax.swing.JButton();
+        try {
+            jButtonChoose =(javax.swing.JButton)java.beans.Beans.instantiate(getClass().getClassLoader(), "bestguiever.AddBoardGame_jButtonChoose");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
         jScrollPane2 = new javax.swing.JScrollPane();
         model = new DefaultListModel();
         jListCategories = new javax.swing.JList(model);
@@ -128,7 +133,6 @@ public class AddBoardGame extends javax.swing.JFrame {
             }
         });
 
-        jButtonChoose.setText("Choose");
         jButtonChoose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonChooseActionPerformed(evt);
@@ -144,7 +148,12 @@ public class AddBoardGame extends javax.swing.JFrame {
             }
         });
 
-        jButtonChange.setText("Change");
+        jButtonChange.setText("Change Categories");
+        jButtonChange.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonChangeActionPerformed(evt);
+            }
+        });
 
         jButtonDelete.setText("Delete");
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -153,10 +162,21 @@ public class AddBoardGame extends javax.swing.JFrame {
             }
         });
 
+        int maxWidth = 25;
+        int preferredWidth = 20;
         jTableBoardGames.setModel(new BoardGameTableModel());
-        jTableBoardGames.setDefaultRenderer(Set.class, new SetCellRenderer());
+        jTableBoardGames.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        //jTableBoardGames.setDefaultRenderer(Set.class, new SetCellRenderer());
         jTableBoardGames.setSelectionMode (0);
-        jTableBoardGames.getColumnModel().getColumn(0).setMaxWidth(20);
+        TableColumnModel columnModel = jTableBoardGames.getColumnModel();
+        columnModel.getColumn(0).setMaxWidth(maxWidth);
+        columnModel.getColumn(0).setPreferredWidth(preferredWidth);
+        columnModel.getColumn(2).setMaxWidth(maxWidth * 2);
+        columnModel.getColumn(2).setPreferredWidth(preferredWidth * 2);
+        columnModel.getColumn(3).setMaxWidth(maxWidth * 2);
+        columnModel.getColumn(3).setPreferredWidth(preferredWidth * 2);
+        columnModel.getColumn(5).setMaxWidth(45);
+        columnModel.getColumn(5).setPreferredWidth(40);
         jScrollPane1.setViewportView(jTableBoardGames);
 
         jButtonRemove.setText("Remove");
@@ -332,6 +352,10 @@ public class AddBoardGame extends javax.swing.JFrame {
         if (category.remove(cat)) model.removeElement(cat);
     }//GEN-LAST:event_jButtonRemoveActionPerformed
 
+    private void jButtonChangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonChangeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonChangeActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -361,6 +385,7 @@ public class AddBoardGame extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new AddBoardGame().setVisible(true);
             }
@@ -383,7 +408,7 @@ public class AddBoardGame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JList jListCategories;
-    private DefaultListModel model;
+    protected DefaultListModel model;
     private javax.swing.JProgressBar jProgressBarBG;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

@@ -113,7 +113,7 @@ public class BoardGameManagerImpl implements BoardGameManager {
                 return boardGames;
             }
         } catch (SQLException ex) {
-            String msg = "Error when getting all graves from DB";
+            String msg = "Error when getting all board games from DB";
             logger.log(Level.SEVERE, msg, ex);
             throw new common.ServiceFailureException(msg, ex);
         }
