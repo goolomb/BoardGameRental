@@ -34,7 +34,7 @@ public class LendingManagerImpl implements LendingManager {
     private DataSource dataSource;
 
     
-    LendingManagerImpl() {
+    public LendingManagerImpl() {
     }
 
     public void setDataSource(DataSource dataSource) {

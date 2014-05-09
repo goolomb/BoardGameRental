@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 /**
@@ -30,9 +29,7 @@ public class CustomerManagerImpl implements CustomerManager {
     
     private DataSource dataSource;
 
-    //@Resource(name="jdbc/CustomerManager")
-    public void setDataSource(DataSource dataSource) throws SQLException {
-        DBUtils.executeSqlScript(dataSource,CustomerManager.class.getResource("createTables.sql"));
+    public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -115,8 +112,8 @@ public class CustomerManagerImpl implements CustomerManager {
         
         try (Connection conn = dataSource.getConnection()){
             try(PreparedStatement st = conn.prepareStatement(
-                    "SELECT id,name,address,phonenumber FROM customer WHERE name = ? ")){
-                st.setString(1, name);
+                    "SELECT id,name,address,phonenumber FROM customer WHERE name LIKE ? ")){
+                st.setString(1, "%" + name + "%");
                 try(ResultSet rs = st.executeQuery()){
             
                     List<Customer> result = new ArrayList<>();
@@ -231,11 +228,21 @@ public class CustomerManagerImpl implements CustomerManager {
         if (customer.getAddress() == null) {
             throw new ValidationException("customer address is null");            
         }
+        if (customer.getAddress().equals("")) {
+            throw new ValidationException("customer address is empty");
+        }
+
         if (customer.getName() == null) {
             throw new ValidationException("customer name is null");            
         }
+        if (customer.getName().equals("")) {
+            throw new ValidationException("customer name is empty");
+        }
         if (customer.getPhoneNumber() == null) {
             throw new ValidationException("customer phone number is null");          
+        }
+        if (customer.getPhoneNumber().equals("")) {
+            throw new ValidationException("customer phone number is empty");          
         }
     }   
 }

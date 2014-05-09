@@ -127,6 +127,7 @@ public class BoardGameManagerImplTest {
         List<BoardGame> actual = manager.findBoardGameByName("BoardGame");
         
         assertBGCollectionDeepEquals(expected, actual);
+        
     }
 
     /**
