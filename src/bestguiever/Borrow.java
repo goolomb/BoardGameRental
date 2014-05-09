@@ -453,12 +453,12 @@ public class Borrow extends javax.swing.JFrame {
             Calendar c = new GregorianCalendar();
             c.set(
                     (Integer)jSpinnerStartYear.getValue(),
-                    (Integer)jSpinnerStartMonth.getValue(),
+                    (Integer)jSpinnerStartMonth.getValue()-1,
                     (Integer)jSpinnerStartDay.getValue());
             lend.setStartTime(new Date(c.getTimeInMillis()));
             c.set(
                     (Integer)jSpinnerEndYear.getValue(),
-                    (Integer)jSpinnerEndMonth.getValue(),
+                    (Integer)jSpinnerEndMonth.getValue()-1,
                     (Integer)jSpinnerEndDay.getValue());
             lend.setExpectedEndTime(new Date(c.getTimeInMillis()));
         } catch (IllegalArgumentException ex) {

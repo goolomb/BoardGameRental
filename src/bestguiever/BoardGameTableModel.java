@@ -17,7 +17,7 @@ public class BoardGameTableModel extends AbstractTableModel {
     private static final Logger LOGGER = Logger.getLogger(BoardGameTableModel.class.getName());
     private BoardGameManager bGameManager;
     private List<BoardGame> bGames = new ArrayList<>();
-    private static enum COLUMNS {
+    static enum COLUMNS {
         ID, NAME, MINPLAYERS, MAXPLAYERS, CATEGORIES, PRIZEPERDAY
     }
 
