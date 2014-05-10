@@ -133,8 +133,8 @@ public class BoardGameManagerImpl implements BoardGameManager {
         
         try (Connection conn = dataSource.getConnection()){
             try(PreparedStatement st = conn.prepareStatement(
-                    "SELECT id, name, maxPlayers, minPlayers, pricePerDay FROM BoardGame WHERE name = ?")){
-                st.setString(1, name);
+                    "SELECT id, name, maxPlayers, minPlayers, pricePerDay FROM BoardGame WHERE name LIKE ?")){
+                st.setString(1, "%" + name + "%");
                 
                 List<BoardGame> boardGames = executeQueryForMultipleBoardGames(st);
                 
