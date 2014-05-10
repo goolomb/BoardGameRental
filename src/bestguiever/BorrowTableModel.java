@@ -8,6 +8,7 @@ package bestguiever;
 
 import boardgamerental.Lending;
 import boardgamerental.LendingManager;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ class BorrowTableModel  extends AbstractTableModel {
     private List<Lending> lendings = new ArrayList<Lending>();
     
     private static enum COLUMNS {
-        ID, CUSTOMER, BOARDGAME, STARTTIME, EXPECTEDENDTIME, REALENDTIME
+        ID, CUSTOMER, BOARDGAME, STARTTIME, EXPECTEDENDTIME, REALENDTIME, PRICE
     }
 
     public void setLendingManager(LendingManager lendingManager) {
@@ -54,7 +55,9 @@ class BorrowTableModel  extends AbstractTableModel {
 	    case STARTTIME:
             case EXPECTEDENDTIME:
             case REALENDTIME:
-		return String.class;
+		return Date.class;
+            case PRICE:
+                return BigDecimal.class;
 	    default:
 		throw new IllegalArgumentException("columnIndex");
 	}
@@ -70,11 +73,13 @@ class BorrowTableModel  extends AbstractTableModel {
 	    case BOARDGAME:
 		return "Board Game";
 	    case STARTTIME:
-		return "Start Time";
+		return "Borrowed";
             case EXPECTEDENDTIME:
-		return "Expected End Time";
+		return "Return exected";
             case REALENDTIME:
-		return "Real End Time";
+		return "Returned";
+            case PRICE:
+                return "Price";
 	    default:
 		throw new IllegalArgumentException("columnIndex");
 	}
@@ -96,6 +101,8 @@ class BorrowTableModel  extends AbstractTableModel {
 		return lending.getExpectedEndTime();
             case REALENDTIME:
 		return lending.getRealEndTime();
+            case PRICE:
+                return lendingManager.calculateTotalPrice(lending);
 	    default:
                 throw new IllegalArgumentException("columnIndex");
         }
@@ -151,6 +158,7 @@ class BorrowTableModel  extends AbstractTableModel {
 	    case ID:
             case CUSTOMER:
             case BOARDGAME:
+            case PRICE:
 		return false;
 	    case STARTTIME:
 	    case EXPECTEDENDTIME:

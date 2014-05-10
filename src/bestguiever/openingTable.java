@@ -146,7 +146,7 @@ public class openingTable extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonListAllBoardGamesActionPerformed
 
     private void jButtonShowLendingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonShowLendingsActionPerformed
-        new ShowMyLendings().setVisible(true);
+        new ShowLendingsForCustomer().setVisible(true);
         dispose();
     }//GEN-LAST:event_jButtonShowLendingsActionPerformed
 

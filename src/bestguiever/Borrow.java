@@ -23,7 +23,6 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingWorker;
 import org.apache.commons.dbcp.BasicDataSource;
@@ -44,7 +43,7 @@ public class Borrow extends javax.swing.JFrame {
 
     BorrowTableModel borrowTableModel;
     CustomerTableModel customerTableModel;
-    BoardGameTableModel boardGameTableModel;
+    BoardGameTableModelUnmodifiable boardGameTableModel;
 
     /**
      * Creates new form Borrow
@@ -76,10 +75,11 @@ public class Borrow extends javax.swing.JFrame {
         boardGamesSwingWorker = new BoardGamesSwingWorker();
         boardGamesSwingWorker.addPropertyChangeListener(boardGameProgressListener);
         boardGamesSwingWorker.execute();
-        
+
     }
 
     private LendingsSwingWorker lendingsSwingWorker;
+
     private class LendingsSwingWorker extends SwingWorker<Void, Lending> {
 
         @Override
@@ -117,13 +117,14 @@ public class Borrow extends javax.swing.JFrame {
             }
         }
     };
-    
+
     private CustomersSwingWorker customersSwingWorker;
+
     private class CustomersSwingWorker extends SwingWorker<Void, Customer> {
 
         @Override
         protected Void doInBackground() throws Exception {
-            customerTableModel = (CustomerTableModel) jTable3.getModel();
+            customerTableModel = (CustomerTableModel) jTableCustomers.getModel();
             customerTableModel.setCustomerManager(customerManager);
             int counter = 0;
             for (Customer customer : customerManager.findAllCustomers()) {
@@ -156,13 +157,14 @@ public class Borrow extends javax.swing.JFrame {
             }
         }
     };
-    
+
     private BoardGamesSwingWorker boardGamesSwingWorker;
+
     private class BoardGamesSwingWorker extends SwingWorker<Void, BoardGame> {
 
         @Override
         protected Void doInBackground() throws Exception {
-            boardGameTableModel = (BoardGameTableModel) jTable2.getModel();
+            boardGameTableModel = (BoardGameTableModelUnmodifiable) jTableBordGames.getModel();
             boardGameTableModel.setBGManager(boardGameManager);
             int counter = 0;
             for (BoardGame bg : boardGameManager.findAllBoardGames()) {
@@ -176,7 +178,9 @@ public class Borrow extends javax.swing.JFrame {
         @Override
         protected void process(List<BoardGame> items) {
             for (BoardGame i : items) {
-                boardGameTableModel.addBoardGame(i);
+                if (lendingManager.isAvailable(i)) {
+                    boardGameTableModel.addBoardGame(i);
+                }
             }
         }
 
@@ -207,20 +211,20 @@ public class Borrow extends javax.swing.JFrame {
 
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jLabelLending = new javax.swing.JLabel();
+        jScrollPaneLendings = new javax.swing.JScrollPane();
         jTableBorrow = new javax.swing.JTable();
         jProgressBarLendings = new javax.swing.JProgressBar();
-        jButton1 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        jButtonBack = new javax.swing.JButton();
+        jLabelCustomers = new javax.swing.JLabel();
+        jLabelBoardGames = new javax.swing.JLabel();
+        jScrollPaneBoardGames = new javax.swing.JScrollPane();
+        jTableBordGames = new javax.swing.JTable();
+        jScrollPaneCustomers = new javax.swing.JScrollPane();
+        jTableCustomers = new javax.swing.JTable();
+        jLabelFrom = new javax.swing.JLabel();
+        jLabelTo = new javax.swing.JLabel();
+        jButtonAdd = new javax.swing.JButton();
         int current = Calendar.getInstance().get(Calendar.YEAR);
         jSpinnerStartYear = new javax.swing.JSpinner(new SpinnerNumberModel(current,current,current+1,1));
         int current2 = Calendar.getInstance().get(Calendar.YEAR);
@@ -229,12 +233,13 @@ public class Borrow extends javax.swing.JFrame {
         jSpinnerEndMonth = new javax.swing.JSpinner(new SpinnerNumberModel(1,1,12,1));
         jSpinnerStartDay = new javax.swing.JSpinner(new SpinnerNumberModel(1,1,31,1));
         jSpinnerEndDay = new javax.swing.JSpinner(new SpinnerNumberModel(1,1,31,1));
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        jLabelYear = new javax.swing.JLabel();
+        jLabelMonth = new javax.swing.JLabel();
+        jLabelDay = new javax.swing.JLabel();
         jProgressBarCustomers = new javax.swing.JProgressBar();
         jProgressBarBoardGames = new javax.swing.JProgressBar();
-        jButton3 = new javax.swing.JButton();
+        jButtonDelete = new javax.swing.JButton();
+        jButtonAvailable = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -251,58 +256,65 @@ public class Borrow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel1.setText("Lendings");
+        jLabelLending.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelLending.setText("Lendings");
 
         jTableBorrow.setModel(new BorrowTableModel());
         jTableBorrow.setSelectionMode (0);
         jTableBorrow.getColumnModel().getColumn(0).setMaxWidth(20);
-        jScrollPane1.setViewportView(jTableBorrow);
+        jScrollPaneLendings.setViewportView(jTableBorrow);
 
-        jButton1.setText("Back");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonBack.setText("Back");
+        jButtonBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonBackActionPerformed(evt);
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setText("Customers");
+        jLabelCustomers.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabelCustomers.setText("Customers");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel3.setText("Board Games");
+        jLabelBoardGames.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabelBoardGames.setText("Board Games");
 
-        jTable2.setModel(new BoardGameTableModelUnmodifiable());
-        jTable2.setSelectionMode (0);
-        jTable2.getColumnModel().getColumn(0).setMaxWidth(20);
-        jScrollPane3.setViewportView(jTable2);
+        jTableBordGames.setModel(new BoardGameTableModelUnmodifiable());
+        jTableBordGames.setSelectionMode (0);
+        jTableBordGames.getColumnModel().getColumn(0).setMaxWidth(20);
+        jScrollPaneBoardGames.setViewportView(jTableBordGames);
 
-        jTable3.setModel(new CustomerTableModelUnmodifiable());
-        jTable3.setSelectionMode (0);
-        jTable3.getColumnModel().getColumn(0).setMaxWidth(20);
-        jScrollPane4.setViewportView(jTable3);
+        jTableCustomers.setModel(new CustomerTableModelUnmodifiable());
+        jTableCustomers.setSelectionMode (0);
+        jTableCustomers.getColumnModel().getColumn(0).setMaxWidth(20);
+        jScrollPaneCustomers.setViewportView(jTableCustomers);
 
-        jLabel4.setText("From:");
+        jLabelFrom.setText("From:");
 
-        jLabel5.setText("To:");
+        jLabelTo.setText("To:");
 
-        jButton2.setText("Add");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButtonAdd.setText("Add");
+        jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButtonAddActionPerformed(evt);
             }
         });
 
-        jLabel6.setText("Year");
+        jLabelYear.setText("Year");
 
-        jLabel7.setText("Month");
+        jLabelMonth.setText("Month");
 
-        jLabel8.setText("Day");
+        jLabelDay.setText("Day");
 
-        jButton3.setText("Delete");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jButtonDelete.setText("Delete");
+        jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jButtonDeleteActionPerformed(evt);
+            }
+        });
+
+        jButtonAvailable.setText("Get available");
+        jButtonAvailable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAvailableActionPerformed(evt);
             }
         });
 
@@ -314,101 +326,126 @@ public class Borrow extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(85, 85, 85)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel3)
-                        .addGap(134, 134, 134))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jProgressBarLendings, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addGap(74, 74, 74)
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
-                                .addComponent(jButton3))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jProgressBarLendings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(29, 29, 29)
+                                .addComponent(jButtonBack)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabelLending)
+                                .addGap(69, 69, 69)
+                                .addComponent(jButtonDelete)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonAdd))
+                            .addComponent(jScrollPaneLendings, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabelTo)
+                            .addComponent(jLabelFrom))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2)
+                            .addComponent(jSpinnerEndYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSpinnerStartYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelYear))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSpinnerEndMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSpinnerStartMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelMonth))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                .addComponent(jSpinnerEndDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jSpinnerStartDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabelDay)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPaneCustomers, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jProgressBarCustomers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5))
+                                .addGap(101, 101, 101)
+                                .addComponent(jLabelCustomers)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPaneBoardGames, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jProgressBarBoardGames, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(94, 94, 94)
+                                .addComponent(jLabelBoardGames)
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jSpinnerEndYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jSpinnerStartYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jSpinnerEndMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jSpinnerStartMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                                    .addComponent(jSpinnerEndDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jSpinnerStartDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8))))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(81, 81, 81)
-                .addComponent(jProgressBarCustomers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jProgressBarBoardGames, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(85, 85, 85))
+                                .addComponent(jButtonAvailable)))))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel8, jSpinnerEndDay, jSpinnerStartDay});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabelDay, jSpinnerEndDay, jSpinnerStartDay});
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel7, jSpinnerEndMonth, jSpinnerStartMonth});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabelMonth, jSpinnerEndMonth, jSpinnerStartMonth});
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel6, jSpinnerEndYear, jSpinnerStartYear});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabelYear, jSpinnerEndYear, jSpinnerStartYear});
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabelFrom, jLabelTo});
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jProgressBarCustomers, jScrollPaneCustomers});
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jProgressBarBoardGames, jScrollPaneBoardGames});
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jProgressBarLendings, jScrollPaneLendings});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(11, 11, 11)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8)
-                    .addComponent(jButton3))
-                .addGap(11, 11, 11)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(jSpinnerStartYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSpinnerStartMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSpinnerStartDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(jSpinnerEndYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSpinnerEndMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSpinnerEndDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jProgressBarLendings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addComponent(jButtonBack))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabelLending)))
+                        .addGap(11, 11, 11))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButtonAdd)
+                            .addComponent(jButtonDelete))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPaneLendings, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelMonth)
+                            .addComponent(jLabelDay))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelYear)
+                                .addGap(11, 11, 11)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jSpinnerStartYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabelFrom))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jSpinnerEndYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabelTo)))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jSpinnerStartDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jSpinnerEndDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jSpinnerStartMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jSpinnerEndMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jProgressBarLendings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonAvailable)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabelCustomers)
+                        .addComponent(jLabelBoardGames)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPaneBoardGames, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPaneCustomers, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jProgressBarCustomers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -419,32 +456,34 @@ public class Borrow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed
         new openingTable().setVisible(true);
         dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonBackActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
         Lending lend = new Lending();
-        
+
         Integer customer_id = null;
         try {
-            customer_id = (Integer) customerTableModel.getValueAt(jTable3.getSelectedRow(), 0);
+            customer_id = (Integer) customerTableModel.getValueAt(jTableCustomers.getSelectedRow(), 0);
         } catch (ArrayIndexOutOfBoundsException e) {
-            String msg = "Board Game not selected";
+            String msg = "Customer not selected";
             LOGGER.log(Level.INFO, msg);
             JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
+            return;
         }
-        
+
         Integer boardGame_id = null;
         try {
-            boardGame_id = (Integer) boardGameTableModel.getValueAt(jTable2.getSelectedRow(), 0);
+            boardGame_id = (Integer) boardGameTableModel.getValueAt(jTableBordGames.getSelectedRow(), 0);
         } catch (ArrayIndexOutOfBoundsException e) {
             String msg = "Board Game not selected";
             LOGGER.log(Level.INFO, msg);
             JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
+            return;
         }
-        
+
         lend.setCustomer(customerManager.getCustomerById(customer_id));
         lend.setBoardGame(boardGameManager.getBoardGameById(boardGame_id));
 
@@ -452,41 +491,33 @@ public class Borrow extends javax.swing.JFrame {
         try {
             Calendar c = new GregorianCalendar();
             c.set(
-                    (Integer)jSpinnerStartYear.getValue(),
-                    (Integer)jSpinnerStartMonth.getValue()-1,
-                    (Integer)jSpinnerStartDay.getValue());
+                    (Integer) jSpinnerStartYear.getValue(),
+                    (Integer) jSpinnerStartMonth.getValue() - 1,
+                    (Integer) jSpinnerStartDay.getValue());
             lend.setStartTime(new Date(c.getTimeInMillis()));
             c.set(
-                    (Integer)jSpinnerEndYear.getValue(),
-                    (Integer)jSpinnerEndMonth.getValue()-1,
-                    (Integer)jSpinnerEndDay.getValue());
+                    (Integer) jSpinnerEndYear.getValue(),
+                    (Integer) jSpinnerEndMonth.getValue() - 1,
+                    (Integer) jSpinnerEndDay.getValue());
             lend.setExpectedEndTime(new Date(c.getTimeInMillis()));
         } catch (IllegalArgumentException ex) {
-            String msg = "Rent from or to wrong format";
+            String msg = "Lending from or to wrong format";
             LOGGER.log(Level.INFO, msg);
             JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
         }
-        /* Cost */
-        /*try {
-            rent.setCost(BigDecimal.valueOf(Double.parseDouble(dialog_rents_costInput.getText())).setScale(2));
-        } catch (NumberFormatException ex) { // chyba prevodu String -> Double
-            String msg = "Rent cost wrong format";
-            LOGGER.log(Level.SEVERE, msg);
-        }*/
-        
-        try {
-                LOGGER.log(Level.INFO, "Adding lending");
-                lendingManager.createLending(lend);
-                borrowTableModel.addLending(lend);
-            }
-         catch (Exception ex) {
-            String msg = "User request failed";
-            LOGGER.log(Level.INFO, msg);
-            JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
-        }
-    }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try {
+            LOGGER.log(Level.INFO, "Adding lending");
+            lendingManager.createLending(lend);
+            borrowTableModel.addLending(lend);
+        } catch (Exception ex) {
+            //String msg = "User request failed";
+            LOGGER.log(Level.INFO, ex.getMessage());
+            JOptionPane.showMessageDialog(rootPane, ex.getMessage(), "Error", 2);
+        }
+    }//GEN-LAST:event_jButtonAddActionPerformed
+
+    private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
         Integer lending_id = null;
         try {
             lending_id = (Integer) borrowTableModel.getValueAt(jTableBorrow.getSelectedRow(), 0);
@@ -495,7 +526,7 @@ public class Borrow extends javax.swing.JFrame {
             LOGGER.log(Level.INFO, msg);
             JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
         }
-        
+
         Lending lend = lendingManager.getLendingById(lending_id);
         try {
             lendingManager.deleteLending(lend);
@@ -505,7 +536,18 @@ public class Borrow extends javax.swing.JFrame {
             LOGGER.log(Level.INFO, msg);
             JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_jButtonDeleteActionPerformed
+
+    private void jButtonAvailableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAvailableActionPerformed
+        if (boardGamesSwingWorker != null) {
+            throw new IllegalStateException("Operation is already in progress");
+        }
+        jProgressBarBoardGames.setValue(0);
+        boardGameTableModel.clear();
+        boardGamesSwingWorker = new BoardGamesSwingWorker();
+        boardGamesSwingWorker.addPropertyChangeListener(boardGameProgressListener);
+        boardGamesSwingWorker.execute();
+    }//GEN-LAST:event_jButtonAvailableActionPerformed
 
     /**
      * @param args the command line arguments
@@ -553,24 +595,25 @@ public class Borrow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
+    private javax.swing.JButton jButtonAdd;
+    private javax.swing.JButton jButtonAvailable;
+    private javax.swing.JButton jButtonBack;
+    private javax.swing.JButton jButtonDelete;
+    private javax.swing.JLabel jLabelBoardGames;
+    private javax.swing.JLabel jLabelCustomers;
+    private javax.swing.JLabel jLabelDay;
+    private javax.swing.JLabel jLabelFrom;
+    private javax.swing.JLabel jLabelLending;
+    private javax.swing.JLabel jLabelMonth;
+    private javax.swing.JLabel jLabelTo;
+    private javax.swing.JLabel jLabelYear;
     private javax.swing.JProgressBar jProgressBarBoardGames;
     private javax.swing.JProgressBar jProgressBarCustomers;
     private javax.swing.JProgressBar jProgressBarLendings;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPaneBoardGames;
+    private javax.swing.JScrollPane jScrollPaneCustomers;
+    private javax.swing.JScrollPane jScrollPaneLendings;
     private javax.swing.JSpinner jSpinnerEndDay;
     private javax.swing.JSpinner jSpinnerEndMonth;
     private javax.swing.JSpinner jSpinnerEndYear;
@@ -578,8 +621,8 @@ public class Borrow extends javax.swing.JFrame {
     private javax.swing.JSpinner jSpinnerStartMonth;
     private javax.swing.JSpinner jSpinnerStartYear;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
+    private javax.swing.JTable jTableBordGames;
     private javax.swing.JTable jTableBorrow;
+    private javax.swing.JTable jTableCustomers;
     // End of variables declaration//GEN-END:variables
 }

@@ -6,6 +6,12 @@
 
 package bestguiever;
 
+import boardgamerental.BoardGame;
+import boardgamerental.BoardGameManagerImpl;
+import boardgamerental.LendingManagerImpl;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Goolomb
@@ -26,4 +32,5 @@ public class BoardGameTableModelUnmodifiable extends BoardGameTableModel {
 		throw new IllegalArgumentException("columnIndex");
 	}
     }
+    
 }
