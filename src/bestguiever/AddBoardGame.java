@@ -97,7 +97,8 @@ public class AddBoardGame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButtonBack.setText("Back");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("bestguiever/Bundle"); // NOI18N
+        jButtonBack.setText(bundle.getString("BoardGameRental.jButtonBack")); // NOI18N
         jButtonBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonBackActionPerformed(evt);
@@ -105,27 +106,28 @@ public class AddBoardGame extends javax.swing.JFrame {
         });
 
         jLabelAddBoardGame.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabelAddBoardGame.setText("Add Board game");
+        jLabelAddBoardGame.setText(bundle.getString("BoardGameRental.jLabelAddBoardGame")); // NOI18N
 
-        jLabelName.setText("Name");
+        jLabelName.setText(bundle.getString("BoardGameRental.jLabelName")); // NOI18N
 
-        jLabelMinimumOfPlayers.setText("Minimum of players");
+        jLabelMinimumOfPlayers.setText(bundle.getString("BoardGameRental.jLabelMinimumOfPlayers")); // NOI18N
 
-        jLabelMaximumOfPlayers.setText("Maximum of players");
+        jLabelMaximumOfPlayers.setText(bundle.getString("BoardGameRental.jLabelMaxmimumOfPlayers")); // NOI18N
 
-        jLabelCategories.setText("Categories");
+        jLabelCategories.setText(bundle.getString("BoardGameRental.jLabelCategories")); // NOI18N
 
         jComboBoxCategory.setModel(new javax.swing.DefaultComboBoxModel(categories));
 
-        jLabelPrizePerDay.setText("Prize per day");
+        jLabelPrizePerDay.setText(bundle.getString("BoardGameRental.jLabelPrizePerDay")); // NOI18N
 
-        jButtonAdd.setText("Add");
+        jButtonAdd.setText(bundle.getString("BoardGameRental.jButtonAdd")); // NOI18N
         jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAddActionPerformed(evt);
             }
         });
 
+        jButtonChoose.setText(bundle.getString("BoardGameRental.jButtonChoose")); // NOI18N
         jButtonChoose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonChooseActionPerformed(evt);
@@ -134,14 +136,14 @@ public class AddBoardGame extends javax.swing.JFrame {
 
         jScrollPane2.setViewportView(jListCategories);
 
-        jButtonClear.setText("Clear");
+        jButtonClear.setText(bundle.getString("BoardGameRental.jButtonClear")); // NOI18N
         jButtonClear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonClearActionPerformed(evt);
             }
         });
 
-        jButtonDelete.setText("Delete");
+        jButtonDelete.setText(bundle.getString("BoardGameRental.jButtonDelete")); // NOI18N
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDeleteActionPerformed(evt);
@@ -165,7 +167,7 @@ public class AddBoardGame extends javax.swing.JFrame {
         columnModel.getColumn(5).setPreferredWidth(40);
         jScrollPane1.setViewportView(jTableBoardGames);
 
-        jButtonRemove.setText("Remove");
+        jButtonRemove.setText(bundle.getString("BoardGameRental.jButtonRemove")); // NOI18N
         jButtonRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonRemoveActionPerformed(evt);
@@ -204,16 +206,16 @@ public class AddBoardGame extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButtonClear)
-                            .addComponent(jButtonChoose)
-                            .addComponent(jButtonRemove))
+                            .addComponent(jButtonRemove)
+                            .addComponent(jButtonChoose, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jProgressBarBG, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(135, 135, 135)
+                                .addGap(0, 0, 0)
                                 .addComponent(jButtonDelete)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE))))
                 .addContainerGap())
         );
 
@@ -250,18 +252,19 @@ public class AddBoardGame extends javax.swing.JFrame {
                                     .addComponent(jLabelMaximumOfPlayers)
                                     .addComponent(jSpinnerMaxPlayers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jButtonRemove))
-                                .addGap(6, 6, 6)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jComboBoxCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButtonChoose)
-                                    .addComponent(jLabelCategories))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jSpinnerPrizePerDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabelPrizePerDay)))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(jComboBoxCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabelCategories))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(jSpinnerPrizePerDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabelPrizePerDay))))
+                                    .addComponent(jButtonChoose, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonClear)

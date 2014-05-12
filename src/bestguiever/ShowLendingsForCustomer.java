@@ -186,21 +186,22 @@ public class ShowLendingsForCustomer extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel1.setText("Lendings:");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("bestguiever/Bundle"); // NOI18N
+        jLabel1.setText(bundle.getString("BoardGameRental.jLabelLending")); // NOI18N
 
         jTable2.setModel(new BorrowTableModel());
         jScrollPane1.setViewportView(jTable2);
 
-        jButtonBack.setText("Back");
+        jButtonBack.setText(bundle.getString("BoardGameRental.jButtonBack")); // NOI18N
         jButtonBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonBackActionPerformed(evt);
             }
         });
 
-        jLabelForCustomer.setText("For Customer:");
+        jLabelForCustomer.setText(bundle.getString("BoardGameRental.jLabelForCustomer")); // NOI18N
 
-        jButtonFind.setText("Find");
+        jButtonFind.setText(bundle.getString("BoardGameRental.jButtonFind")); // NOI18N
         jButtonFind.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonFindActionPerformed(evt);
@@ -211,7 +212,7 @@ public class ShowLendingsForCustomer extends javax.swing.JFrame {
         );
         jScrollPane3.setViewportView(jList1);
 
-        jButtonChoose.setText("Choose");
+        jButtonChoose.setText(bundle.getString("BoardGameRental.jButtonChoose")); // NOI18N
         jButtonChoose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonChooseActionPerformed(evt);
