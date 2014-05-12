@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+import javax.swing.table.TableColumnModel;
 import org.apache.commons.dbcp.BasicDataSource;
 
 /**
@@ -79,7 +80,7 @@ public class ShowLendingsForCustomer extends javax.swing.JFrame {
                 byName = customerManager.findCustomerByName(name);
             }
             
-            nameModel = (DefaultListModel)jList1.getModel();
+            nameModel = (DefaultListModel)jListNames.getModel();
             nameModel.clear();
             
             int counter = 0;
@@ -117,7 +118,7 @@ public class ShowLendingsForCustomer extends javax.swing.JFrame {
             int index = 0;
             
             try {
-                index = jList1.getSelectedIndex();
+                index = jListNames.getSelectedIndex();
             } catch (ArrayIndexOutOfBoundsException e) {
                 String msg = "No name selected";
                 LOGGER.log(Level.INFO, msg);
@@ -126,7 +127,7 @@ public class ShowLendingsForCustomer extends javax.swing.JFrame {
         
             byCustomer = lendingManager.findLendingsForCustomer(byName.get(index));
 
-            borrowModel = (BorrowTableModel)jTable2.getModel();
+            borrowModel = (BorrowTableModel)jTableLendings.getModel();
             borrowModel.setLendingManager(lendingManager);
             
             int counter = 0;
@@ -173,13 +174,13 @@ public class ShowLendingsForCustomer extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jTableLendings = new javax.swing.JTable();
         jButtonBack = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jTextFieldName = new javax.swing.JTextField();
         jButtonFind = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        jListNames = new javax.swing.JList();
         jButtonChoose = new javax.swing.JButton();
         jProgressBar = new javax.swing.JProgressBar();
 
@@ -188,8 +189,11 @@ public class ShowLendingsForCustomer extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Lendings:");
 
-        jTable2.setModel(new BorrowTableModel());
-        jScrollPane1.setViewportView(jTable2);
+        jTableLendings.setModel(new BorrowTableModel());
+        TableColumnModel columnModel = jTableLendings.getColumnModel();
+        columnModel.getColumn(0).setMaxWidth(25);
+        columnModel.getColumn(0).setPreferredWidth(20);
+        jScrollPane1.setViewportView(jTableLendings);
 
         jButtonBack.setText("Back");
         jButtonBack.addActionListener(new java.awt.event.ActionListener() {
@@ -207,9 +211,9 @@ public class ShowLendingsForCustomer extends javax.swing.JFrame {
             }
         });
 
-        jList1.setModel(new javax.swing.DefaultListModel<String>()
+        jListNames.setModel(new javax.swing.DefaultListModel<String>()
         );
-        jScrollPane3.setViewportView(jList1);
+        jScrollPane3.setViewportView(jListNames);
 
         jButtonChoose.setText("Choose");
         jButtonChoose.addActionListener(new java.awt.event.ActionListener() {
@@ -331,12 +335,11 @@ public class ShowLendingsForCustomer extends javax.swing.JFrame {
     private javax.swing.JButton jButtonFind;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JList jList1;
+    private javax.swing.JList jListNames;
     private javax.swing.JProgressBar jProgressBar;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTableLendings;
     private javax.swing.JTextField jTextFieldName;
     // End of variables declaration//GEN-END:variables
 }
