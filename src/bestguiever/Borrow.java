@@ -16,14 +16,14 @@ import java.beans.PropertyChangeListener;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingWorker;
 import org.apache.commons.dbcp.BasicDataSource;
 
@@ -209,8 +209,6 @@ public class Borrow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         jLabelLending = new javax.swing.JLabel();
         jScrollPaneLendings = new javax.swing.JScrollPane();
         jTableBorrow = new javax.swing.JTable();
@@ -225,34 +223,12 @@ public class Borrow extends javax.swing.JFrame {
         jLabelFrom = new javax.swing.JLabel();
         jLabelTo = new javax.swing.JLabel();
         jButtonAdd = new javax.swing.JButton();
-        int current = Calendar.getInstance().get(Calendar.YEAR);
-        jSpinnerStartYear = new javax.swing.JSpinner(new SpinnerNumberModel(current,current,current+1,1));
-        int current2 = Calendar.getInstance().get(Calendar.YEAR);
-        jSpinnerEndYear = new javax.swing.JSpinner(new SpinnerNumberModel(current2,current2,current2+1,1));
-        jSpinnerStartMonth = new javax.swing.JSpinner(new SpinnerNumberModel(1,1,12,1));
-        jSpinnerEndMonth = new javax.swing.JSpinner(new SpinnerNumberModel(1,1,12,1));
-        jSpinnerStartDay = new javax.swing.JSpinner(new SpinnerNumberModel(1,1,31,1));
-        jSpinnerEndDay = new javax.swing.JSpinner(new SpinnerNumberModel(1,1,31,1));
-        jLabelYear = new javax.swing.JLabel();
-        jLabelMonth = new javax.swing.JLabel();
-        jLabelDay = new javax.swing.JLabel();
         jProgressBarCustomers = new javax.swing.JProgressBar();
         jProgressBarBoardGames = new javax.swing.JProgressBar();
         jButtonDelete = new javax.swing.JButton();
         jButtonAvailable = new javax.swing.JButton();
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane2.setViewportView(jTable1);
+        jComboBoxFrom = new javax.swing.JComboBox();
+        jComboBoxTo = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -298,12 +274,6 @@ public class Borrow extends javax.swing.JFrame {
             }
         });
 
-        jLabelYear.setText("Year");
-
-        jLabelMonth.setText("Month");
-
-        jLabelDay.setText("Day");
-
         jButtonDelete.setText("Delete");
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -315,6 +285,21 @@ public class Borrow extends javax.swing.JFrame {
         jButtonAvailable.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAvailableActionPerformed(evt);
+            }
+        });
+
+        Calendar c = Calendar.getInstance();
+        jComboBoxFrom.setModel(new ComboModel(14, c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR)));
+        jComboBoxFrom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxFromActionPerformed(evt);
+            }
+        });
+
+        jComboBoxTo.setModel(new ComboModel(30, c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR)));
+        jComboBoxTo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxToActionPerformed(evt);
             }
         });
 
@@ -343,20 +328,8 @@ public class Borrow extends javax.swing.JFrame {
                             .addComponent(jLabelFrom))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSpinnerEndYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSpinnerStartYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelYear))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSpinnerEndMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSpinnerStartMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelMonth))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                                .addComponent(jSpinnerEndDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jSpinnerStartDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabelDay)))
+                            .addComponent(jComboBoxFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBoxTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPaneCustomers, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -375,12 +348,6 @@ public class Borrow extends javax.swing.JFrame {
                                 .addComponent(jButtonAvailable)))))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabelDay, jSpinnerEndDay, jSpinnerStartDay});
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabelMonth, jSpinnerEndMonth, jSpinnerStartMonth});
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabelYear, jSpinnerEndYear, jSpinnerStartYear});
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabelFrom, jLabelTo});
 
@@ -408,32 +375,20 @@ public class Borrow extends javax.swing.JFrame {
                             .addComponent(jButtonAdd)
                             .addComponent(jButtonDelete))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jScrollPaneLendings, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelMonth)
-                            .addComponent(jLabelDay))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelYear)
-                                .addGap(11, 11, 11)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jSpinnerStartYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabelFrom))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jSpinnerEndYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabelTo)))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jSpinnerStartDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jSpinnerEndDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jSpinnerStartMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jSpinnerEndMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(37, 37, 37)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabelTo)
+                                .addComponent(jComboBoxTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(28, 28, 28))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabelFrom)
+                                .addComponent(jComboBoxFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jProgressBarLendings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
@@ -489,23 +444,21 @@ public class Borrow extends javax.swing.JFrame {
 
         /* From, To */
         try {
-            Calendar c = new GregorianCalendar();
-            c.set(
-                    (Integer) jSpinnerStartYear.getValue(),
-                    (Integer) jSpinnerStartMonth.getValue() - 1,
-                    (Integer) jSpinnerStartDay.getValue());
+            DateFormat fd;
+            fd = new SimpleDateFormat("dd.MM.yyyy");
+            
+            Calendar c = Calendar.getInstance();
+            c.setTime(fd.parse((String)jComboBoxFrom.getSelectedItem()));
             lend.setStartTime(new Date(c.getTimeInMillis()));
-            c.set(
-                    (Integer) jSpinnerEndYear.getValue(),
-                    (Integer) jSpinnerEndMonth.getValue() - 1,
-                    (Integer) jSpinnerEndDay.getValue());
+            
+            c.setTime(fd.parse((String)jComboBoxTo.getSelectedItem()));
             lend.setExpectedEndTime(new Date(c.getTimeInMillis()));
-        } catch (IllegalArgumentException ex) {
+        } catch (Exception ex) {
             String msg = "Lending from or to wrong format";
             LOGGER.log(Level.INFO, msg);
             JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
         }
-
+        
         try {
             LOGGER.log(Level.INFO, "Adding lending");
             lendingManager.createLending(lend);
@@ -548,6 +501,14 @@ public class Borrow extends javax.swing.JFrame {
         boardGamesSwingWorker.addPropertyChangeListener(boardGameProgressListener);
         boardGamesSwingWorker.execute();
     }//GEN-LAST:event_jButtonAvailableActionPerformed
+
+    private void jComboBoxFromActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxFromActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxFromActionPerformed
+
+    private void jComboBoxToActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxToActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxToActionPerformed
 
     /**
      * @param args the command line arguments
@@ -599,28 +560,19 @@ public class Borrow extends javax.swing.JFrame {
     private javax.swing.JButton jButtonAvailable;
     private javax.swing.JButton jButtonBack;
     private javax.swing.JButton jButtonDelete;
+    private javax.swing.JComboBox jComboBoxFrom;
+    private javax.swing.JComboBox jComboBoxTo;
     private javax.swing.JLabel jLabelBoardGames;
     private javax.swing.JLabel jLabelCustomers;
-    private javax.swing.JLabel jLabelDay;
     private javax.swing.JLabel jLabelFrom;
     private javax.swing.JLabel jLabelLending;
-    private javax.swing.JLabel jLabelMonth;
     private javax.swing.JLabel jLabelTo;
-    private javax.swing.JLabel jLabelYear;
     private javax.swing.JProgressBar jProgressBarBoardGames;
     private javax.swing.JProgressBar jProgressBarCustomers;
     private javax.swing.JProgressBar jProgressBarLendings;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPaneBoardGames;
     private javax.swing.JScrollPane jScrollPaneCustomers;
     private javax.swing.JScrollPane jScrollPaneLendings;
-    private javax.swing.JSpinner jSpinnerEndDay;
-    private javax.swing.JSpinner jSpinnerEndMonth;
-    private javax.swing.JSpinner jSpinnerEndYear;
-    private javax.swing.JSpinner jSpinnerStartDay;
-    private javax.swing.JSpinner jSpinnerStartMonth;
-    private javax.swing.JSpinner jSpinnerStartYear;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTableBordGames;
     private javax.swing.JTable jTableBorrow;
     private javax.swing.JTable jTableCustomers;

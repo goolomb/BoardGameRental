@@ -231,7 +231,6 @@ public class CustomerManagerImpl implements CustomerManager {
         if (customer.getAddress().equals("")) {
             throw new ValidationException("customer address is empty");
         }
-
         if (customer.getName() == null) {
             throw new ValidationException("customer name is null");            
         }

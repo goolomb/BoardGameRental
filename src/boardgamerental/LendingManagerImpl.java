@@ -9,6 +9,7 @@ package boardgamerental;
 import common.*;
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -233,20 +234,6 @@ public class LendingManagerImpl implements LendingManager {
                     pastDays++;
                     }
 
-/*                    long day = 1000*60*60*24;
-                    long sTimeDay = lending.getStartTime().getTime()/day - 1;
-                    long eeTime = lending.getExpectedEndTime().getTime()/day - sTimeDay;
-                    
-                    if(lending.getRealEndTime() == null) {
-                        return perDay.multiply(new BigDecimal(eeTime));
-                    }
-                    long reTime = lending.getRealEndTime().getTime()/day - sTimeDay;
-                    if(!lending.getExpectedEndTime().before(lending.getRealEndTime())) {
-                        return perDay.multiply(new BigDecimal(reTime));
-                    }
-                    else {
-                        return perDay.multiply(new BigDecimal(reTime)).add(new BigDecimal(50*(reTime - eeTime)));
-                    }*/
                 }
             }
         }
@@ -306,7 +293,7 @@ public class LendingManagerImpl implements LendingManager {
         if (lending.getExpectedEndTime() == null) {
             throw new ValidationException("expectedendtime is null");
         }
-        if (!lending.getStartTime().before(lending.getExpectedEndTime())) {
+        if (lending.getStartTime().after(lending.getExpectedEndTime())) {
             throw new ValidationException("expected time is set to earlier date than start time");
         }
         if (lending.getBoardGame().getPricePerDay() == null) {

@@ -1,7 +1,7 @@
 ----------------------------------------------------------------
-2014-05-06 13:41:50.011 GMT:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.6.2.1 - (999685): instance a816c00e-0145-d1c4-d82f-000002c8af28 
-on database directory memory:C:\Users\Goolomb\Documents\GitHub\BoardGameRental\CustomerManager-test  with class loader sun.misc.Launcher$AppClassLoader@5c4aca27 
+2014-05-11 06:57:58.293 GMT:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.6.2.1 - (999685): instance a816c00e-0145-ea12-e4b9-000002b77a40 
+on database directory memory:C:\Users\Goolomb\Documents\GitHub\BoardGameRental\LendingManager-test  with class loader sun.misc.Launcher$AppClassLoader@231a6631 
 Loaded from file:/C:/Users/Goolomb/Documents/GitHub/BoardGameRental/test/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.7.0_40-b43
