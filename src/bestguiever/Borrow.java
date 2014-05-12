@@ -240,7 +240,8 @@ public class Borrow extends javax.swing.JFrame {
         jTableBorrow.getColumnModel().getColumn(0).setMaxWidth(20);
         jScrollPaneLendings.setViewportView(jTableBorrow);
 
-        jButtonBack.setText("Back");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("bestguiever/Bundle"); // NOI18N
+        jButtonBack.setText(bundle.getString("BoardGameRental.jButtonBack.text"));
         jButtonBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonBackActionPerformed(evt);
