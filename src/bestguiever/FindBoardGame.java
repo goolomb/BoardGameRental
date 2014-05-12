@@ -180,24 +180,25 @@ public class FindBoardGame extends javax.swing.JFrame {
             }
         });
 
-        jLabelNumberOfPlayers.setText("Number of players:");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("bestguiever/Bundle"); // NOI18N
+        jLabelNumberOfPlayers.setText(bundle.getString("BoardGameRental.jLabelNumberOfPlayers")); // NOI18N
 
         List<String> cat = new ArrayList(Arrays.asList(new AddBoardGame().categories));
         cat.add("None");
         jComboBoxCategory.setModel(new javax.swing.DefaultComboBoxModel(cat.toArray()));
         jComboBoxCategory.setSelectedItem("None");
 
-        JButtonMaxPrice.setText("Max. price:");
+        JButtonMaxPrice.setText(bundle.getString("BoardGameRental.jLabelMaxPrice")); // NOI18N
 
         jButtonSearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jButtonSearch.setText("Search");
+        jButtonSearch.setText(bundle.getString("BoardGameRental.jButtonSearch")); // NOI18N
         jButtonSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonSearchActionPerformed(evt);
             }
         });
 
-        jButtonBack.setText("Back");
+        jButtonBack.setText(bundle.getString("BoardGameRental.jButtonBack")); // NOI18N
         jButtonBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonBackActionPerformed(evt);
@@ -205,11 +206,11 @@ public class FindBoardGame extends javax.swing.JFrame {
         });
 
         jLabelSearch.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabelSearch.setText("Search");
+        jLabelSearch.setText(bundle.getString("BoardGameRental.jLabelSearch")); // NOI18N
 
-        jLabelName.setText("Name:");
+        jLabelName.setText(bundle.getString("BoardGameRental.jLabelName")); // NOI18N
 
-        jLabelCategory.setText("Category:");
+        jLabelCategory.setText(bundle.getString("BoardGameRental.jLabelCategories")); // NOI18N
 
         int maxWidth = 25;
         int preferredWidth = 20;
@@ -258,7 +259,7 @@ public class FindBoardGame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jProgressBarBG, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE))
-                .addGap(0, 21, Short.MAX_VALUE))
+                .addGap(0, 19, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jComboBoxCategory, jTextName});

@@ -51,14 +51,15 @@ public class openingTable extends javax.swing.JFrame {
             }
         });
 
-        jButtonShowLendings.setText("Show lendings for Customer");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("bestguiever/Bundle"); // NOI18N
+        jButtonShowLendings.setText(bundle.getString("BoardGameRental.jButtonShowLendings")); // NOI18N
         jButtonShowLendings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonShowLendingsActionPerformed(evt);
             }
         });
 
-        jButtonFindBoardGame.setText("Find board game");
+        jButtonFindBoardGame.setText(bundle.getString("BoardGameRental.jButtonFindBoardGame")); // NOI18N
         jButtonFindBoardGame.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonFindBoardGameActionPerformed(evt);
@@ -66,23 +67,23 @@ public class openingTable extends javax.swing.JFrame {
         });
 
         jLabelBoardGameRental.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabelBoardGameRental.setText("Board game Rental");
+        jLabelBoardGameRental.setText(bundle.getString("BoardGameRental.jLabelBoardGameRental")); // NOI18N
 
-        jButtonAddCustomer.setText("Add Customer");
+        jButtonAddCustomer.setText(bundle.getString("BoardGameRental.jButtonAddCustomer")); // NOI18N
         jButtonAddCustomer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAddCustomerActionPerformed(evt);
             }
         });
 
-        jButtonAddBoardGame.setText("Add board game");
+        jButtonAddBoardGame.setText(bundle.getString("BoardGameRental.jButtonAddBoardGame")); // NOI18N
         jButtonAddBoardGame.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAddBoardGameActionPerformed(evt);
             }
         });
 
-        jButtonBorrow.setText("Borrow");
+        jButtonBorrow.setText(bundle.getString("BoardGameRental.jButtonBorrow")); // NOI18N
         jButtonBorrow.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonBorrowActionPerformed(evt);

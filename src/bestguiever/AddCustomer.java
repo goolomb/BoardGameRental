@@ -118,13 +118,14 @@ public class AddCustomer extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabelCustomer.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabelCustomer.setText("Customer");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("bestguiever/Bundle"); // NOI18N
+        jLabelCustomer.setText(bundle.getString("BoardGameRental.jLabelCustomer")); // NOI18N
 
-        jLabelName.setText("Name:");
+        jLabelName.setText(bundle.getString("BoardGameRental.jLabelName")); // NOI18N
 
-        jLabelAddress.setText("Address:");
+        jLabelAddress.setText(bundle.getString("BoardGameRental.jLabelAddress")); // NOI18N
 
-        jLabelPhone.setText("Phone number:");
+        jLabelPhone.setText(bundle.getString("BoardGameRental.jLabelPhone")); // NOI18N
 
         jTextName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -138,14 +139,14 @@ public class AddCustomer extends javax.swing.JFrame {
             }
         });
 
-        jButtonBack.setText("Back");
+        jButtonBack.setText(bundle.getString("BoardGameRental.jButtonBack")); // NOI18N
         jButtonBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonBackActionPerformed(evt);
             }
         });
 
-        jButtonAdd.setText("Add");
+        jButtonAdd.setText(bundle.getString("BoardGameRental.jButtonAdd")); // NOI18N
         jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAddActionPerformed(evt);
@@ -157,7 +158,7 @@ public class AddCustomer extends javax.swing.JFrame {
         jTableCustomers.getColumnModel().getColumn(0).setMaxWidth(20);
         jScrollPaneCustomers.setViewportView(jTableCustomers);
 
-        jButtonDelete.setText("Delete");
+        jButtonDelete.setText(bundle.getString("BoardGameRental.jButtonDelete")); // NOI18N
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDeleteActionPerformed(evt);

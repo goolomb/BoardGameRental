@@ -233,7 +233,8 @@ public class Borrow extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabelLending.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabelLending.setText("Lendings");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("bestguiever/Bundle"); // NOI18N
+        jLabelLending.setText(bundle.getString("BoardGameRental.jLabelLending")); // NOI18N
 
         jTableBorrow.setModel(new BorrowTableModel());
         jTableBorrow.setSelectionMode (0);
@@ -241,7 +242,6 @@ public class Borrow extends javax.swing.JFrame {
         jScrollPaneLendings.setViewportView(jTableBorrow);
 
         //java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("bestguiever/Bundle"); // NOI18N
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("bestguiever/Bundle"); // NOI18N
         jButtonBack.setText(bundle.getString("BoardGameRental.jButtonBack.text")); // NOI18N
         jButtonBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -250,10 +250,10 @@ public class Borrow extends javax.swing.JFrame {
         });
 
         jLabelCustomers.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabelCustomers.setText("Customers");
+        jLabelCustomers.setText(bundle.getString("BoardGameRental.jLabelCustomer")); // NOI18N
 
         jLabelBoardGames.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabelBoardGames.setText("Board Games");
+        jLabelBoardGames.setText(bundle.getString("BoardGameRental.jLabelBoardGames")); // NOI18N
 
         jTableBordGames.setModel(new BoardGameTableModelUnmodifiable());
         jTableBordGames.setSelectionMode (0);
@@ -265,25 +265,25 @@ public class Borrow extends javax.swing.JFrame {
         jTableCustomers.getColumnModel().getColumn(0).setMaxWidth(20);
         jScrollPaneCustomers.setViewportView(jTableCustomers);
 
-        jLabelFrom.setText("From:");
+        jLabelFrom.setText(bundle.getString("BoardGameRental.jLabelFrom")); // NOI18N
 
-        jLabelTo.setText("To:");
+        jLabelTo.setText(bundle.getString("BoardGameRental.jLabelTo")); // NOI18N
 
-        jButtonAdd.setText("Add");
+        jButtonAdd.setText(bundle.getString("BoardGameRental.jButtonAdd")); // NOI18N
         jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAddActionPerformed(evt);
             }
         });
 
-        jButtonDelete.setText("Delete");
+        jButtonDelete.setText(bundle.getString("BoardGameRental.jButtonDelete.text")); // NOI18N
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDeleteActionPerformed(evt);
             }
         });
 
-        jButtonAvailable.setText("Get available");
+        jButtonAvailable.setText(bundle.getString("BoardGameRental.jButtonAvailable")); // NOI18N
         jButtonAvailable.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAvailableActionPerformed(evt);
@@ -348,7 +348,7 @@ public class Borrow extends javax.swing.JFrame {
                                 .addComponent(jLabelBoardGames)
                                 .addGap(18, 18, 18)
                                 .addComponent(jButtonAvailable)))))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabelFrom, jLabelTo});
