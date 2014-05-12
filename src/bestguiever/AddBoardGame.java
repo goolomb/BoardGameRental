@@ -83,13 +83,7 @@ public class AddBoardGame extends javax.swing.JFrame {
         jSpinnerMaxPlayers = new javax.swing.JSpinner(new SpinnerNumberModel(1,1,99,1));
         jLabel6 = new javax.swing.JLabel();
         jButtonAdd = new javax.swing.JButton();
-        try {
-            jButtonChoose =(javax.swing.JButton)java.beans.Beans.instantiate(getClass().getClassLoader(), "bestguiever.AddBoardGame_jButtonChoose");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
-        }
+        jButtonChoose = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         model = new DefaultListModel();
         jListCategories = new javax.swing.JList(model);
