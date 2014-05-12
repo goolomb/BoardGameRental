@@ -37,10 +37,10 @@ public class openingTable extends javax.swing.JFrame {
         jButtonListAllBoardGames = new javax.swing.JButton();
         jButtonShowLendings = new javax.swing.JButton();
         jButtonFindBoardGame = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        jLabelBoardGameRental = new javax.swing.JLabel();
         jButtonAddCustomer = new javax.swing.JButton();
         jButtonAddBoardGame = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        jButtonBorrow = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -65,8 +65,8 @@ public class openingTable extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel1.setText("Board game Rental");
+        jLabelBoardGameRental.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabelBoardGameRental.setText("Board game Rental");
 
         jButtonAddCustomer.setText("Add Customer");
         jButtonAddCustomer.addActionListener(new java.awt.event.ActionListener() {
@@ -82,10 +82,10 @@ public class openingTable extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Borrow");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonBorrow.setText("Borrow");
+        jButtonBorrow.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonBorrowActionPerformed(evt);
             }
         });
 
@@ -97,7 +97,7 @@ public class openingTable extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(86, 86, 86)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabelBoardGameRental, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 90, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
@@ -111,19 +111,19 @@ public class openingTable extends javax.swing.JFrame {
                     .addComponent(jButtonFindBoardGame)
                     .addComponent(jButtonShowLendings)
                     .addComponent(jButtonListAllBoardGames)
-                    .addComponent(jButton1))
+                    .addComponent(jButtonBorrow))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton1, jButtonFindBoardGame, jButtonListAllBoardGames, jButtonShowLendings});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonBorrow, jButtonFindBoardGame, jButtonListAllBoardGames, jButtonShowLendings});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(31, 31, 31)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabelBoardGameRental, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(25, 25, 25)
-                .addComponent(jButton1)
+                .addComponent(jButtonBorrow)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonListAllBoardGames)
                 .addGap(18, 18, 18)
@@ -165,10 +165,10 @@ public class openingTable extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jButtonAddBoardGameActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonBorrowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrowActionPerformed
         dispose();
         new Borrow().setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonBorrowActionPerformed
 
     /**
      * @param args the command line arguments
@@ -208,12 +208,12 @@ public class openingTable extends javax.swing.JFrame {
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAddBoardGame;
     private javax.swing.JButton jButtonAddCustomer;
+    private javax.swing.JButton jButtonBorrow;
     private javax.swing.JButton jButtonFindBoardGame;
     private javax.swing.JButton jButtonListAllBoardGames;
     private javax.swing.JButton jButtonShowLendings;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabelBoardGameRental;
     // End of variables declaration//GEN-END:variables
 }

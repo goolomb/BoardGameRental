@@ -175,7 +175,7 @@ public class ShowLendingsForCustomer extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         jButtonBack = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        jLabelForCustomer = new javax.swing.JLabel();
         jTextFieldName = new javax.swing.JTextField();
         jButtonFind = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -198,7 +198,7 @@ public class ShowLendingsForCustomer extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setText("For Customer:");
+        jLabelForCustomer.setText("For Customer:");
 
         jButtonFind.setText("Find");
         jButtonFind.addActionListener(new java.awt.event.ActionListener() {
@@ -234,7 +234,7 @@ public class ShowLendingsForCustomer extends javax.swing.JFrame {
                                         .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jButtonFind))
-                                    .addComponent(jLabel2)
+                                    .addComponent(jLabelForCustomer)
                                     .addComponent(jButtonBack))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -254,7 +254,7 @@ public class ShowLendingsForCustomer extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonBack)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)
+                        .addComponent(jLabelForCustomer)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -330,11 +330,10 @@ public class ShowLendingsForCustomer extends javax.swing.JFrame {
     private javax.swing.JButton jButtonChoose;
     private javax.swing.JButton jButtonFind;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabelForCustomer;
     private javax.swing.JList jList1;
     private javax.swing.JProgressBar jProgressBar;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextFieldName;
