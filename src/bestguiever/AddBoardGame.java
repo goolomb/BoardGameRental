@@ -36,9 +36,19 @@ public class AddBoardGame extends javax.swing.JFrame {
     private static final Logger LOGGER = Logger.getLogger(AddBoardGame.class.getName());
     BasicDataSource basicDataSource = new BasicDataSource();
     BoardGameManagerImpl bgManager;
-    static String [] categories = new String[] {"Roll and Move", "Simulation", "Strategy", "Wargames", "Party/Family",
-                                            "Resource Management", "Cooperative", "Abstract", "Miniatures", 
-                                            "Collectible", "Auction", "Tile Laying/Modular board"};
+    final static java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("bestguiever/Bundle");
+    static String [] categories = new String[] {bundle.getString("BoardGameRental.RollandMove"), 
+                                                bundle.getString("BoardGameRental.Simulation"), 
+                                                bundle.getString("BoardGameRental.Strategy"), 
+                                                bundle.getString("BoardGameRental.Wargames"), 
+                                                bundle.getString("BoardGameRental.Party/Family"),
+                                                bundle.getString("BoardGameRental.ResourceManagement"),
+                                                bundle.getString("BoardGameRental.Cooperative"),
+                                                bundle.getString("BoardGameRental.Abstract"),
+                                                bundle.getString("BoardGameRental.Miniatures"), 
+                                                bundle.getString("BoardGameRental.Collectible"),
+                                                bundle.getString("BoardGameRental.Auction"),
+                                                bundle.getString("BoardGameRental.TileLaying")};
     private Set<String> category = new HashSet<>();
     /**
      * Creates new form AddBoardGame
@@ -207,12 +217,11 @@ public class AddBoardGame extends javax.swing.JFrame {
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButtonClear)
                             .addComponent(jButtonRemove)
-                            .addComponent(jButtonChoose, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jButtonChoose, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jProgressBarBG, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, 0)
                                 .addComponent(jButtonDelete)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE))))
@@ -220,6 +229,8 @@ public class AddBoardGame extends javax.swing.JFrame {
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonAdd, jSpinnerPrizePerDay, jTextName});
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonChoose, jButtonRemove});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -271,6 +282,8 @@ public class AddBoardGame extends javax.swing.JFrame {
                     .addComponent(jProgressBarBG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(51, 51, 51))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButtonChoose, jButtonRemove});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

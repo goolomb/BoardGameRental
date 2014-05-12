@@ -55,14 +55,13 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jScrollPane2" alignment="0" min="-2" pref="90" max="-2" attributes="0"/>
                           <Component id="jButtonClear" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButtonRemove" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButtonChoose" min="-2" pref="71" max="-2" attributes="0"/>
+                          <Component id="jButtonRemove" linkSize="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jButtonChoose" linkSize="3" alignment="0" min="-2" pref="53" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jProgressBarBG" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
                               <Component id="jButtonDelete" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
@@ -109,7 +108,7 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabelMaximumOfPlayers" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jSpinnerMaxPlayers" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButtonRemove" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jButtonRemove" linkSize="4" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -127,7 +126,7 @@
                                           </Group>
                                       </Group>
                                   </Group>
-                                  <Component id="jButtonChoose" min="-2" pref="20" max="-2" attributes="0"/>
+                                  <Component id="jButtonChoose" linkSize="4" min="-2" pref="20" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
