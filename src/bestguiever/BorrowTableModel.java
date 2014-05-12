@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
@@ -65,21 +66,22 @@ class BorrowTableModel  extends AbstractTableModel {
     
     @Override
     public String getColumnName(int columnIndex) {
+        ResourceBundle rb = ResourceBundle.getBundle("bestguiever/Bundle");
 	switch (COLUMNS.values()[columnIndex]) {
 	    case ID:
-		return "Id";
+		return rb.getString("BoardGameRental.Id");
 	    case CUSTOMER:
-		return "Customer";
+		return rb.getString("BoardGameRental.Customer");
 	    case BOARDGAME:
-		return "Board Game";
+		return rb.getString("BoardGameRental.BoardGame");
 	    case STARTTIME:
-		return "Borrowed";
+		return rb.getString("BoardGameRental.Borrowed");
             case EXPECTEDENDTIME:
-		return "Return exected";
+		return rb.getString("BoardGameRental.ReturnExected");
             case REALENDTIME:
-		return "Returned";
+		return rb.getString("BoardGameRental.Returned");
             case PRICE:
-                return "Price";
+                return rb.getString("BoardGameRental.Price");
 	    default:
 		throw new IllegalArgumentException("columnIndex");
 	}
