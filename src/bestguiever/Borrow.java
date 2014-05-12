@@ -242,7 +242,7 @@ public class Borrow extends javax.swing.JFrame {
         jScrollPaneLendings.setViewportView(jTableBorrow);
 
         //java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("bestguiever/Bundle"); // NOI18N
-        jButtonBack.setText(bundle.getString("BoardGameRental.jButtonBack.text")); // NOI18N
+        jButtonBack.setText(bundle.getString("BoardGameRental.jButtonBack")); // NOI18N
         jButtonBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonBackActionPerformed(evt);
@@ -276,7 +276,7 @@ public class Borrow extends javax.swing.JFrame {
             }
         });
 
-        jButtonDelete.setText(bundle.getString("BoardGameRental.jButtonDelete.text")); // NOI18N
+        jButtonDelete.setText(bundle.getString("BoardGameRental.jButtonDelete")); // NOI18N
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDeleteActionPerformed(evt);
@@ -348,7 +348,7 @@ public class Borrow extends javax.swing.JFrame {
                                 .addComponent(jLabelBoardGames)
                                 .addGap(18, 18, 18)
                                 .addComponent(jButtonAvailable)))))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(181, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabelFrom, jLabelTo});
@@ -386,11 +386,9 @@ public class Borrow extends javax.swing.JFrame {
                                 .addComponent(jLabelTo)
                                 .addComponent(jComboBoxTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGap(28, 28, 28))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabelFrom)
-                                .addComponent(jComboBoxFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelFrom)
+                            .addComponent(jComboBoxFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jProgressBarLendings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
