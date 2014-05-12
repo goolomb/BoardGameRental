@@ -10,6 +10,7 @@ import boardgamerental.Customer;
 import boardgamerental.CustomerManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
@@ -58,15 +59,16 @@ public class CustomerTableModel extends AbstractTableModel {
     
     @Override
     public String getColumnName(int columnIndex) {
+        ResourceBundle rb = ResourceBundle.getBundle("bestguiever/Bundle");
 	switch (COLUMNS.values()[columnIndex]) {
 	    case ID:
-		return "Id";
+                return rb.getString("BoardGameRental.Id");
 	    case NAME:
-		return "Name";
+		return rb.getString("BoardGameRental.Name");
 	    case ADDRESS:
-		return "Address";
+		return rb.getString("BoardGameRental.Address");
 	    case PHONENUMBER:
-		return "Phone Number";
+		return rb.getString("BoardGameRental.PhoneNumber");
 	    default:
 		throw new IllegalArgumentException("columnIndex");
 	}

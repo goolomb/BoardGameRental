@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,19 +57,20 @@ public class BoardGameTableModel extends AbstractTableModel {
     
     @Override
     public String getColumnName(int columnIndex) {
+        ResourceBundle rb = ResourceBundle.getBundle("bestguiever/Bundle");
 	switch (COLUMNS.values()[columnIndex]) {
 	    case ID:
-                return "Id";
+                return rb.getString("BoardGameRental.Id");
 	    case NAME:
-		return "Name";
+		return rb.getString("BoardGameRental.Name");
 	    case MINPLAYERS:
-		return "Min players";
+		return rb.getString("BoardGameRental.MinPlayers");
 	    case MAXPLAYERS:
-		return "Max players";
+		return rb.getString("BoardGameRental.MaxPlayers");
 	    case CATEGORIES:
-		return "Categories";
+		return rb.getString("BoardGameRental.Categories");
 	    case PRIZEPERDAY:
-		return "Prize";
+		return rb.getString("BoardGameRental.Price");
 	    default:
 		throw new IllegalArgumentException("columnIndex");
 	}
