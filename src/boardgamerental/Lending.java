@@ -44,10 +44,7 @@ public class Lending {
             return false;
         }
         final Lending other = (Lending) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.id, other.id);
     }
 
     @Override

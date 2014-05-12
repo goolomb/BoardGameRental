@@ -114,7 +114,7 @@ public class BoardGame {
 
     @Override
     public String toString() {
-        return "BoardGame{" + "id=" + id + ", name=" + name + '}';
+        return name + "(id=" + id + ")";
     }
     
     

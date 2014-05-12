@@ -9,7 +9,6 @@ package boardgamerental;
 import common.*;
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,13 +27,9 @@ import javax.sql.DataSource;
 public class LendingManagerImpl implements LendingManager {
     private static final Logger logger = Logger.getLogger(
             LendingManagerImpl.class.getName());
-    
-    private BoardGameManager boardGameManager;
-    private CustomerManager customerManager;
 
     private DataSource dataSource;
 
-    
     public LendingManagerImpl() {
     }
 
@@ -48,6 +43,7 @@ public class LendingManagerImpl implements LendingManager {
         }
     }
     
+    @Override
     public void createLending(Lending lending) {
         checkDataSource();
         validate(lending);
@@ -62,7 +58,7 @@ public class LendingManagerImpl implements LendingManager {
         }
         
         try (Connection conn = dataSource.getConnection()) {
-            //conn.setAutoCommit(false);
+            
             try (PreparedStatement st = conn.prepareStatement(
                     "INSERT INTO Lending (boardgameid, customerid, starttime, expectedendtime) VALUES (?,?,?,?)",
                     Statement.RETURN_GENERATED_KEYS)){
@@ -77,7 +73,6 @@ public class LendingManagerImpl implements LendingManager {
             Integer id = DBUtils.getId(st.getGeneratedKeys());
             lending.setId(id);
             }
-            //conn.commit();
         } catch (SQLException ex) {
             String msg = "Error when inserting lending into db";
             logger.log(Level.SEVERE, msg, ex);
@@ -85,6 +80,7 @@ public class LendingManagerImpl implements LendingManager {
         }
     }
 
+    @Override
     public Lending getLendingById(Integer id) {
         checkDataSource();
         
@@ -106,6 +102,7 @@ public class LendingManagerImpl implements LendingManager {
         }
     }
 
+    @Override
     public List<Lending> findAllLendings() {
         checkDataSource();
         try (Connection conn = dataSource.getConnection()){
@@ -120,6 +117,7 @@ public class LendingManagerImpl implements LendingManager {
         }
     }
 
+    @Override
     public List<Lending> findLendingsForCustomer(Customer customer) {
         checkDataSource();
         try (Connection conn = dataSource.getConnection()){
@@ -135,6 +133,7 @@ public class LendingManagerImpl implements LendingManager {
         }
     }
 
+    @Override
     public void updateLending(Lending lending) {
         checkDataSource();
         validate(lending);
@@ -163,6 +162,7 @@ public class LendingManagerImpl implements LendingManager {
         }
     }
 
+    @Override
     public void deleteLending(Lending lending) {
         checkDataSource();
         validate(lending);
@@ -188,6 +188,7 @@ public class LendingManagerImpl implements LendingManager {
         }
     }
 
+    @Override
     public BigDecimal calculateTotalPrice(Lending lending) {
         checkDataSource();
         validate(lending);
@@ -244,6 +245,7 @@ public class LendingManagerImpl implements LendingManager {
         }
     }
 
+    @Override
     public boolean isAvailable(BoardGame boardGame) {
         checkDataSource();
         
@@ -347,13 +349,5 @@ public class LendingManagerImpl implements LendingManager {
             }
         }
         return result;
-    }
-
-    public void setBoardGameManager(BoardGameManager boardGameManager) {
-        this.boardGameManager = boardGameManager;
-    }
-
-    public void setCustomerManager(CustomerManager customerManager) {
-        this.customerManager = customerManager;
     }
 }

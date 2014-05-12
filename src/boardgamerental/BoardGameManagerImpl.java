@@ -48,7 +48,8 @@ public class BoardGameManagerImpl implements BoardGameManager {
         validate(boardGame);
         if (boardGame.getId() != null) {
             throw new IllegalEntityException("board game id is already set");
-        }        
+        }  
+        
         try (Connection conn = dataSource.getConnection()) {
 
             try (PreparedStatement st = conn.prepareStatement(
@@ -127,7 +128,7 @@ public class BoardGameManagerImpl implements BoardGameManager {
             throw new IllegalArgumentException("name is null");
         }
         
-        if (name == "") {
+        if ("".equals(name)) {
             throw new IllegalArgumentException("name is empty");
         }
         
@@ -307,10 +308,10 @@ public class BoardGameManagerImpl implements BoardGameManager {
     }
     
     private void retrieveFromCategory(BoardGame boardGame, final Connection conn) throws SQLException {
-        try (PreparedStatement st1 = conn.prepareStatement(
+        try (PreparedStatement st = conn.prepareStatement(
                 "SELECT boardGameId, category FROM category WHERE boardGameId = ?")){
-            st1.setInt(1, boardGame.getId());
-            boardGame.setCategory(executeQueryForCategory(st1));
+            st.setInt(1, boardGame.getId());
+            boardGame.setCategory(executeQueryForCategory(st));
         }
     }
     

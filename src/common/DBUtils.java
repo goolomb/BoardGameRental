@@ -13,20 +13,13 @@ import javax.sql.DataSource;
 /**
  * Some DB tools.
  * 
- * @author Petr Adamek 
+ * @author Patrik
  */
 public class DBUtils {
 
     private static final Logger logger = Logger.getLogger(
             DBUtils.class.getName());
 
-        /**
-     * Extract key from given ResultSet.
-     * 
-     * @param key resultSet with key
-     * @return key from given result set
-     * @throws SQLException when operation fails
-     */
     public static Integer getId(ResultSet key) throws SQLException {
         if (key.getMetaData().getColumnCount() != 1) {
             throw new IllegalArgumentException("Given ResultSet contains more columns");
@@ -42,13 +35,6 @@ public class DBUtils {
         }
     }
 
-    /**
-     * Reads SQL statements from file. SQL commands in file must be separated by 
-     * a semicolon.
-     * 
-     * @param url url of the file
-     * @return array of command  strings
-     */
     private static String[] readSqlStatements(URL url) {
         try {
             char buffer[] = new char[256];
@@ -67,13 +53,6 @@ public class DBUtils {
         }
     }
     
-        /**
-     * Executes SQL script.
-     * 
-     * @param ds datasource
-     * @param scriptUrl url of sql script to be executed
-     * @throws SQLException when operation fails
-     */
     public static void executeSqlScript(DataSource ds, URL scriptUrl) throws SQLException {
         
         try (Connection conn = ds.getConnection()){
@@ -86,15 +65,6 @@ public class DBUtils {
         }
     }
 
-    /**
-     * Check if updates count is one. Otherwise appropriate exception is thrown.
-     * 
-     * @param count updates count.
-     * @param entity updated entity (for includig to error message)
-     * @param insert flag if performed operation was insert
-     * @throws IllegalEntityException when updates count is zero, so updated entity does not exist
-     * @throws ServiceFailureException when updates count is unexpected number
-     */
     public static void checkUpdatesCount(int count, Object entity, 
             boolean insert) throws IllegalEntityException, ServiceFailureException {
         

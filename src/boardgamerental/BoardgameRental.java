@@ -7,8 +7,6 @@
 package boardgamerental;
 
 import bestguiever.openingTable;
-import java.awt.EventQueue;
-import javax.swing.JFrame;
 
 /**
  *
