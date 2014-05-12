@@ -72,16 +72,16 @@ public class AddBoardGame extends javax.swing.JFrame {
     private void initComponents() {
 
         jButtonBack = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jLabelAddBoardGame = new javax.swing.JLabel();
+        jLabelName = new javax.swing.JLabel();
         jTextName = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        jLabelMinimumOfPlayers = new javax.swing.JLabel();
+        jLabelMaximumOfPlayers = new javax.swing.JLabel();
+        jLabelCategories = new javax.swing.JLabel();
         jComboBoxCategory = new javax.swing.JComboBox();
         jSpinnerMinPlayers = new javax.swing.JSpinner(new SpinnerNumberModel(1,1,99,1));
         jSpinnerMaxPlayers = new javax.swing.JSpinner(new SpinnerNumberModel(1,1,99,1));
-        jLabel6 = new javax.swing.JLabel();
+        jLabelPrizePerDay = new javax.swing.JLabel();
         jButtonAdd = new javax.swing.JButton();
         jButtonChoose = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -89,7 +89,6 @@ public class AddBoardGame extends javax.swing.JFrame {
         jListCategories = new javax.swing.JList(model);
         jButtonClear = new javax.swing.JButton();
         jSpinnerPrizePerDay = new javax.swing.JSpinner(new SpinnerNumberModel(100,50,1000,100));
-        jButtonChange = new javax.swing.JButton();
         jButtonDelete = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableBoardGames = new javax.swing.JTable();
@@ -105,20 +104,20 @@ public class AddBoardGame extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText("Add Board game");
+        jLabelAddBoardGame.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabelAddBoardGame.setText("Add Board game");
 
-        jLabel2.setText("Name");
+        jLabelName.setText("Name");
 
-        jLabel3.setText("Minimum of players");
+        jLabelMinimumOfPlayers.setText("Minimum of players");
 
-        jLabel4.setText("Maximum of players");
+        jLabelMaximumOfPlayers.setText("Maximum of players");
 
-        jLabel5.setText("Categories");
+        jLabelCategories.setText("Categories");
 
         jComboBoxCategory.setModel(new javax.swing.DefaultComboBoxModel(categories));
 
-        jLabel6.setText("Prize per day");
+        jLabelPrizePerDay.setText("Prize per day");
 
         jButtonAdd.setText("Add");
         jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -139,13 +138,6 @@ public class AddBoardGame extends javax.swing.JFrame {
         jButtonClear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonClearActionPerformed(evt);
-            }
-        });
-
-        jButtonChange.setText("Change Categories");
-        jButtonChange.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonChangeActionPerformed(evt);
             }
         });
 
@@ -190,15 +182,15 @@ public class AddBoardGame extends javax.swing.JFrame {
                         .addGap(12, 12, 12)
                         .addComponent(jButtonBack)
                         .addGap(28, 28, 28)
-                        .addComponent(jLabel1))
+                        .addComponent(jLabelAddBoardGame))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(13, 13, 13)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
+                            .addComponent(jLabelMinimumOfPlayers)
+                            .addComponent(jLabelName)
+                            .addComponent(jLabelMaximumOfPlayers)
+                            .addComponent(jLabelCategories)
+                            .addComponent(jLabelPrizePerDay))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextName)
@@ -218,8 +210,7 @@ public class AddBoardGame extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jProgressBarBG, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButtonChange)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(135, 135, 135)
                                 .addComponent(jButtonDelete)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE))))
@@ -239,39 +230,37 @@ public class AddBoardGame extends javax.swing.JFrame {
                         .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jButtonChange)
-                                    .addComponent(jButtonDelete))
+                                .addComponent(jButtonDelete)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
+                                    .addComponent(jLabelAddBoardGame)
                                     .addComponent(jButtonBack))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel2)
+                                    .addComponent(jLabelName)
                                     .addComponent(jTextName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel3)
+                                    .addComponent(jLabelMinimumOfPlayers)
                                     .addComponent(jSpinnerMinPlayers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel4)
+                                    .addComponent(jLabelMaximumOfPlayers)
                                     .addComponent(jSpinnerMaxPlayers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jButtonRemove))
                                 .addGap(6, 6, 6)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jComboBoxCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jButtonChoose)
-                                    .addComponent(jLabel5))
+                                    .addComponent(jLabelCategories))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jSpinnerPrizePerDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel6)))))
+                                        .addComponent(jLabelPrizePerDay)))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -346,10 +335,6 @@ public class AddBoardGame extends javax.swing.JFrame {
         if (category.remove(cat)) model.removeElement(cat);
     }//GEN-LAST:event_jButtonRemoveActionPerformed
 
-    private void jButtonChangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonChangeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonChangeActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -389,18 +374,17 @@ public class AddBoardGame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAdd;
     private javax.swing.JButton jButtonBack;
-    private javax.swing.JButton jButtonChange;
     private javax.swing.JButton jButtonChoose;
     private javax.swing.JButton jButtonClear;
     private javax.swing.JButton jButtonDelete;
     private javax.swing.JButton jButtonRemove;
     private javax.swing.JComboBox jComboBoxCategory;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabelAddBoardGame;
+    private javax.swing.JLabel jLabelCategories;
+    private javax.swing.JLabel jLabelMaximumOfPlayers;
+    private javax.swing.JLabel jLabelMinimumOfPlayers;
+    private javax.swing.JLabel jLabelName;
+    private javax.swing.JLabel jLabelPrizePerDay;
     private javax.swing.JList jListCategories;
     protected DefaultListModel model;
     private javax.swing.JProgressBar jProgressBarBG;
