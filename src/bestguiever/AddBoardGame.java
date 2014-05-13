@@ -301,7 +301,7 @@ public class AddBoardGame extends javax.swing.JFrame {
                 (Integer)jSpinnerMaxPlayers.getValue(), 
                 (Integer)jSpinnerMinPlayers.getValue(), 
                 category,
-                new BigDecimal((String)jSpinnerPrizePerDay.getValue()));
+                new BigDecimal (jSpinnerPrizePerDay.getValue().toString()));
             bgManager.createBoardGame(bGame);
             boardGameTableModel.addBoardGame(bGame);
             jTextName.setText("");
