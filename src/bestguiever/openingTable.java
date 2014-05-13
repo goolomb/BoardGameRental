@@ -34,7 +34,6 @@ public class openingTable extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButtonListAllBoardGames = new javax.swing.JButton();
         jButtonShowLendings = new javax.swing.JButton();
         jButtonFindBoardGame = new javax.swing.JButton();
         jLabelBoardGameRental = new javax.swing.JLabel();
@@ -43,13 +42,6 @@ public class openingTable extends javax.swing.JFrame {
         jButtonBorrow = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jButtonListAllBoardGames.setText("List all board games");
-        jButtonListAllBoardGames.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonListAllBoardGamesActionPerformed(evt);
-            }
-        });
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("bestguiever/Bundle"); // NOI18N
         jButtonShowLendings.setText(bundle.getString("BoardGameRental.jButtonShowLendings")); // NOI18N
@@ -67,6 +59,7 @@ public class openingTable extends javax.swing.JFrame {
         });
 
         jLabelBoardGameRental.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabelBoardGameRental.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelBoardGameRental.setText(bundle.getString("BoardGameRental.jLabelBoardGameRental")); // NOI18N
 
         jButtonAddCustomer.setText(bundle.getString("BoardGameRental.jButtonAddCustomer")); // NOI18N
@@ -97,41 +90,38 @@ public class openingTable extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(86, 86, 86)
-                        .addComponent(jLabelBoardGameRental, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 90, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jButtonAddCustomer)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonAddBoardGame)))
+                        .addComponent(jButtonAddBoardGame))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(108, 108, 108)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(jButtonBorrow)
+                            .addComponent(jButtonShowLendings)
+                            .addComponent(jButtonFindBoardGame))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(108, 108, 108)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonFindBoardGame)
-                    .addComponent(jButtonShowLendings)
-                    .addComponent(jButtonListAllBoardGames)
-                    .addComponent(jButtonBorrow))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(56, 56, 56)
+                .addComponent(jLabelBoardGameRental, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                .addGap(54, 54, 54))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonBorrow, jButtonFindBoardGame, jButtonListAllBoardGames, jButtonShowLendings});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonBorrow, jButtonFindBoardGame, jButtonShowLendings});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(31, 31, 31)
+                .addGap(52, 52, 52)
                 .addComponent(jLabelBoardGameRental, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(25, 25, 25)
+                .addGap(33, 33, 33)
                 .addComponent(jButtonBorrow)
-                .addGap(18, 18, 18)
-                .addComponent(jButtonListAllBoardGames)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonShowLendings)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonFindBoardGame)
-                .addGap(43, 43, 43)
+                .addGap(55, 55, 55)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAddCustomer)
                     .addComponent(jButtonAddBoardGame))
@@ -140,11 +130,6 @@ public class openingTable extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButtonListAllBoardGamesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonListAllBoardGamesActionPerformed
-        new ListBoardGames().setVisible(true);
-        dispose();
-    }//GEN-LAST:event_jButtonListAllBoardGamesActionPerformed
 
     private void jButtonShowLendingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonShowLendingsActionPerformed
         new ShowLendingsForCustomer().setVisible(true);
@@ -213,7 +198,6 @@ public class openingTable extends javax.swing.JFrame {
     private javax.swing.JButton jButtonAddCustomer;
     private javax.swing.JButton jButtonBorrow;
     private javax.swing.JButton jButtonFindBoardGame;
-    private javax.swing.JButton jButtonListAllBoardGames;
     private javax.swing.JButton jButtonShowLendings;
     private javax.swing.JLabel jLabelBoardGameRental;
     // End of variables declaration//GEN-END:variables

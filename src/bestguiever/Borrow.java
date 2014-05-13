@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
+import static java.util.ResourceBundle.getBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -35,7 +36,6 @@ public class Borrow extends javax.swing.JFrame {
 
     BasicDataSource basicDataSource = new BasicDataSource();
     private static final Logger LOGGER = Logger.getLogger(Borrow.class.getName());
-    //private String action;
 
     LendingManagerImpl lendingManager;
     CustomerManagerImpl customerManager;
@@ -69,9 +69,11 @@ public class Borrow extends javax.swing.JFrame {
         lendingsSwingWorker = new LendingsSwingWorker();
         lendingsSwingWorker.addPropertyChangeListener(lendingProgressListener);
         lendingsSwingWorker.execute();
+
         customersSwingWorker = new CustomersSwingWorker();
         customersSwingWorker.addPropertyChangeListener(customerProgressListener);
         customersSwingWorker.execute();
+
         boardGamesSwingWorker = new BoardGamesSwingWorker();
         boardGamesSwingWorker.addPropertyChangeListener(boardGameProgressListener);
         boardGamesSwingWorker.execute();
@@ -423,7 +425,7 @@ public class Borrow extends javax.swing.JFrame {
         try {
             customer_id = (Integer) customerTableModel.getValueAt(jTableCustomers.getSelectedRow(), 0);
         } catch (ArrayIndexOutOfBoundsException e) {
-            String msg = "Customer not selected";
+            String msg = getBundle("bestguiever/Bundle").getString("BoardGameRental.CustomerNotSelected");
             LOGGER.log(Level.INFO, msg);
             JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
             return;
@@ -433,7 +435,7 @@ public class Borrow extends javax.swing.JFrame {
         try {
             boardGame_id = (Integer) boardGameTableModel.getValueAt(jTableBordGames.getSelectedRow(), 0);
         } catch (ArrayIndexOutOfBoundsException e) {
-            String msg = "Board Game not selected";
+            String msg = getBundle("bestguiever/Bundle").getString("BoardGameRental.BoardGameNotSelected");
             LOGGER.log(Level.INFO, msg);
             JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
             return;
@@ -446,28 +448,29 @@ public class Borrow extends javax.swing.JFrame {
         try {
             DateFormat fd;
             fd = new SimpleDateFormat("dd.MM.yyyy");
-            
+
             Calendar c = Calendar.getInstance();
-            c.setTime(fd.parse((String)jComboBoxFrom.getSelectedItem()));
+            c.setTime(fd.parse((String) jComboBoxFrom.getSelectedItem()));
             lend.setStartTime(new Date(c.getTimeInMillis()));
-            
-            c.setTime(fd.parse((String)jComboBoxTo.getSelectedItem()));
+
+            c.setTime(fd.parse((String) jComboBoxTo.getSelectedItem()));
             lend.setExpectedEndTime(new Date(c.getTimeInMillis()));
         } catch (Exception ex) {
             String msg = "Lending from or to wrong format";
             LOGGER.log(Level.INFO, msg);
-            JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
+            return;
         }
-        
+
         try {
             LOGGER.log(Level.INFO, "Adding lending");
             lendingManager.createLending(lend);
             borrowTableModel.addLending(lend);
         } catch (Exception ex) {
-            //String msg = "User request failed";
+            String msg = getBundle("bestguiever/Bundle").getString("BoardGameRental.RequestFailed");
             LOGGER.log(Level.INFO, ex.getMessage());
-            JOptionPane.showMessageDialog(rootPane, ex.getMessage(), "Error", 2);
+            JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
         }
+        
     }//GEN-LAST:event_jButtonAddActionPerformed
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
@@ -475,17 +478,19 @@ public class Borrow extends javax.swing.JFrame {
         try {
             lending_id = (Integer) borrowTableModel.getValueAt(jTableBorrow.getSelectedRow(), 0);
         } catch (ArrayIndexOutOfBoundsException e) {
-            String msg = "No row selected";
+            String msg = getBundle("bestguiever/Bundle").getString("BoardGameRental.LendingNotSelected");
             LOGGER.log(Level.INFO, msg);
             JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
+            return;
         }
 
         Lending lend = lendingManager.getLendingById(lending_id);
         try {
+            LOGGER.log(Level.INFO, "Deleting lending");
             lendingManager.deleteLending(lend);
             borrowTableModel.removeLending(lend);
         } catch (Exception ex) {
-            String msg = "Deleting failed";
+            String msg = getBundle("bestguiever/Bundle").getString("BoardGameRental.DeletingFailed");
             LOGGER.log(Level.INFO, msg);
             JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
         }

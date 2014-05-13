@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
+import static java.util.ResourceBundle.getBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -258,7 +259,7 @@ public class AddCustomer extends javax.swing.JFrame {
             jTextPhone.setText("");
 
         } catch (Exception ex) {
-            String msg = "User request failed";
+            String msg = getBundle("bestguiever/Bundle").getString("BoardGameRental.RequestFailed");
             LOGGER.log(Level.INFO, msg);
             JOptionPane.showMessageDialog(rootPane, ex.getMessage(), "Error", 2);
         }
@@ -274,7 +275,7 @@ public class AddCustomer extends javax.swing.JFrame {
         try {
             customer_id = (Integer) customerTableModel.getValueAt(jTableCustomers.getSelectedRow(), 0);
         } catch (ArrayIndexOutOfBoundsException e) {
-            String msg = "No row selected";
+            String msg = getBundle("bestguiever/Bundle").getString("BoardGameRental.CustomerNotSelected");
             LOGGER.log(Level.INFO, msg);
             JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
         }
@@ -284,7 +285,7 @@ public class AddCustomer extends javax.swing.JFrame {
             customerManager.deleteCustomer(customer);
             customerTableModel.removeCustomer(customer);
         } catch (Exception ex) {
-            String msg = "Deleting failed";
+            String msg = getBundle("bestguiever/Bundle").getString("BoardGameRental.DeletingFailed");
             LOGGER.log(Level.INFO, msg);
             JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
         }
