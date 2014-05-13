@@ -255,7 +255,7 @@
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JList(model)"/>
-            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="model = new DefaultListModel();"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="model = new DefaultListModel&lt;String&gt;();"/>
             <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="protected DefaultListModel model;"/>
           </AuxValues>
         </Component>

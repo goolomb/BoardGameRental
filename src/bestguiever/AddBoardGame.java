@@ -22,6 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.ListModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingWorker;
 import javax.swing.table.TableColumnModel;
@@ -95,7 +96,7 @@ public class AddBoardGame extends javax.swing.JFrame {
         jButtonAdd = new javax.swing.JButton();
         jButtonChoose = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        model = new DefaultListModel();
+        model = new DefaultListModel<String>();
         jListCategories = new javax.swing.JList(model);
         jButtonClear = new javax.swing.JButton();
         jSpinnerPrizePerDay = new javax.swing.JSpinner(new SpinnerNumberModel(100,50,1000,100));
@@ -311,7 +312,7 @@ public class AddBoardGame extends javax.swing.JFrame {
         catch (ValidationException ex){
             String msg = "User request failed";
             LOGGER.log(Level.INFO, msg);
-            JOptionPane.showMessageDialog(rootPane, ex.getMessage(), "Error", 2);
+            JOptionPane.showMessageDialog(rootPane, bundle.getString("RequestFailed"), "Error", 2);
         }
     }//GEN-LAST:event_jButtonAddActionPerformed
 
@@ -332,7 +333,7 @@ public class AddBoardGame extends javax.swing.JFrame {
         } catch (ArrayIndexOutOfBoundsException e) {
             String msg = "No row selected";
             LOGGER.log(Level.INFO, msg);
-            JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
+            JOptionPane.showMessageDialog(rootPane, bundle.getString("BoardGameNotSelected"), "Error", 2);
         }
         
         BoardGame bGame = bgManager.getBoardGameById(bGame_id);
@@ -342,12 +343,12 @@ public class AddBoardGame extends javax.swing.JFrame {
         } catch (Exception ex) {
             String msg = "Deleting failed";
             LOGGER.log(Level.INFO, msg);
-            JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
+            JOptionPane.showMessageDialog(rootPane, bundle.getString("DeletingFailed"), "Error", 2);
         }
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
     private void jButtonRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveActionPerformed
-        String cat = (String)jComboBoxCategory.getSelectedItem();
+        String cat = (String)jListCategories.getSelectedValue();
         if (category.remove(cat)) model.removeElement(cat);
     }//GEN-LAST:event_jButtonRemoveActionPerformed
 
@@ -454,7 +455,27 @@ public class AddBoardGame extends javax.swing.JFrame {
             bGamesSwingWorker = null;
         }
     }
-   
+    /*
+    BoardGameAddSwingWorker bgAddSwingWorker;
+    
+    private class BoardGameAddSwingWorker extends SwingWorker<Void, BoardGame> {
+
+	@Override
+	protected Void doInBackground() throws Exception {
+	    boardGameTableModel = (BoardGameTableModel) jTableBoardGames.getModel();
+            boardGameTableModel.setBGManager(bgManager);
+            
+	    return null;
+	}
+
+        @Override
+        protected void done() {
+            //customers_load.setEnabled(true);
+            jProgressBarBG.setValue(100);
+            bgAddSwingWorker = null;
+        }
+    }
+   */
     private PropertyChangeListener boardGamesProgressListener = new PropertyChangeListener() {
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
