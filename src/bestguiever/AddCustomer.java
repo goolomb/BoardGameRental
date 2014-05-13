@@ -78,7 +78,6 @@ public class AddCustomer extends javax.swing.JFrame {
 
         @Override
         protected void done() {
-            //customers_load.setEnabled(true);
             jProgressBarCustomers.setValue(100);
             customerSwingWorker = null;
         }
@@ -250,6 +249,8 @@ public class AddCustomer extends javax.swing.JFrame {
 
     private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
         try {
+            LOGGER.log(Level.INFO, "Adding Customer");
+            
             Customer customer = new Customer(
                     jTextName.getText(),
                     jTextAddress.getText(),
@@ -263,8 +264,8 @@ public class AddCustomer extends javax.swing.JFrame {
 
         } catch (Exception ex) {
             String msg = getBundle("bestguiever/Bundle").getString("BoardGameRental.RequestFailed");
-            LOGGER.log(Level.INFO, msg);
-            JOptionPane.showMessageDialog(rootPane, ex.getMessage(), "Error", 2);
+            LOGGER.log(Level.INFO, ex.getMessage());
+            JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
         }
     }//GEN-LAST:event_jButtonAddActionPerformed
 
@@ -279,17 +280,18 @@ public class AddCustomer extends javax.swing.JFrame {
             customer_id = (Integer) customerTableModel.getValueAt(jTableCustomers.getSelectedRow(), 0);
         } catch (ArrayIndexOutOfBoundsException e) {
             String msg = getBundle("bestguiever/Bundle").getString("BoardGameRental.CustomerNotSelected");
-            LOGGER.log(Level.INFO, msg);
+            LOGGER.log(Level.INFO, e.getMessage());
             JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
         }
         
         Customer customer = customerManager.getCustomerById(customer_id);
         try {
+            LOGGER.log(Level.INFO, "Deleting lending");
             customerManager.deleteCustomer(customer);
             customerTableModel.removeCustomer(customer);
         } catch (Exception ex) {
             String msg = getBundle("bestguiever/Bundle").getString("BoardGameRental.DeletingFailed");
-            LOGGER.log(Level.INFO, msg);
+            LOGGER.log(Level.INFO, ex.getMessage());
             JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
         }
     }//GEN-LAST:event_jButtonDeleteActionPerformed
