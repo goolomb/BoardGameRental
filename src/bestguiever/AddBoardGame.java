@@ -296,6 +296,7 @@ public class AddBoardGame extends javax.swing.JFrame {
 
     private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
         try {
+            LOGGER.log(Level.INFO, "Adding Board game");
             BoardGame bGame = new BoardGame(jTextName.getText(), 
                 (Integer)jSpinnerMaxPlayers.getValue(), 
                 (Integer)jSpinnerMinPlayers.getValue(), 
@@ -338,6 +339,7 @@ public class AddBoardGame extends javax.swing.JFrame {
         
         BoardGame bGame = bgManager.getBoardGameById(bGame_id);
         try {
+            LOGGER.log(Level.INFO, "Deleting Board game");
             bgManager.deleteBoardGame(bGame);
             boardGameTableModel.removeBoardGame(bGame);
         } catch (Exception ex) {
