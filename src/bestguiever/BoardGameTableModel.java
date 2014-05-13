@@ -111,6 +111,7 @@ public class BoardGameTableModel extends AbstractTableModel {
 	bGames.add(bGame);
 	fireTableDataChanged();
     }
+  
     
     public void removeBoardGame(BoardGame bGame) {
 	bGames.remove(bGame);
