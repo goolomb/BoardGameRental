@@ -116,14 +116,13 @@ public class ShowLendingsForCustomer extends javax.swing.JFrame {
             List<Lending> byCustomer = new ArrayList<>();
             int index = 0;
             
-            try {
-                index = jList1.getSelectedIndex();
-            } catch (ArrayIndexOutOfBoundsException e) {
+            index = jList1.getSelectedIndex();
+            if (index == -1){
                 String msg = "No name selected";
                 LOGGER.log(Level.INFO, msg);
-                JOptionPane.showMessageDialog(rootPane, msg, "Error", 2);
+                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("bestguiever/Bundle").getString("BoardGameRental.NameNotSelected"), "Error", 2);
             }
-        
+            
             byCustomer = lendingManager.findLendingsForCustomer(byName.get(index));
 
             borrowModel = (BorrowTableModel)jTable2.getModel();
