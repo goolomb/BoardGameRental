@@ -312,7 +312,7 @@ public class AddBoardGame extends javax.swing.JFrame {
         catch (ValidationException ex){
             String msg = "User request failed";
             LOGGER.log(Level.INFO, msg);
-            JOptionPane.showMessageDialog(rootPane, bundle.getString("RequestFailed"), "Error", 2);
+            JOptionPane.showMessageDialog(rootPane, bundle.getString("BoardGameRental.RequestFailed"), "Error", 2);
         }
     }//GEN-LAST:event_jButtonAddActionPerformed
 
@@ -333,7 +333,7 @@ public class AddBoardGame extends javax.swing.JFrame {
         } catch (ArrayIndexOutOfBoundsException e) {
             String msg = "No row selected";
             LOGGER.log(Level.INFO, msg);
-            JOptionPane.showMessageDialog(rootPane, bundle.getString("BoardGameNotSelected"), "Error", 2);
+            JOptionPane.showMessageDialog(rootPane, bundle.getString("BoardGameRental.BoardGameNotSelected"), "Error", 2);
         }
         
         BoardGame bGame = bgManager.getBoardGameById(bGame_id);
@@ -343,7 +343,7 @@ public class AddBoardGame extends javax.swing.JFrame {
         } catch (Exception ex) {
             String msg = "Deleting failed";
             LOGGER.log(Level.INFO, msg);
-            JOptionPane.showMessageDialog(rootPane, bundle.getString("DeletingFailed"), "Error", 2);
+            JOptionPane.showMessageDialog(rootPane, bundle.getString("BoardGameRental.DeletingFailed"), "Error", 2);
         }
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
